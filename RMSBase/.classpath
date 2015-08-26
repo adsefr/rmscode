@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="base"/>
+	<classpathentry kind="src" path="common"/>
+	<classpathentry kind="src" path="util"/>
+	<classpathentry kind="src" path="task"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="lib" path="libraries/j2ee/javax.json.jar"/>
+	<classpathentry kind="lib" path="libraries/dom4j/dom4j-2.0.0-ALPHA-2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="libraries/ssh/jsch-0.1.53.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JDBC_DRVIER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/POI_LIBRALRY"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/OTHER_LIBRARY"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LOGGING_LIBRARY"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
