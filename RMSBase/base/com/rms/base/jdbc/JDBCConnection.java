@@ -4,8 +4,14 @@ import java.sql.SQLException;
 
 import com.rms.base.jdbc.constant.HoldabilityType;
 import com.rms.base.jdbc.constant.TransactionType;
+import com.rms.base.jdbc.model.ConnectionInfo;
+import com.rms.base.jdbc.model.QueryParameter;
+import com.rms.base.jdbc.model.UpdateParameter;
 import com.rms.common.jdbc.JDBCCloseable;
+import com.rms.common.jdbc.JDBCDataBaseMetaData;
+import com.rms.common.jdbc.JDBCQueryResult;
 import com.rms.common.jdbc.JDBCSavePoint;
+import com.rms.common.jdbc.JDBCUpdateResult;
 
 /**
  *
@@ -13,7 +19,11 @@ import com.rms.common.jdbc.JDBCSavePoint;
  * @author ri.meisei
  * @since 2014/02/24
  */
-interface JDBCConnection extends JDBCCloseable {
+public interface JDBCConnection extends JDBCCloseable {
+
+	public void connection(ConnectionInfo connectionInfo) throws SQLException;
+
+	public JDBCDataBaseMetaData getJDBCDataBaseMetaData() throws SQLException;
 
 	public void setAutoCommit(boolean autoCommit) throws SQLException;
 
@@ -30,6 +40,10 @@ interface JDBCConnection extends JDBCCloseable {
 	public void setHoldabilityType(HoldabilityType holdabilityType) throws SQLException;
 
 	public HoldabilityType getHoldabilityType() throws SQLException;
+
+	public JDBCQueryResult queryStatement(QueryParameter queryParameter) throws SQLException;
+
+	public JDBCUpdateResult updateStatement(UpdateParameter updateParameter) throws SQLException;
 
 	public JDBCSavePoint savePoint() throws SQLException;
 

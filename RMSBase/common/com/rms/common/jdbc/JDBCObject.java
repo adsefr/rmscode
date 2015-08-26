@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import com.rms.base.jdbc.model.DataBaseInfo;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.jdbc.model.UpdateParameter;
-import com.rms.common.reflect.ReflectUtil;
+import com.rms.base.reflect.Reflection;
 
 /**
  *
@@ -23,13 +23,15 @@ public abstract class JDBCObject implements JDBCCloseable {
 		try {
 			Class<?>[] parameterTypes = new Class<?>[] { DataBaseInfo.class };
 			Object[] params = new Object[] { dataBaseInfo };
-			instance = ReflectUtil.newInstance(INSTANCE_JDBCOBJECT_CLASS_NAME, parameterTypes, params);
+			instance = Reflection.newInstance(INSTANCE_JDBCOBJECT_CLASS_NAME, parameterTypes, params);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();// TODO
 		}
 
 		return instance;
 	}
+
+	public abstract void setDataBaseInfo(DataBaseInfo dataBaseInfo);
 
 	public abstract void startTransaction() throws SQLException;
 

@@ -10,13 +10,17 @@ public class TestLogger {
 		Logger logger = null;
 
 		logger = Logger.getLogger();
-		logger.info(logger.getName());
+		logger.error(logger.getName());
 
 		logger = Logger.getLogger(TestLogger.class);
-		logger.info(logger.getName());
+		logger.warn(logger.getName());
 
 		logger = Logger.getLogger(TestLogger.class.getName());
 		logger.info(logger.getName());
+		logger = Logger.getLogger(TestLogger.class.getName());
+		logger.debug(logger.getName());
+		logger = Logger.getLogger(TestLogger.class.getName());
+		logger.trace(logger.getName());
 
 	}
 }
