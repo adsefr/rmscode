@@ -7,5 +7,7 @@ package com.rms.common.jdbc;
  */
 public interface JDBCUpdateResult {
 
+	public void setUpdateCount(int updateCount);
+
 	public int getUpdateCount();
 }

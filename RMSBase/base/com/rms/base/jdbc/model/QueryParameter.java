@@ -19,6 +19,8 @@ public class QueryParameter {
 
 	private HoldabilityType holdabilityType = HoldabilityType.HOLD_CURSORS_OVER_COMMIT;
 
+	private boolean largeDataMode = false;
+
 	private String sqlClause;
 
 	private List<Object> parameterList;
@@ -99,6 +101,23 @@ public class QueryParameter {
 	public void setResultSetConcurrency(ResultSetConcurrency resultSetConcurrency) {
 
 		this.resultSetConcurrency = resultSetConcurrency;
+	}
+
+	/**
+	 * @return largeDataMode
+	 */
+	public boolean isLargeDataMode() {
+
+		return largeDataMode;
+	}
+
+	/**
+	 * @param largeDataMode
+	 *            セットする largeDataMode
+	 */
+	public void setLargeDataMode(boolean largeDataMode) {
+
+		this.largeDataMode = largeDataMode;
 	}
 
 	/**

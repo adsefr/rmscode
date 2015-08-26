@@ -1,121 +1,82 @@
 package com.rms.base.jdbc.instance;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
-import com.rms.base.jdbc.JDBCUtil;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.validate.Assertion;
-import com.rms.common.jdbc.JDBCQueryResult;
 
 /**
- *
  *
  * @author ri.meisei
  * @since 2014/02/24
  */
-class DefaultJDBCQueryResult implements JDBCQueryResult {
+class DefaultJDBCQueryResult extends AbstractJDBCQueryResult {
 
-	private QueryParameter queryParameter;
-
-	private Map<Integer, String> queryResultColumnNameMap = new TreeMap<>();
-
-	private Integer columnCount = 0;
-
-	private Map<Integer, Map<String, Object>> queryResultValuesMap = new HashMap<>();
-
-	private Integer resultCount = 0;
+	private final List<Map<String, Object>> queryResultDataCollection = new ArrayList<>();
 
 	private Integer currentRowNumber = 0;
 
-	private String errorCode;
+	DefaultJDBCQueryResult(ResultSet resultSet) throws SQLException {
 
-	private String errorMessage;
-
-	private DefaultJDBCQueryResult(ResultSet resultSet) throws SQLException {
-
-		Assertion.assertNotNull("resultSet", resultSet);
-
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-		columnCount = resultSetMetaData.getColumnCount();
-		for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-			queryResultColumnNameMap.put(columnIndex, resultSetMetaData.getColumnName(columnIndex).toUpperCase());
-		}
-
-		int currentRowNumber = 1;
-		int maxColumnNumber = queryResultColumnNameMap.size();
-		while (resultSet.next()) {
-			Map<String, Object> queryResultValue = new HashMap<>();
-			for (int columnNumber = 1; columnNumber <= maxColumnNumber; columnNumber++) {
-				String columnName = queryResultColumnNameMap.get(columnNumber);
-				queryResultValue.put(columnName, resultSet.getObject(columnName));
-			}
-			queryResultValuesMap.put(currentRowNumber++, queryResultValue);
-		}
-		resultCount = queryResultValuesMap.size();
-
-		JDBCUtil.close(resultSet);
+		super(resultSet, null);
 	}
 
 	DefaultJDBCQueryResult(ResultSet resultSet, QueryParameter queryParameter) throws SQLException {
 
-		this(resultSet);
+		super(resultSet, queryParameter);
 
-		this.queryParameter = queryParameter;
+		while (resultSet.next()) {
+			Map<String, Object> queryResultValue = new HashMap<>();
+			for (String columnName : queryResultColumnNameCollection) {
+				queryResultValue.put(columnName, resultSet.getObject(columnName));
+			}
+			queryResultDataCollection.add(queryResultValue);
+		}
+
+		close();
 	}
 
 	@Override
-	public QueryParameter getQueryParameter() {
-
-		return queryParameter;
-	}
-
-	@Override
-	public boolean hasNext() throws SQLException {
-
-		return (++currentRowNumber <= queryResultValuesMap.size());
-	}
-
-	@Override
-	public void beforeFirst() throws SQLException {
+	public final void beforeFirst() throws SQLException {
 
 		currentRowNumber = 0;
 	}
 
 	@Override
-	public void before(int rowNumber) throws SQLException {
+	public final void absolute(int rowNumber) throws SQLException {
 
-		currentRowNumber -= rowNumber;
+		if (rowNumber == 0) {
+		}
 
-		if (currentRowNumber < 0) {
-			currentRowNumber = 0;
+		if (rowNumber > 0) {
+		}
+
+		if (rowNumber < 0) {
 		}
 	}
 
 	@Override
-	public void after(int rowNumber) throws SQLException {
-
-		currentRowNumber += rowNumber;
-
-		if (currentRowNumber > resultCount) {
-			currentRowNumber = resultCount;
-		}
-	}
-
-	@Override
-	public void afterLast() throws SQLException {
+	public final void afterLast() throws SQLException {
 
 		currentRowNumber = resultCount + 1;
 	}
 
 	@Override
-	public JDBCRow getRow() throws SQLException {
+	public final boolean hasNext() throws SQLException {
 
+		return (++currentRowNumber > queryResultDataCollection.size());
+	}
+
+	@Override
+	public final JDBCRow getRow() throws SQLException {
+
+		// TODO
 		// DefaultJDBCRow row = new DefaultJDBCRow();
 		//
 		// for (int columnNumber = 1; columnNumber <= columnCount;
@@ -139,74 +100,33 @@ class DefaultJDBCQueryResult implements JDBCQueryResult {
 		return null;
 	}
 
-	@Override
-	public boolean hasColumn(int columnIndex) throws SQLException {
-
-		return columnIndex >= 1 && queryResultColumnNameMap.size() >= columnIndex;
-	}
-
-	@Override
-	public boolean hasColumn(String columnName) throws SQLException {
-
-		Assertion.assertNotBlank("columnName", columnName);
-
-		return queryResultColumnNameMap.values().contains(columnName.toUpperCase());
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getValue(int columnIndex) throws SQLException {
+	public final <T> T getValue(int columnNumber) throws SQLException {
 
-		Assertion.assertNotNull("columnIndex", columnIndex);
+		Assertion.assertNotNull("columnNumber", columnNumber);
 
-		Object object = null;
-
-		if (hasColumn(columnIndex)) {
-			object = queryResultValuesMap.get(currentRowNumber).get(columnIndex);
+		if (hasColumn(columnNumber)) {
+			throw new SQLException("the columnNumber is not found!!![" + columnNumber + "]");
 		}
+
+		Object object = queryResultDataCollection.get(currentRowNumber).get(columnNumber);
 
 		return (T) object;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getValue(String columnName) throws SQLException {
+	public final <T> T getValue(String columnName) throws SQLException {
 
 		Assertion.assertNotNull("columnName", columnName);
 
-		Object object = null;
-
 		if (hasColumn(columnName)) {
-			object = queryResultValuesMap.get(currentRowNumber).get(columnName.toUpperCase());
+			throw new SQLException("the columnName is not found!!![" + columnName + "]");
 		}
 
+		Object object = queryResultDataCollection.get(currentRowNumber).get(columnName.toUpperCase());
+
 		return (T) object;
-	}
-
-	/**
-	 * @return errorCode
-	 */
-	@Override
-	public String getErrorCode() {
-
-		return errorCode;
-	}
-
-	/**
-	 * @return errorMessage
-	 */
-	@Override
-	public String getErrorMessage() {
-
-		return errorMessage;
-	}
-
-	/**
-	 * @return resultCount
-	 */
-	@Override
-	public Integer getResultCount() {
-
-		return resultCount;
 	}
 }

@@ -156,7 +156,7 @@ public class AbstractJDBCConnection implements JDBCConnection {
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 
-			JDBCQueryResult jdbcQueryResult = new DefaultJDBCQueryResult(resultSet, queryParameter);
+			JDBCQueryResult jdbcQueryResult = JDBCFactory.newJDBCQueryResult(resultSet, queryParameter);
 
 			return jdbcQueryResult;
 		} finally {
@@ -182,7 +182,7 @@ public class AbstractJDBCConnection implements JDBCConnection {
 
 			preparedStatement.executeUpdate();
 
-			DefaultJDBCUpdateResult jdbcUpdateResult = new DefaultJDBCUpdateResult();
+			JDBCUpdateResult jdbcUpdateResult = JDBCFactory.newJDBCUpdateResult();
 
 			jdbcUpdateResult.setUpdateCount(preparedStatement.getUpdateCount());
 

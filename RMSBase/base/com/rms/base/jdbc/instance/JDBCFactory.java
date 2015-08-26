@@ -11,6 +11,7 @@ import com.rms.base.jdbc.model.SchemaMeta;
 import com.rms.base.jdbc.model.TableMeta;
 import com.rms.common.jdbc.JDBCQueryResult;
 import com.rms.common.jdbc.JDBCSavePoint;
+import com.rms.common.jdbc.JDBCUpdateResult;
 
 public class JDBCFactory {
 
@@ -33,6 +34,13 @@ public class JDBCFactory {
 		JDBCQueryResult jdbcQueryResult = new DefaultJDBCQueryResult(resultSet, queryParameter);
 
 		return jdbcQueryResult;
+	}
+
+	public static JDBCUpdateResult newJDBCUpdateResult() {
+
+		JDBCUpdateResult jdbcUpdateResult = new DefaultJDBCUpdateResult();
+
+		return jdbcUpdateResult;
 	}
 
 	static JDBCSavePoint newJDBCSavePoint() {
