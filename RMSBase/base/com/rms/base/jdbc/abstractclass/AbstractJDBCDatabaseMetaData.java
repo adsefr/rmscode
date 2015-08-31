@@ -1,4 +1,4 @@
-package com.rms.base.jdbc.instance;
+package com.rms.base.jdbc.abstractclass;
 
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -7,6 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.rms.base.jdbc.implments.DefaultCatalogMeta;
+import com.rms.base.jdbc.implments.DefaultColumnMeta;
+import com.rms.base.jdbc.implments.DefaultSchemaMeta;
+import com.rms.base.jdbc.implments.DefaultTableMeta;
+import com.rms.base.jdbc.implments.JDBCFactory;
 import com.rms.base.jdbc.model.CatalogMeta;
 import com.rms.base.jdbc.model.SchemaMeta;
 import com.rms.base.jdbc.model.TableMeta;
@@ -19,7 +24,7 @@ import com.rms.common.jdbc.JDBCQueryResult;
  * @author ri.meisei
  * @since 2015/08/19
  */
-abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaData {
+public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaData {
 
 	private final DatabaseMetaData databaseMetaData;
 

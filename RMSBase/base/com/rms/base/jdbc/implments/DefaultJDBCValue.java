@@ -1,4 +1,4 @@
-package com.rms.base.jdbc.instance;
+package com.rms.base.jdbc.implments;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -22,6 +22,34 @@ class DefaultJDBCValue implements JDBCValue {
 
 	public DefaultJDBCValue() {
 
+	}
+
+	@Override
+	public int getColumnNumber() {
+
+		// TODO 自動生成されたメソッド・スタブ
+		return 0;
+	}
+
+	@Override
+	public int getRowNumber() {
+
+		// TODO 自動生成されたメソッド・スタブ
+		return 0;
+	}
+
+	@Override
+	public int setColumnNumber(int columnNumber) {
+
+		// TODO 自動生成されたメソッド・スタブ
+		return 0;
+	}
+
+	@Override
+	public int setRowNumber(int rowNumber) {
+
+		// TODO 自動生成されたメソッド・スタブ
+		return 0;
 	}
 
 	@Override

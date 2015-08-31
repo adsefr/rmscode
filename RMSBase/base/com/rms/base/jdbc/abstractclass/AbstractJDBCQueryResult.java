@@ -1,15 +1,16 @@
-package com.rms.base.jdbc.instance;
+package com.rms.base.jdbc.abstractclass;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 
 import com.rms.base.jdbc.JDBCUtil;
+import com.rms.base.jdbc.implments.JDBCFactory;
 import com.rms.base.jdbc.model.QueryParameter;
+import com.rms.base.jdbc.model.QueryResultColumnMeta;
 import com.rms.base.validate.Assertion;
 import com.rms.common.jdbc.JDBCQueryResult;
+import com.rms.common.jdbc.JDBCQueryResultMetaData;
 
 /**
  *
@@ -17,13 +18,13 @@ import com.rms.common.jdbc.JDBCQueryResult;
  * @author ri.meisei
  * @since 2014/02/24
  */
-abstract class AbstractJDBCQueryResult implements JDBCQueryResult {
-
-	protected ResultSet resultSet;
+public abstract class AbstractJDBCQueryResult implements JDBCQueryResult {
 
 	protected QueryParameter queryParameter;
 
-	protected final List<String> queryResultColumnNameCollection = Arrays.asList("");
+	protected ResultSet resultSet;
+
+	protected final JDBCQueryResultMetaData jdbcQueryResultMetaData;
 
 	protected final Integer resultCount;
 
@@ -41,8 +42,13 @@ abstract class AbstractJDBCQueryResult implements JDBCQueryResult {
 		resultCount = resultSet.getFetchSize();
 
 		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+
+		jdbcQueryResultMetaData = JDBCFactory.newJDBCQueryResultMetaData(resultSetMetaData.getColumnCount());
+
 		for (int columnNumber = 1; columnNumber < resultSetMetaData.getColumnCount(); columnNumber++) {
-			queryResultColumnNameCollection.add(resultSetMetaData.getColumnName(columnNumber).toUpperCase());
+			QueryResultColumnMeta queryResultColumnMeta = JDBCFactory.newQueryResultColumnMeta();
+
+			jdbcQueryResultMetaData.addColumnMeta(queryResultColumnMeta);
 		}
 	}
 
@@ -113,7 +119,7 @@ abstract class AbstractJDBCQueryResult implements JDBCQueryResult {
 
 		Assertion.assertNotBlank("columnName", columnName);
 
-		return queryResultColumnNameCollection.contains(columnName.toUpperCase());
+		return jdbcQueryResultMetaData.hasColumn(columnName.toUpperCase());
 	}
 
 }

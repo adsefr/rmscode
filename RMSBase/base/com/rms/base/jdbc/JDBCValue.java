@@ -13,6 +13,14 @@ import com.rms.base.jdbc.constant.ValueType;
  */
 public interface JDBCValue {
 
+	public int getRowNumber();
+
+	public int setRowNumber(int rowNumber);
+
+	public int getColumnNumber();
+
+	public int setColumnNumber(int columnNumber);
+
 	public void setValueType(int type);
 
 	public void setValueType(ValueType valueType);

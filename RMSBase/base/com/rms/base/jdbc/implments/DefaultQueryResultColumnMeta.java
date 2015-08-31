@@ -1,7 +1,6 @@
-package com.rms.base.jdbc.instance;
+package com.rms.base.jdbc.implments;
 
-import com.rms.base.jdbc.model.ColumnMeta;
-
+import com.rms.base.jdbc.model.QueryResultColumnMeta;
 
 /**
  *
@@ -9,7 +8,7 @@ import com.rms.base.jdbc.model.ColumnMeta;
  * @author ri.meisei
  * @since 2014/02/26
  */
-public class DefaultColumnMeta implements ColumnMeta {
+public class DefaultQueryResultColumnMeta implements QueryResultColumnMeta {
 
 	/** TABLE_CAT String => テーブルカタログ (null の可能性がある) */
 	private String catalogName;
@@ -115,7 +114,7 @@ public class DefaultColumnMeta implements ColumnMeta {
 
 	private Integer keySequence;
 
-	public DefaultColumnMeta() {
+	public DefaultQueryResultColumnMeta() {
 
 	}
 

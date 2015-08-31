@@ -1,7 +1,9 @@
-package com.rms.base.jdbc.instance;
+package com.rms.base.jdbc.implments;
 
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+
+import com.rms.base.jdbc.abstractclass.AbstractJDBCDatabaseMetaData;
 
 /**
  *
@@ -9,7 +11,7 @@ import java.sql.SQLException;
  * @author ri.meisei
  * @since 2014/02/12
  */
-class DefaultJDBCDatabaseMetaData extends AbstractJDBCDatabaseMetaData {
+public class DefaultJDBCDatabaseMetaData extends AbstractJDBCDatabaseMetaData {
 
 	DefaultJDBCDatabaseMetaData(DatabaseMetaData databaseMetaData) throws SQLException {
 

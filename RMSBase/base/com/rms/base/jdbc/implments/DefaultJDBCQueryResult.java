@@ -1,4 +1,4 @@
-package com.rms.base.jdbc.instance;
+package com.rms.base.jdbc.implments;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.rms.base.jdbc.JDBCValue;
+import com.rms.base.jdbc.abstractclass.AbstractJDBCQueryResult;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.validate.Assertion;
@@ -51,13 +53,15 @@ class DefaultJDBCQueryResult extends AbstractJDBCQueryResult {
 	@Override
 	public final void absolute(int rowNumber) throws SQLException {
 
-		if (rowNumber == 0) {
-		}
+		int _rowNumber = Math.abs(rowNumber);
+		int mod = _rowNumber % resultCount;
 
 		if (rowNumber > 0) {
-		}
-
-		if (rowNumber < 0) {
+			currentRowNumber = mod;
+		} else if (rowNumber < 0) {
+			currentRowNumber = resultCount - mod;
+		} else {
+			currentRowNumber = 0;
 		}
 	}
 
@@ -70,34 +74,31 @@ class DefaultJDBCQueryResult extends AbstractJDBCQueryResult {
 	@Override
 	public final boolean hasNext() throws SQLException {
 
-		return (++currentRowNumber > queryResultDataCollection.size());
+		return (++currentRowNumber > resultCount);
 	}
 
 	@Override
 	public final JDBCRow getRow() throws SQLException {
 
-		// TODO
-		// DefaultJDBCRow row = new DefaultJDBCRow();
-		//
-		// for (int columnNumber = 1; columnNumber <= columnCount;
-		// columnNumber++) {
-		// String columnName = resultSetMetaData.getColumnName(columnNumber);
-		// Object rawValue = getValue(columnNumber);
-		//
-		// DefaultJDBCColumn column = new DefaultJDBCColumn();
-		// column.setColumnName(columnName);
-		// column.setRawValue(rawValue);
-		//
-		// JDBCValue jdbcValue = new DefaultJDBCValue();
-		// jdbcValue.setRawValue(rawValue);
-		// jdbcValue.setValueType(resultSetMetaData.getColumnType(columnNumber));
-		// column.setJdbcValue(jdbcValue);
-		//
-		// row.addColumn(column);
-		// }
-		//
-		// return row;
-		return null;
+		JDBCRow jdbcRow = JDBCFactory.newJDBCRow();
+
+		Map<String, Object> currRowDataMap = queryResultDataCollection.get(currentRowNumber);
+		for (String columnName : currRowDataMap.keySet()) {
+
+			Object rawValue = currRowDataMap.get(columnName);
+
+			DefaultJDBCColumn column = new DefaultJDBCColumn();
+			column.setColumnName(columnName);
+			column.setRawValue(rawValue);
+
+			JDBCValue jdbcValue = JDBCFactory.newJDBCValue();
+			jdbcValue.setRawValue(rawValue);
+			column.setJdbcValue(jdbcValue);
+
+			jdbcRow.addValue(columnName, jdbcValue);
+		}
+
+		return jdbcRow;
 	}
 
 	@SuppressWarnings("unchecked")

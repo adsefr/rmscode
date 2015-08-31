@@ -1,8 +1,10 @@
-package com.rms.base.jdbc.instance;
+package com.rms.base.jdbc.implments;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.rms.base.jdbc.JDBCValue;
+import com.rms.base.jdbc.abstractclass.AbstractJDBCQueryResult;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.validate.Assertion;
@@ -46,28 +48,25 @@ class JDBCQueryLargeDataResult extends AbstractJDBCQueryResult {
 	@Override
 	public final JDBCRow getRow() throws SQLException {
 
-		// TODO
-		// DefaultJDBCRow row = new DefaultJDBCRow();
-		//
-		// for (int columnNumber = 1; columnNumber <= columnCount;
-		// columnNumber++) {
-		// String columnName = resultSetMetaData.getColumnName(columnNumber);
-		// Object rawValue = getValue(columnNumber);
-		//
-		// DefaultJDBCColumn column = new DefaultJDBCColumn();
-		// column.setColumnName(columnName);
-		// column.setRawValue(rawValue);
-		//
-		// JDBCValue jdbcValue = new DefaultJDBCValue();
-		// jdbcValue.setRawValue(rawValue);
-		// jdbcValue.setValueType(resultSetMetaData.getColumnType(columnNumber));
-		// column.setJdbcValue(jdbcValue);
-		//
-		// row.addColumn(column);
-		// }
-		//
-		// return row;
-		return null;
+		JDBCRow jdbcRow = JDBCFactory.newJDBCRow();
+
+		for (int columnNumber = 1; columnNumber <= jdbcQueryResultMetaData.getColumnCount(); columnNumber++) {
+
+			String columnName = jdbcQueryResultMetaData.getColumnName(columnNumber);
+			Object rawValue = getValue(columnNumber);
+
+			DefaultJDBCColumn column = new DefaultJDBCColumn();
+			column.setColumnName(columnName);
+			column.setRawValue(rawValue);
+
+			JDBCValue jdbcValue = JDBCFactory.newJDBCValue();
+			jdbcValue.setRawValue(rawValue);
+			column.setJdbcValue(jdbcValue);
+
+			jdbcRow.addValue(columnName, jdbcValue);
+		}
+
+		return jdbcRow;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -1,4 +1,4 @@
-package com.rms.base.jdbc.instance;
+package com.rms.base.jdbc.abstractclass;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -18,6 +18,7 @@ import com.rms.base.jdbc.constant.HoldabilityType;
 import com.rms.base.jdbc.constant.ResultSetConcurrency;
 import com.rms.base.jdbc.constant.ResultSetType;
 import com.rms.base.jdbc.constant.TransactionType;
+import com.rms.base.jdbc.implments.JDBCFactory;
 import com.rms.base.jdbc.model.ConnectionInfo;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.jdbc.model.UpdateParameter;
@@ -131,7 +132,7 @@ public class AbstractJDBCConnection implements JDBCConnection {
 	public final JDBCDataBaseMetaData getJDBCDataBaseMetaData() throws SQLException {
 
 		DatabaseMetaData databaseMetaData = getConnection().getMetaData();
-		JDBCDataBaseMetaData jdbcDataBaseMetaData = new DefaultJDBCDatabaseMetaData(databaseMetaData);
+		JDBCDataBaseMetaData jdbcDataBaseMetaData = JDBCFactory.newJDBCDataBaseMetaData(databaseMetaData);
 
 		return jdbcDataBaseMetaData;
 	}
