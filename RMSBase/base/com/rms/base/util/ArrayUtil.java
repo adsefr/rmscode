@@ -80,6 +80,18 @@ public class ArrayUtil {
 		return false;
 	}
 
+	public static <T> void add(List<T> collection, int index, T element) {
+
+		Assertion.assertNotNull("collection", collection);
+		Assertion.assertPositiveNumber("index", index);
+
+		while (collection.size() < index) {
+			collection.add(null);
+		}
+
+		collection.add(index, element);
+	}
+
 	public static String join(List<?> list, String seperator) {
 
 		return join(list, seperator, false, null);

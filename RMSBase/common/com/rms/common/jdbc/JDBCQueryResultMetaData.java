@@ -16,9 +16,13 @@ public interface JDBCQueryResultMetaData {
 
 	public boolean hasColumn(String columnName);
 
-	public QueryResultColumnMeta getColumn(int columnNumber);
+	public QueryResultColumnMeta getColumnMeta(int columnNumber);
 
-	public QueryResultColumnMeta getColumn(String columnName);
+	public QueryResultColumnMeta getColumnMeta(String columnName);
+
+	public Integer getColumnNumber(String columnName);
+
+	public String getColumnName(int columnNumber);
 
 	public void addColumnMeta(QueryResultColumnMeta queryResultColumnMeta);
 

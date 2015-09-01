@@ -1,4 +1,4 @@
-package com.rms.base.jdbc.abstractclass;
+package com.rms.base.jdbc;
 
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.rms.base.jdbc.implments.DefaultCatalogMeta;
 import com.rms.base.jdbc.implments.DefaultColumnMeta;
 import com.rms.base.jdbc.implments.DefaultSchemaMeta;
 import com.rms.base.jdbc.implments.DefaultTableMeta;
@@ -68,7 +67,7 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 
 		catalogQueryResult = JDBCFactory.newJDBCQueryResult(databaseMetaData.getCatalogs());
 		while (catalogQueryResult.hasNext()) {
-			DefaultCatalogMeta catalogMeta = (DefaultCatalogMeta) JDBCFactory.newCatalogMeta();
+			CatalogMeta catalogMeta = JDBCFactory.newCatalogMeta();
 			// 1.TABLE_CAT String =>カタログ名
 			catalogMeta.setCatalogName(catalogQueryResult.getValue("TABLE_CAT"));
 
@@ -439,16 +438,16 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 	}
 
 	@Override
+	public List<CatalogMeta> getCatalogMetas() throws SQLException {
+
+		return new ArrayList<CatalogMeta>(catalogMetaMap.values());
+	}
+
+	@Override
 	public CatalogMeta getCatalogMeta() throws SQLException {
 
 		String catalogName = databaseMetaData.getConnection().getCatalog();
 		return getCatalogMeta(catalogName);
-	}
-
-	@Override
-	public List<CatalogMeta> getCatalogMetas() throws SQLException {
-
-		return new ArrayList<CatalogMeta>(catalogMetaMap.values());
 	}
 
 	@Override
@@ -458,7 +457,7 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 	}
 
 	@Override
-	public List<SchemaMeta> getCurrentSchemaMetas() throws SQLException {
+	public List<SchemaMeta> getSchemaMetas() throws SQLException {
 
 		return getCatalogMeta().getSchemaMetas();
 	}
@@ -467,6 +466,12 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 	public List<SchemaMeta> getSchemaMetas(String catalogName) throws SQLException {
 
 		return getCatalogMeta(catalogName).getSchemaMetas();
+	}
+
+	@Override
+	public SchemaMeta getSchemaMeta(String schemaName) throws SQLException {
+
+		return getSchemaMeta(getCatalogMeta().getCatalogName(), schemaName);
 	}
 
 	@Override
@@ -483,9 +488,34 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 	}
 
 	@Override
+	public List<TableMeta> getTableMetas(String schemaName) throws SQLException {
+
+		CatalogMeta catalogMeta = getCatalogMeta();
+		SchemaMeta schemaMeta = getSchemaMeta(catalogMeta.getCatalogName(), schemaName);
+		if (schemaMeta != null) {
+			return schemaMeta.getTableMetas();
+		}
+
+		return null;
+	}
+
+	@Override
 	public List<TableMeta> getTableMetas(String catalogName, String schemaName) throws SQLException {
 
 		return getSchemaMeta(catalogName, schemaName).getTableMetas();
+	}
+
+	@Override
+	public TableMeta getTableMeta(String schemaName, String tableName) throws SQLException {
+
+		List<TableMeta> tableMetas = getTableMetas(getCatalogMeta().getCatalogName(), schemaName);
+		for (TableMeta tableMeta : tableMetas) {
+			if (tableMeta.getTableName().equals(schemaName)) {
+				return tableMeta;
+			}
+		}
+
+		return null;
 	}
 
 	@Override

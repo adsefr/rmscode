@@ -1,11 +1,10 @@
-package com.rms.base.jdbc.implments;
+package com.rms.base.jdbc;
 
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.rms.base.jdbc.JDBCConnection;
-import com.rms.base.jdbc.JDBCUtil;
+import com.rms.base.jdbc.implments.JDBCFactory;
 import com.rms.base.jdbc.model.ConnectionInfo;
 import com.rms.base.jdbc.model.DataBaseInfo;
 import com.rms.base.jdbc.model.QueryParameter;
@@ -58,7 +57,7 @@ class DefaultJDBCObject extends JDBCObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setDataBaseInfo(DataBaseInfo dataBaseInfo) {
+	public final void setDataBaseInfo(DataBaseInfo dataBaseInfo) {
 
 		Assertion.assertNotNull("dataBaseInfo", dataBaseInfo);
 
@@ -69,7 +68,7 @@ class DefaultJDBCObject extends JDBCObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void startTransaction() throws SQLException {
+	public final void startTransaction() throws SQLException {
 
 		if (isClosed()) {
 			ConnectionInfo connectionInfo = new ConnectionInfo();
@@ -98,16 +97,18 @@ class DefaultJDBCObject extends JDBCObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void endTransaction() throws SQLException {
+	public final void endTransaction() throws SQLException {
 
-		getJDBCConnection().commit();
+		jdbcQueryResultMap.values().stream().forEach(element -> {
+			JDBCUtil.close(element);
+		});
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public JDBCDataBaseMetaData getJDBCDataBaseMetaData() throws SQLException {
+	public final JDBCDataBaseMetaData getJDBCDataBaseMetaData() throws SQLException {
 
 		return getJDBCConnection().getJDBCDataBaseMetaData();
 	}
@@ -116,7 +117,7 @@ class DefaultJDBCObject extends JDBCObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public JDBCQueryResult query(QueryParameter queryParameter) throws SQLException {
+	public final JDBCQueryResult query(QueryParameter queryParameter) throws SQLException {
 
 		Assertion.assertNotNull("queryParameter", queryParameter);
 
@@ -131,7 +132,7 @@ class DefaultJDBCObject extends JDBCObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public JDBCUpdateResult update(UpdateParameter updateParameter) throws SQLException {
+	public final JDBCUpdateResult update(UpdateParameter updateParameter) throws SQLException {
 
 		Assertion.assertNotNull("updateParameter", updateParameter);
 
@@ -146,7 +147,7 @@ class DefaultJDBCObject extends JDBCObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public JDBCSavePoint savePoint() throws SQLException {
+	public final JDBCSavePoint savePoint() throws SQLException {
 
 		return getJDBCConnection().savePoint();
 	}
@@ -155,7 +156,7 @@ class DefaultJDBCObject extends JDBCObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void commit() throws SQLException {
+	public final void commit() throws SQLException {
 
 		getJDBCConnection().commit();
 	}
@@ -164,7 +165,7 @@ class DefaultJDBCObject extends JDBCObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void rollback() throws SQLException {
+	public final void rollback() throws SQLException {
 
 		getJDBCConnection().rollback();
 	}
@@ -173,7 +174,7 @@ class DefaultJDBCObject extends JDBCObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void rollback(JDBCSavePoint jdbcSavePoint) throws SQLException {
+	public final void rollback(JDBCSavePoint jdbcSavePoint) throws SQLException {
 
 		Assertion.assertNotNull("jdbcSavePoint", jdbcSavePoint);
 
@@ -184,7 +185,7 @@ class DefaultJDBCObject extends JDBCObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void close() throws SQLException {
+	public final void close() throws SQLException {
 
 		JDBCUtil.close(jdbcConnection);
 	}
@@ -193,7 +194,7 @@ class DefaultJDBCObject extends JDBCObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isClosed() throws SQLException {
+	public final boolean isClosed() throws SQLException {
 
 		return (jdbcConnection == null || jdbcConnection.isClosed());
 	}

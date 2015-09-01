@@ -24,7 +24,7 @@ public class JDBCOperator {
 
 		Assertion.assertNotNull("dataBaseInfo", dataBaseInfo);
 
-		JDBCObject jdbcObject = JDBCObject.newInstance(dataBaseInfo);
+		JDBCObject jdbcObject = JDBCObject.getInstance(dataBaseInfo);
 		jdbcObject.startTransaction();
 		JDBCDataBaseMetaData jdbcDataBaseMetaData = jdbcObject.getJDBCDataBaseMetaData();
 		List<SchemaMeta> schemaList = jdbcDataBaseMetaData.getCurrentSchemaMetas();

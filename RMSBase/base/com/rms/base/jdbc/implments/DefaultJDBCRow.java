@@ -2,12 +2,9 @@ package com.rms.base.jdbc.implments;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.rms.base.jdbc.JDBCValue;
-import com.rms.base.jdbc.model.JDBCColumn;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.validate.Assertion;
 import com.rms.common.jdbc.JDBCQueryResultMetaData;
@@ -22,15 +19,7 @@ public class DefaultJDBCRow implements JDBCRow {
 
 	private JDBCQueryResultMetaData jdbcQueryResultMetaData;
 
-	private Map<Integer, String> columnOrderMap = new HashMap<>();
-
-	private List<JDBCColumn> columnList = new ArrayList<>();
-
 	private List<JDBCValue> jdbcValuesCollection = new ArrayList<JDBCValue>(Arrays.asList(JDBCFactory.newJDBCValue()));
-
-	private Map<String, JDBCValue> jdbcValuesMap = new HashMap<>();
-
-	private Map<String, JDBCColumn> columnMap = new HashMap<>();
 
 	public DefaultJDBCRow() {
 
@@ -39,13 +28,13 @@ public class DefaultJDBCRow implements JDBCRow {
 	@Override
 	public int getColumnCount() {
 
-		return columnList.size();
+		return jdbcValuesCollection.size();
 	}
 
 	@Override
 	public final boolean exist(int columnNumber) {
 
-		return columnNumber >= 1 && columnNumber <= columnList.size();
+		return jdbcQueryResultMetaData.hasColumn(columnNumber);
 	}
 
 	@Override
@@ -53,13 +42,14 @@ public class DefaultJDBCRow implements JDBCRow {
 
 		Assertion.assertNotBlank("columnName", columnName);
 
-		return columnMap.containsKey(columnName);
+		return jdbcQueryResultMetaData.hasColumn(columnName);
 	}
 
 	@Override
 	public void addValue(int columnNumber, JDBCValue jdbcValue) {
 
 		jdbcValuesCollection.add(columnNumber, jdbcValue);
+
 	}
 
 	@Override
@@ -80,6 +70,6 @@ public class DefaultJDBCRow implements JDBCRow {
 	@Override
 	public JDBCValue getValue(String columnName) {
 
-		return jdbcValuesMap.get(columnName);
+		return getValue(jdbcQueryResultMetaData.getColumnNumber(columnName));
 	}
 }

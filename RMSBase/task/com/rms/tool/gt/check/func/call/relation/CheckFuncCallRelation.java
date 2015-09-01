@@ -526,7 +526,7 @@ public class CheckFuncCallRelation {
 		dataBase.setUserId("foptrade");
 		dataBase.setPassword("trade");
 
-		jdbcObject = JDBCObject.newInstance(dataBase);
+		jdbcObject = JDBCObject.getInstance(dataBase);
 		jdbcConnection = jdbcObject.getJDBCConnection();
 		jdbcConnection.connection();
 	}

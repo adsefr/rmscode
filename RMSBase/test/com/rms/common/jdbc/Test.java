@@ -24,7 +24,7 @@ public class Test {
 		dataBase.setPort(5432);
 		dataBase.setUserId("postgres");
 		dataBase.setPassword("postgres00");
-		JDBCObject jdbcObject = JDBCObject.newInstance(dataBase);
+		JDBCObject jdbcObject = JDBCObject.getInstance(dataBase);
 
 		JDBCConnection jdbcConnection = jdbcObject.getJDBCConnection();
 		jdbcConnection.connection();

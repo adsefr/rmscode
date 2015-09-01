@@ -3,12 +3,9 @@ package com.rms.base.jdbc.implments;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.rms.base.jdbc.JDBCValue;
-import com.rms.base.jdbc.abstractclass.AbstractJDBCQueryResult;
+import com.rms.base.jdbc.AbstractJDBCQueryResult;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.validate.Assertion;
@@ -20,13 +17,14 @@ import com.rms.base.validate.Assertion;
  */
 class DefaultJDBCQueryResult extends AbstractJDBCQueryResult {
 
-	private final List<Map<String, Object>> queryResultDataCollection = new ArrayList<>();
+	private final List<JDBCRow> queryResultRows = new ArrayList<>();
 
 	private Integer currentRowNumber = 0;
 
 	DefaultJDBCQueryResult(ResultSet resultSet) throws SQLException {
 
 		super(resultSet, null);
+
 	}
 
 	DefaultJDBCQueryResult(ResultSet resultSet, QueryParameter queryParameter) throws SQLException {
@@ -34,14 +32,12 @@ class DefaultJDBCQueryResult extends AbstractJDBCQueryResult {
 		super(resultSet, queryParameter);
 
 		while (resultSet.next()) {
-			Map<String, Object> queryResultValue = new HashMap<>();
-			for (String columnName : queryResultColumnNameCollection) {
-				queryResultValue.put(columnName, resultSet.getObject(columnName));
-			}
-			queryResultDataCollection.add(queryResultValue);
+			JDBCRow jdbcRow = convertCurrentResultToJDBCRow();
+
+			queryResultRows.add(jdbcRow);
 		}
 
-		close();
+		queryResultRows.add(0, JDBCFactory.newJDBCRow());
 	}
 
 	@Override
@@ -54,12 +50,12 @@ class DefaultJDBCQueryResult extends AbstractJDBCQueryResult {
 	public final void absolute(int rowNumber) throws SQLException {
 
 		int _rowNumber = Math.abs(rowNumber);
-		int mod = _rowNumber % resultCount;
+		int mod = _rowNumber % queryResultRows.size();
 
 		if (rowNumber > 0) {
 			currentRowNumber = mod;
 		} else if (rowNumber < 0) {
-			currentRowNumber = resultCount - mod;
+			currentRowNumber = queryResultRows.size() - mod;
 		} else {
 			currentRowNumber = 0;
 		}
@@ -68,37 +64,19 @@ class DefaultJDBCQueryResult extends AbstractJDBCQueryResult {
 	@Override
 	public final void afterLast() throws SQLException {
 
-		currentRowNumber = resultCount + 1;
+		currentRowNumber = queryResultRows.size() + 1;
 	}
 
 	@Override
 	public final boolean hasNext() throws SQLException {
 
-		return (++currentRowNumber > resultCount);
+		return (++currentRowNumber >= queryResultRows.size());
 	}
 
 	@Override
 	public final JDBCRow getRow() throws SQLException {
 
-		JDBCRow jdbcRow = JDBCFactory.newJDBCRow();
-
-		Map<String, Object> currRowDataMap = queryResultDataCollection.get(currentRowNumber);
-		for (String columnName : currRowDataMap.keySet()) {
-
-			Object rawValue = currRowDataMap.get(columnName);
-
-			DefaultJDBCColumn column = new DefaultJDBCColumn();
-			column.setColumnName(columnName);
-			column.setRawValue(rawValue);
-
-			JDBCValue jdbcValue = JDBCFactory.newJDBCValue();
-			jdbcValue.setRawValue(rawValue);
-			column.setJdbcValue(jdbcValue);
-
-			jdbcRow.addValue(columnName, jdbcValue);
-		}
-
-		return jdbcRow;
+		return queryResultRows.get(currentRowNumber);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -107,11 +85,11 @@ class DefaultJDBCQueryResult extends AbstractJDBCQueryResult {
 
 		Assertion.assertNotNull("columnNumber", columnNumber);
 
-		if (hasColumn(columnNumber)) {
-			throw new SQLException("the columnNumber is not found!!![" + columnNumber + "]");
+		if (!hasColumn(columnNumber)) {
+			throw new SQLException("the columnNumber[" + columnNumber + "] is not found!!!");
 		}
 
-		Object object = queryResultDataCollection.get(currentRowNumber).get(columnNumber);
+		Object object = queryResultRows.get(currentRowNumber).getValue(columnNumber);
 
 		return (T) object;
 	}
@@ -122,11 +100,11 @@ class DefaultJDBCQueryResult extends AbstractJDBCQueryResult {
 
 		Assertion.assertNotNull("columnName", columnName);
 
-		if (hasColumn(columnName)) {
-			throw new SQLException("the columnName is not found!!![" + columnName + "]");
+		if (!hasColumn(columnName)) {
+			throw new SQLException("the columnName[" + columnName + "] is not found!!!");
 		}
 
-		Object object = queryResultDataCollection.get(currentRowNumber).get(columnName.toUpperCase());
+		Object object = queryResultRows.get(currentRowNumber).getValue(columnName);
 
 		return (T) object;
 	}

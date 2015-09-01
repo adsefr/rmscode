@@ -25,8 +25,8 @@ public class CopyTables {
 
 	public CopyTables(DataBaseInfo srcDatabaseInfo, DataBaseInfo destDatabaseInfo) {
 
-		srcJDBCObject = JDBCObject.newInstance(srcDatabaseInfo);
-		destJDBCObject = JDBCObject.newInstance(destDatabaseInfo);
+		srcJDBCObject = JDBCObject.getInstance(srcDatabaseInfo);
+		destJDBCObject = JDBCObject.getInstance(destDatabaseInfo);
 	}
 
 	private void close() {

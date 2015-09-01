@@ -1,11 +1,11 @@
-package com.rms.base.jdbc.abstractclass;
+package com.rms.base.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-import com.rms.base.jdbc.JDBCUtil;
 import com.rms.base.jdbc.implments.JDBCFactory;
+import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.jdbc.model.QueryResultColumnMeta;
 import com.rms.base.validate.Assertion;
@@ -24,9 +24,7 @@ public abstract class AbstractJDBCQueryResult implements JDBCQueryResult {
 
 	protected ResultSet resultSet;
 
-	protected final JDBCQueryResultMetaData jdbcQueryResultMetaData;
-
-	protected final Integer resultCount;
+	protected final JDBCQueryResultMetaData jdbcQueryResultMetaData = JDBCFactory.newJDBCQueryResultMetaData();;
 
 	protected String errorCode;
 
@@ -39,14 +37,24 @@ public abstract class AbstractJDBCQueryResult implements JDBCQueryResult {
 
 		getResultSet();
 
-		resultCount = resultSet.getFetchSize();
-
 		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
 
-		jdbcQueryResultMetaData = JDBCFactory.newJDBCQueryResultMetaData(resultSetMetaData.getColumnCount());
+		int columnCount = resultSetMetaData.getColumnCount();
 
-		for (int columnNumber = 1; columnNumber < resultSetMetaData.getColumnCount(); columnNumber++) {
+		for (int columnNumber = 1; columnNumber <= columnCount; columnNumber++) {
 			QueryResultColumnMeta queryResultColumnMeta = JDBCFactory.newQueryResultColumnMeta();
+			queryResultColumnMeta.setColumnNumber(columnNumber);
+			queryResultColumnMeta.setCatalogName(resultSetMetaData.getCatalogName(columnNumber));
+			queryResultColumnMeta.setSchemaName(resultSetMetaData.getSchemaName(columnNumber));
+			queryResultColumnMeta.setTableName(resultSetMetaData.getTableName(columnNumber));
+			queryResultColumnMeta.setColumnName(resultSetMetaData.getColumnName(columnNumber));
+			queryResultColumnMeta.setColumnClassName(resultSetMetaData.getColumnClassName(columnNumber));
+			queryResultColumnMeta.setColumnType(resultSetMetaData.getColumnType(columnNumber));
+			queryResultColumnMeta.setColumnTypeName(resultSetMetaData.getColumnTypeName(columnNumber));
+			queryResultColumnMeta.setColumnLabel(resultSetMetaData.getColumnLabel(columnNumber));
+			queryResultColumnMeta.setColumnDisplaySize(resultSetMetaData.getColumnDisplaySize(columnNumber));
+			queryResultColumnMeta.setPrecision(resultSetMetaData.getPrecision(columnNumber));
+			queryResultColumnMeta.setScale(resultSetMetaData.getScale(columnNumber));
 
 			jdbcQueryResultMetaData.addColumnMeta(queryResultColumnMeta);
 		}
@@ -59,6 +67,23 @@ public abstract class AbstractJDBCQueryResult implements JDBCQueryResult {
 		}
 
 		return resultSet;
+	}
+
+	protected JDBCRow convertCurrentResultToJDBCRow() throws SQLException {
+
+		ResultSet resultSet = getResultSet();
+
+		JDBCRow jdbcRow = JDBCFactory.newJDBCRow();
+
+		for (int columnNumber = 1; columnNumber <= jdbcQueryResultMetaData.getColumnCount(); columnNumber++) {
+			Object rawValue = resultSet.getObject(columnNumber);
+			JDBCValue jdbcValue = JDBCFactory.newJDBCValue();
+			jdbcValue.setColumnNumber(columnNumber);
+			jdbcValue.setRawValue(rawValue);
+			jdbcRow.addValue(columnNumber, jdbcValue);
+		}
+
+		return jdbcRow;
 	}
 
 	@Override
@@ -82,15 +107,6 @@ public abstract class AbstractJDBCQueryResult implements JDBCQueryResult {
 	}
 
 	/**
-	 * @return resultCount
-	 */
-	@Override
-	public final Integer getResultCount() {
-
-		return resultCount;
-	}
-
-	/**
 	 * @return errorCode
 	 */
 	@Override
@@ -111,7 +127,7 @@ public abstract class AbstractJDBCQueryResult implements JDBCQueryResult {
 	@Override
 	public boolean hasColumn(int columnNumber) throws SQLException {
 
-		return (columnNumber >= 1 && columnNumber <= resultCount);
+		return (columnNumber >= 1 && columnNumber <= jdbcQueryResultMetaData.getColumnCount());
 	}
 
 	@Override
@@ -119,7 +135,7 @@ public abstract class AbstractJDBCQueryResult implements JDBCQueryResult {
 
 		Assertion.assertNotBlank("columnName", columnName);
 
-		return jdbcQueryResultMetaData.hasColumn(columnName.toUpperCase());
+		return jdbcQueryResultMetaData.hasColumn(columnName);
 	}
 
 }

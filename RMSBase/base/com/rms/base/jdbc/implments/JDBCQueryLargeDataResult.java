@@ -3,8 +3,7 @@ package com.rms.base.jdbc.implments;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.rms.base.jdbc.JDBCValue;
-import com.rms.base.jdbc.abstractclass.AbstractJDBCQueryResult;
+import com.rms.base.jdbc.AbstractJDBCQueryResult;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.validate.Assertion;
@@ -48,23 +47,7 @@ class JDBCQueryLargeDataResult extends AbstractJDBCQueryResult {
 	@Override
 	public final JDBCRow getRow() throws SQLException {
 
-		JDBCRow jdbcRow = JDBCFactory.newJDBCRow();
-
-		for (int columnNumber = 1; columnNumber <= jdbcQueryResultMetaData.getColumnCount(); columnNumber++) {
-
-			String columnName = jdbcQueryResultMetaData.getColumnName(columnNumber);
-			Object rawValue = getValue(columnNumber);
-
-			DefaultJDBCColumn column = new DefaultJDBCColumn();
-			column.setColumnName(columnName);
-			column.setRawValue(rawValue);
-
-			JDBCValue jdbcValue = JDBCFactory.newJDBCValue();
-			jdbcValue.setRawValue(rawValue);
-			column.setJdbcValue(jdbcValue);
-
-			jdbcRow.addValue(columnName, jdbcValue);
-		}
+		JDBCRow jdbcRow = super.convertCurrentResultToJDBCRow();
 
 		return jdbcRow;
 	}
@@ -75,8 +58,8 @@ class JDBCQueryLargeDataResult extends AbstractJDBCQueryResult {
 
 		Assertion.assertNotNull("columnNumber", columnNumber);
 
-		if (hasColumn(columnNumber)) {
-			throw new SQLException("the columnNumber is not found!!![" + columnNumber + "]");
+		if (!hasColumn(columnNumber)) {
+			throw new SQLException("the columnNumber[" + columnNumber + "] is not found!!!");
 		}
 
 		Object object = getResultSet().getObject(columnNumber);
@@ -90,8 +73,8 @@ class JDBCQueryLargeDataResult extends AbstractJDBCQueryResult {
 
 		Assertion.assertNotNull("columnName", columnName);
 
-		if (hasColumn(columnName)) {
-			throw new SQLException("the columnName is not found!!![" + columnName + "]");
+		if (!hasColumn(columnName)) {
+			throw new SQLException("the columnName[" + columnName + "] is not found!!!");
 		}
 
 		Object object = getResultSet().getObject(columnName);

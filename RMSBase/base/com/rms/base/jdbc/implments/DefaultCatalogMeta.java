@@ -25,13 +25,6 @@ public class DefaultCatalogMeta implements CatalogMeta {
 
 	}
 
-	public void setCatalogName(String catalogName) {
-
-		Assertion.assertNotNull("catalogName", catalogName);
-
-		this.catalogName = catalogName;
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -39,6 +32,17 @@ public class DefaultCatalogMeta implements CatalogMeta {
 	public String getCatalogName() {
 
 		return catalogName;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setCatalogName(String catalogName) {
+
+		Assertion.assertNotNull("catalogName", catalogName);
+
+		this.catalogName = catalogName;
 	}
 
 	/**

@@ -3,7 +3,7 @@ package com.rms.base.jdbc.implments;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
-import com.rms.base.jdbc.abstractclass.AbstractJDBCDatabaseMetaData;
+import com.rms.base.jdbc.AbstractJDBCDatabaseMetaData;
 
 /**
  *

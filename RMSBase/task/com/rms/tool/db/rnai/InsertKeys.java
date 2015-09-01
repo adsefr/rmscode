@@ -34,7 +34,7 @@ public class InsertKeys {
 		dataBase.setDataBaseName("rimeisei");
 		dataBase.setUserId("postgres");
 		dataBase.setPassword("admin");
-		JDBCObject jdbcObject = JDBCObject.newInstance(dataBase);
+		JDBCObject jdbcObject = JDBCObject.getInstance(dataBase);
 		JDBCConnection jdbcConnection = jdbcObject.getJDBCConnection();
 		jdbcConnection.connection();
 		JDBCSelector userSelector = jdbcObject.createJDBCSelector(jdbcConnection);

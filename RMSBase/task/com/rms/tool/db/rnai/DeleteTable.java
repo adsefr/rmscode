@@ -28,7 +28,7 @@ public class DeleteTable {
 		dataBase.setDataBaseName("rimeisei");
 		dataBase.setUserId("postgres");
 		dataBase.setPassword("admin");
-		JDBCObject jdbcObject = JDBCObject.newInstance(dataBase);
+		JDBCObject jdbcObject = JDBCObject.getInstance(dataBase);
 		JDBCConnection jdbcConnection = jdbcObject.getJDBCConnection();
 		JDBCUpdater jdbcUpdater = jdbcObject.createJDBCUpdater(jdbcConnection);
 		try {

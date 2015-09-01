@@ -37,19 +37,25 @@ public interface JDBCDataBaseMetaData {
 
 	public String getURL() throws SQLException;
 
-	public CatalogMeta getCatalogMeta() throws SQLException;
-
 	public List<CatalogMeta> getCatalogMetas() throws SQLException;
+
+	public CatalogMeta getCatalogMeta() throws SQLException;
 
 	public CatalogMeta getCatalogMeta(String catalogName) throws SQLException;
 
-	public List<SchemaMeta> getCurrentSchemaMetas() throws SQLException;
+	public List<SchemaMeta> getSchemaMetas() throws SQLException;
 
 	public List<SchemaMeta> getSchemaMetas(String catalogName) throws SQLException;
 
+	public SchemaMeta getSchemaMeta(String schemaName) throws SQLException;
+
 	public SchemaMeta getSchemaMeta(String catalogName, String schemaName) throws SQLException;
 
+	public List<TableMeta> getTableMetas(String schemaName) throws SQLException;
+
 	public List<TableMeta> getTableMetas(String catalogName, String schemaName) throws SQLException;
+
+	public TableMeta getTableMeta(String schemaName, String tableName) throws SQLException;
 
 	public TableMeta getTableMeta(String catalogName, String schemaName, String tableName) throws SQLException;
 }

@@ -20,7 +20,7 @@ public class InsertArrayTbl {
 		dataBase.setPassword("admin");
 		dataBase.setDataBaseType(DataBaseType.POSTGRESQL);
 
-		JDBCObject jdbcObject = JDBCObject.newInstance(dataBase);
+		JDBCObject jdbcObject = JDBCObject.getInstance(dataBase);
 		JDBCConnection connection = jdbcObject.getJDBCConnection();
 		connection.connection();
 

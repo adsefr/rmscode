@@ -48,6 +48,5 @@ public class JDBCTask {
 				sshSession.disconnect();
 			}
 		}
-
 	}
 }

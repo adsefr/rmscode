@@ -14,7 +14,7 @@ public interface JDBCQueryResult extends JDBCCloseable {
 
 	public QueryParameter getQueryParameter();
 
-	public Integer getResultCount();
+	// public Integer getResultCount();
 
 	public String getResultCode();
 

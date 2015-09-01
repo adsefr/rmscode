@@ -35,9 +35,9 @@ public class JDBCFactory {
 		return defaultJDBCDatabaseMetaData;
 	}
 
-	public static JDBCQueryResultMetaData newJDBCQueryResultMetaData(int columnCount) {
+	public static JDBCQueryResultMetaData newJDBCQueryResultMetaData() {
 
-		DefaultJDBCQueryResultMetaData defaultJDBCQueryResultMetaData = new DefaultJDBCQueryResultMetaData(columnCount);
+		DefaultJDBCQueryResultMetaData defaultJDBCQueryResultMetaData = new DefaultJDBCQueryResultMetaData();
 
 		return defaultJDBCQueryResultMetaData;
 	}

@@ -17,7 +17,7 @@ public abstract class JDBCObject implements JDBCCloseable {
 
 	private final static String INSTANCE_JDBCOBJECT_CLASS_NAME = "com.rms.base.jdbc.DefaultJDBCObject";
 
-	public static JDBCObject newInstance(DataBaseInfo dataBaseInfo) {
+	public static JDBCObject getInstance(DataBaseInfo dataBaseInfo) {
 
 		JDBCObject instance = null;
 		try {

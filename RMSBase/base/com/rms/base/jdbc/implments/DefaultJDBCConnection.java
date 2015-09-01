@@ -1,7 +1,6 @@
 package com.rms.base.jdbc.implments;
 
-import com.rms.base.jdbc.abstractclass.AbstractJDBCConnection;
-
+import com.rms.base.jdbc.AbstractJDBCConnection;
 
 /**
  *

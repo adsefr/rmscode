@@ -12,6 +12,8 @@ public interface CatalogMeta {
 
 	public String getCatalogName();
 
+	public void setCatalogName(String catalogName);
+
 	public boolean contains(String schemaName);
 
 	public void addSchemaMeta(SchemaMeta schemaMeta);

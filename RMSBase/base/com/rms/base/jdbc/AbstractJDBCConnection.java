@@ -1,4 +1,4 @@
-package com.rms.base.jdbc.abstractclass;
+package com.rms.base.jdbc;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.rms.base.exception.UnexpectedTypeException;
-import com.rms.base.jdbc.JDBCConnection;
-import com.rms.base.jdbc.JDBCUtil;
 import com.rms.base.jdbc.constant.HoldabilityType;
 import com.rms.base.jdbc.constant.ResultSetConcurrency;
 import com.rms.base.jdbc.constant.ResultSetType;
