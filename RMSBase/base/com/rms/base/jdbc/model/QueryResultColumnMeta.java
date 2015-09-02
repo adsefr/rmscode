@@ -56,40 +56,40 @@ public interface QueryResultColumnMeta {
 
 	public void setScale(Integer scale);
 
-	// public boolean isAutoIncrement();
-	//
-	// public boolean isCaseSensitive();
-	//
-	// public boolean isCurrency();
-	//
-	// public boolean isDefinitelyWritable();
-	//
-	// public boolean isReadOnly();
-	//
-	// public boolean isSearchable();
-	//
-	// public boolean isSigned();
-	//
-	// public boolean isWritable();
-	//
-	// public Integer getNullable();
+	public boolean isAutoIncrement();
 
-	// public void setAutoIncrement(boolean autoIncrement);
-	//
-	// public void setCaseSensitive(boolean caseSensitive);
-	//
-	// public void setCurrency(boolean currency);
-	//
-	// public void setDefinitelyWritable(boolean definitelyWritable);
-	//
-	// public void setNullable(Integer nullable);
-	//
-	// public void setReadOnly(boolean readOnly);
-	//
-	//
-	// public void setSearchable(boolean searchable);
-	//
-	// public void setSigned(boolean signed);
-	//
-	// public void setWritable(boolean writable);
+	public void setAutoIncrement(boolean autoIncrement);
+
+	public boolean isCaseSensitive();
+
+	public void setCaseSensitive(boolean caseSensitive);
+
+	public boolean isCurrency();
+
+	public void setCurrency(boolean currency);
+
+	public boolean isDefinitelyWritable();
+
+	public void setDefinitelyWritable(boolean definitelyWritable);
+
+	public boolean isReadOnly();
+
+	public void setReadOnly(boolean readOnly);
+
+	public boolean isSearchable();
+
+	public void setSearchable(boolean searchable);
+
+	public boolean isSigned();
+
+	public void setSigned(boolean signed);
+
+	public boolean isWritable();
+
+	public void setWritable(boolean writable);
+
+	public Integer getNullable();
+
+	public void setNullable(Integer nullable);
+
 }

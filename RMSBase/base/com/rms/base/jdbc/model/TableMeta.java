@@ -27,5 +27,4 @@ public interface TableMeta {
 	public void addColumnMeta(ColumnMeta columnMeta);
 
 	public void setPrimaryKeyName(String primaryKeyName);
-
 }

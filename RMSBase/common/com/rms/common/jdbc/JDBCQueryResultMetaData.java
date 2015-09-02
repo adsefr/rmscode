@@ -16,57 +16,11 @@ public interface JDBCQueryResultMetaData {
 
 	public boolean hasColumn(String columnName);
 
-	public QueryResultColumnMeta getColumnMeta(int columnNumber);
-
-	public QueryResultColumnMeta getColumnMeta(String columnName);
-
 	public Integer getColumnNumber(String columnName);
 
 	public String getColumnName(int columnNumber);
 
-	public void addColumnMeta(QueryResultColumnMeta queryResultColumnMeta);
+	public QueryResultColumnMeta getColumnMeta(int columnNumber);
 
-	// public String getCatalogName(int column);
-	//
-	// public String getColumnClassName(int column);
-	//
-	// public int getColumnCount();
-	//
-	// public int getColumnNumber(String columnName);
-	//
-	// public int getColumnDisplaySize(int column);
-	//
-	// public String getColumnLabel(int column);
-	//
-	// public String getColumnName(int column);
-	//
-	// public int getColumnType(int column);
-	//
-	// public String getColumnTypeName(int column);
-	//
-	// public int getPrecision(int column);
-	//
-	// public int getScale(int column);
-	//
-	// public String getSchemaName(int column);
-	//
-	// public String getTableName(int column);
-	//
-	// public boolean isAutoIncrement(int column);
-	//
-	// public boolean isCaseSensitive(int column);
-	//
-	// public boolean isCurrency(int column);
-	//
-	// public boolean isDefinitelyWritable(int column);
-	//
-	// public int isNullable(int column);
-	//
-	// public boolean isReadOnly(int column);
-	//
-	// public boolean isSearchable(int column);
-	//
-	// public boolean isSigned(int column);
-	//
-	// public boolean isWritable(int column);
+	public QueryResultColumnMeta getColumnMeta(String columnName);
 }

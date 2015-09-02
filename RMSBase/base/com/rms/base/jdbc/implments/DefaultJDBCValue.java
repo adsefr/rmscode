@@ -7,6 +7,7 @@ import java.util.Calendar;
 import com.rms.base.exception.UnexpectedTypeException;
 import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.jdbc.constant.ValueType;
+import com.rms.base.validate.Assertion;
 
 /**
  *
@@ -20,60 +21,9 @@ class DefaultJDBCValue implements JDBCValue {
 
 	private ValueType valueType = null;
 
-	public DefaultJDBCValue() {
-
-	}
-
-	@Override
-	public int getColumnNumber() {
-
-		// TODO 自動生成されたメソッド・スタブ
-		return 0;
-	}
-
-	@Override
-	public int getRowNumber() {
-
-		// TODO 自動生成されたメソッド・スタブ
-		return 0;
-	}
-
-	@Override
-	public int setColumnNumber(int columnNumber) {
-
-		// TODO 自動生成されたメソッド・スタブ
-		return 0;
-	}
-
-	@Override
-	public int setRowNumber(int rowNumber) {
-
-		// TODO 自動生成されたメソッド・スタブ
-		return 0;
-	}
-
-	@Override
-	public void setValueType(int type) {
-
-		this.valueType = ValueType.valueOf(type);
-	}
-
-	@Override
-	public void setValueType(ValueType valueType) {
-
-		this.valueType = valueType;
-	}
-
-	@Override
-	public void setRawValue(Object rawValue) {
+	public DefaultJDBCValue(Object rawValue) {
 
 		this.rawValue = rawValue;
-	}
-
-	@Override
-	public ValueType getValueType() {
-
-		return valueType;
 	}
 
 	@Override
@@ -131,7 +81,7 @@ class DefaultJDBCValue implements JDBCValue {
 	}
 
 	@Override
-	public BigDecimal NumberValue() {
+	public BigDecimal numberValue() {
 
 		switch (valueType) {
 		case BIT:
@@ -168,13 +118,15 @@ class DefaultJDBCValue implements JDBCValue {
 	@Override
 	public boolean isType(Class<?> clazz) {
 
-		return clazz != null && clazz.isInstance(rawValue);
+		Assertion.assertNotNull("clazz", clazz);
+
+		return rawValue != null && clazz.isInstance(rawValue);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getValue(Class<T> clazz) {
+	public <T> T getValue() {
 
-		return clazz.cast(rawValue);
+		return (T) rawValue;
 	}
-
 }

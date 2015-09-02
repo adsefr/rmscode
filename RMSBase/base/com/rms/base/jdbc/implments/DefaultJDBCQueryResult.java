@@ -8,6 +8,7 @@ import java.util.List;
 import com.rms.base.jdbc.AbstractJDBCQueryResult;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
+import com.rms.base.util.ArrayUtil;
 import com.rms.base.validate.Assertion;
 
 /**
@@ -17,27 +18,28 @@ import com.rms.base.validate.Assertion;
  */
 class DefaultJDBCQueryResult extends AbstractJDBCQueryResult {
 
-	private final List<JDBCRow> queryResultRows = new ArrayList<>();
+	private final List<JDBCRow> queryResultJDBCRowCollection = new ArrayList<>();
 
 	private Integer currentRowNumber = 0;
 
 	DefaultJDBCQueryResult(ResultSet resultSet) throws SQLException {
 
-		super(resultSet, null);
-
+		this(resultSet, null);
 	}
 
 	DefaultJDBCQueryResult(ResultSet resultSet, QueryParameter queryParameter) throws SQLException {
 
 		super(resultSet, queryParameter);
 
-		while (resultSet.next()) {
-			JDBCRow jdbcRow = convertCurrentResultToJDBCRow();
+		while (getResultSet().next()) {
+			JDBCRow jdbcRow = convertToJDBCRow(getResultSet());
 
-			queryResultRows.add(jdbcRow);
+			ArrayUtil.add(queryResultJDBCRowCollection, jdbcRow.getRowNumber(), jdbcRow);
 		}
 
-		queryResultRows.add(0, JDBCFactory.newJDBCRow());
+		beforeFirst();
+
+		close();
 	}
 
 	@Override
@@ -50,12 +52,12 @@ class DefaultJDBCQueryResult extends AbstractJDBCQueryResult {
 	public final void absolute(int rowNumber) throws SQLException {
 
 		int _rowNumber = Math.abs(rowNumber);
-		int mod = _rowNumber % queryResultRows.size();
+		int mod = _rowNumber % queryResultJDBCRowCollection.size();
 
 		if (rowNumber > 0) {
 			currentRowNumber = mod;
 		} else if (rowNumber < 0) {
-			currentRowNumber = queryResultRows.size() - mod;
+			currentRowNumber = queryResultJDBCRowCollection.size() - mod;
 		} else {
 			currentRowNumber = 0;
 		}
@@ -64,19 +66,19 @@ class DefaultJDBCQueryResult extends AbstractJDBCQueryResult {
 	@Override
 	public final void afterLast() throws SQLException {
 
-		currentRowNumber = queryResultRows.size() + 1;
+		currentRowNumber = queryResultJDBCRowCollection.size() + 1;
 	}
 
 	@Override
 	public final boolean hasNext() throws SQLException {
 
-		return (++currentRowNumber >= queryResultRows.size());
+		return (++currentRowNumber < queryResultJDBCRowCollection.size());
 	}
 
 	@Override
 	public final JDBCRow getRow() throws SQLException {
 
-		return queryResultRows.get(currentRowNumber);
+		return queryResultJDBCRowCollection.get(currentRowNumber);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -89,7 +91,7 @@ class DefaultJDBCQueryResult extends AbstractJDBCQueryResult {
 			throw new SQLException("the columnNumber[" + columnNumber + "] is not found!!!");
 		}
 
-		Object object = queryResultRows.get(currentRowNumber).getValue(columnNumber);
+		Object object = queryResultJDBCRowCollection.get(currentRowNumber).getValue(columnNumber);
 
 		return (T) object;
 	}
@@ -104,8 +106,24 @@ class DefaultJDBCQueryResult extends AbstractJDBCQueryResult {
 			throw new SQLException("the columnName[" + columnName + "] is not found!!!");
 		}
 
-		Object object = queryResultRows.get(currentRowNumber).getValue(columnName);
+		JDBCRow jdbcRow = queryResultJDBCRowCollection.get(currentRowNumber);
+
+		Object object = jdbcRow.getValue(columnName);
 
 		return (T) object;
+	}
+
+	@Override
+	public final List<Object> getValues() throws SQLException {
+
+		JDBCRow jdbcRow = getRow();
+
+		List<Object> values = new ArrayList<>();
+		for (int columnNumber = 1; columnNumber <= jdbcRow.getColumnCount(); columnNumber++) {
+			values.add(jdbcRow.getValue(columnNumber));
+		}
+
+		return values;
+
 	}
 }

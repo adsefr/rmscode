@@ -1,13 +1,14 @@
 package com.rms.base.jdbc.implments;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.rms.base.jdbc.JDBCValue;
+import com.rms.base.jdbc.model.JDBCColumn;
 import com.rms.base.jdbc.model.JDBCRow;
+import com.rms.base.util.ArrayUtil;
 import com.rms.base.validate.Assertion;
-import com.rms.common.jdbc.JDBCQueryResultMetaData;
 
 /**
  *
@@ -17,9 +18,13 @@ import com.rms.common.jdbc.JDBCQueryResultMetaData;
  */
 public class DefaultJDBCRow implements JDBCRow {
 
-	private JDBCQueryResultMetaData jdbcQueryResultMetaData;
+	private Integer rowNumber;
 
-	private List<JDBCValue> jdbcValuesCollection = new ArrayList<JDBCValue>(Arrays.asList(JDBCFactory.newJDBCValue()));
+	private List<JDBCColumn> jdbcColumnCollection = new ArrayList<>();
+
+	private Map<Integer, JDBCColumn> jdbcColumnNumberMap = new HashMap<>();
+
+	private Map<String, JDBCColumn> jdbcColumnNameMap = new HashMap<>();
 
 	public DefaultJDBCRow() {
 
@@ -28,13 +33,25 @@ public class DefaultJDBCRow implements JDBCRow {
 	@Override
 	public int getColumnCount() {
 
-		return jdbcValuesCollection.size();
+		return jdbcColumnCollection.size() - 1;
+	}
+
+	@Override
+	public int getRowNumber() {
+
+		return rowNumber;
+	}
+
+	@Override
+	public void setRowNumber(int rowNumber) {
+
+		this.rowNumber = rowNumber;
 	}
 
 	@Override
 	public final boolean exist(int columnNumber) {
 
-		return jdbcQueryResultMetaData.hasColumn(columnNumber);
+		return jdbcColumnNumberMap.containsKey(columnNumber);
 	}
 
 	@Override
@@ -42,34 +59,54 @@ public class DefaultJDBCRow implements JDBCRow {
 
 		Assertion.assertNotBlank("columnName", columnName);
 
-		return jdbcQueryResultMetaData.hasColumn(columnName);
+		return jdbcColumnNameMap.containsKey(columnName.toUpperCase());
 	}
 
 	@Override
-	public void addValue(int columnNumber, JDBCValue jdbcValue) {
+	public <T> T getValue(int columnNumber) {
 
-		jdbcValuesCollection.add(columnNumber, jdbcValue);
+		if (exist(columnNumber)) {
+			return getColumn(columnNumber).getValue();
+		}
 
+		return null;
 	}
 
 	@Override
-	public void addValue(String columnName, JDBCValue jdbcValue) {
+	public <T> T getValue(String columnName) {
 
-		int columnNumber = jdbcQueryResultMetaData.getColumnNumber(columnName);
+		Assertion.assertNotNull("columnName", columnName);
 
-		jdbcValuesCollection.add(columnNumber, jdbcValue);
+		if (exist(columnName)) {
+			return jdbcColumnNameMap.get(columnName.toUpperCase()).getValue();
+		}
+
+		return null;
 	}
 
 	@Override
-	public JDBCValue getValue(int columnNumber) {
+	public JDBCColumn getColumn(int columnNumber) {
 
-		return jdbcValuesCollection.get(columnNumber);
-
+		return jdbcColumnNumberMap.get(columnNumber);
 	}
 
 	@Override
-	public JDBCValue getValue(String columnName) {
+	public JDBCColumn getColumn(String columnName) {
 
-		return getValue(jdbcQueryResultMetaData.getColumnNumber(columnName));
+		Assertion.assertNotNull("columnName", columnName);
+
+		return jdbcColumnNameMap.get(columnName.toUpperCase());
+	}
+
+	@Override
+	public void addColumn(JDBCColumn jdbcColumn) {
+
+		Assertion.assertNotNull("jdbcColumn", jdbcColumn);
+		Assertion.assertNotNull("jdbcColumn.getColumnNumber()", jdbcColumn.getColumnNumber());
+		Assertion.assertNotBlank("jdbcColumn.getColumnName()", jdbcColumn.getColumnName());
+
+		ArrayUtil.add(jdbcColumnCollection, jdbcColumn.getColumnNumber(), jdbcColumn);
+		jdbcColumnNumberMap.put(jdbcColumn.getColumnNumber(), jdbcColumn);
+		jdbcColumnNameMap.put(jdbcColumn.getColumnName().toUpperCase(), jdbcColumn);
 	}
 }

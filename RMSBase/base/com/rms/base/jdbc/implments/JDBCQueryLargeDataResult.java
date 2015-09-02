@@ -47,7 +47,7 @@ class JDBCQueryLargeDataResult extends AbstractJDBCQueryResult {
 	@Override
 	public final JDBCRow getRow() throws SQLException {
 
-		JDBCRow jdbcRow = super.convertCurrentResultToJDBCRow();
+		JDBCRow jdbcRow = super.convertToJDBCRow(getResultSet());
 
 		return jdbcRow;
 	}

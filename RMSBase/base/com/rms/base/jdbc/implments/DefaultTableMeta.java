@@ -66,6 +66,18 @@ public class DefaultTableMeta implements TableMeta {
 
 	}
 
+	@Override
+	public String toString() {
+
+		StringBuilder sBuilder = new StringBuilder();
+		sBuilder.append("catalogName=").append(catalogName).append(", ");
+		sBuilder.append("schemaName=").append(schemaName).append(", ");
+		sBuilder.append("tableName=").append(tableName).append(", ");
+		sBuilder.append("tableType=").append(tableType);
+
+		return sBuilder.toString();
+	}
+
 	/**
 	 * @return catalogName
 	 */

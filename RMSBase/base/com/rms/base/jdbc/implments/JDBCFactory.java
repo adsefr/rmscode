@@ -2,12 +2,14 @@ package com.rms.base.jdbc.implments;
 
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import com.rms.base.jdbc.JDBCConnection;
 import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.jdbc.model.CatalogMeta;
 import com.rms.base.jdbc.model.ColumnMeta;
+import com.rms.base.jdbc.model.JDBCColumn;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.jdbc.model.QueryResultColumnMeta;
@@ -35,9 +37,9 @@ public class JDBCFactory {
 		return defaultJDBCDatabaseMetaData;
 	}
 
-	public static JDBCQueryResultMetaData newJDBCQueryResultMetaData() {
+	public static JDBCQueryResultMetaData newJDBCQueryResultMetaData(ResultSetMetaData resultSetMetaData) throws SQLException {
 
-		DefaultJDBCQueryResultMetaData defaultJDBCQueryResultMetaData = new DefaultJDBCQueryResultMetaData();
+		DefaultJDBCQueryResultMetaData defaultJDBCQueryResultMetaData = new DefaultJDBCQueryResultMetaData(resultSetMetaData);
 
 		return defaultJDBCQueryResultMetaData;
 	}
@@ -70,9 +72,16 @@ public class JDBCFactory {
 		return defaultJDBCRow;
 	}
 
-	public static JDBCValue newJDBCValue() {
+	public static JDBCColumn newJDBCColumn(QueryResultColumnMeta queryResultColumnMeta, Object rawValue) {
 
-		DefaultJDBCValue defaultJDBCValue = new DefaultJDBCValue();
+		DefaultJDBCColumn defaultJDBCColumn = new DefaultJDBCColumn(queryResultColumnMeta, rawValue);
+
+		return defaultJDBCColumn;
+	}
+
+	public static JDBCValue newJDBCValue(Object rawValue) {
+
+		DefaultJDBCValue defaultJDBCValue = new DefaultJDBCValue(rawValue);
 
 		return defaultJDBCValue;
 	}

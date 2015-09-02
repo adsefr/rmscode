@@ -8,9 +8,12 @@ import java.util.Iterator;
 import java.util.UUID;
 
 import com.rms.base.exception.UnexpectedDataException;
+import com.rms.base.logging.Logger;
 import com.rms.common.jdbc.JDBCCloseable;
 
 public class JDBCUtil {
+
+	private final static Logger logger = Logger.getLogger(JDBCUtil.class);
 
 	static String generateID() {
 
@@ -41,7 +44,7 @@ public class JDBCUtil {
 				autoCloseable.close();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.debug(e);
 		}
 	}
 

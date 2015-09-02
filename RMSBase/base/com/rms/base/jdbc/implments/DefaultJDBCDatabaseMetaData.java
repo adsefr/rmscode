@@ -17,5 +17,4 @@ public class DefaultJDBCDatabaseMetaData extends AbstractJDBCDatabaseMetaData {
 
 		super(databaseMetaData);
 	}
-
 }

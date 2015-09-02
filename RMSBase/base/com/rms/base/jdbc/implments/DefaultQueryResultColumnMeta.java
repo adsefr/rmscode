@@ -12,9 +12,9 @@ public class DefaultQueryResultColumnMeta implements QueryResultColumnMeta {
 
 	private Integer columnNumber;
 
-	private String schemaName;
-
 	private String catalogName;
+
+	private String schemaName;
 
 	private String tableName;
 
@@ -33,6 +33,24 @@ public class DefaultQueryResultColumnMeta implements QueryResultColumnMeta {
 	private Integer precision;
 
 	private Integer scale;
+
+	private boolean autoIncrement;
+
+	private boolean caseSensitive;
+
+	private boolean currency;
+
+	private boolean definitelyWritable;
+
+	private boolean readOnly;
+
+	private boolean searchable;
+
+	private boolean signed;
+
+	private boolean writable;
+
+	private Integer nullable;
 
 	public DefaultQueryResultColumnMeta() {
 
@@ -58,25 +76,6 @@ public class DefaultQueryResultColumnMeta implements QueryResultColumnMeta {
 	}
 
 	/**
-	 * @return schemaName
-	 */
-	@Override
-	public String getSchemaName() {
-
-		return schemaName;
-	}
-
-	/**
-	 * @param schemaName
-	 *            セットする schemaName
-	 */
-	@Override
-	public void setSchemaName(String schemaName) {
-
-		this.schemaName = schemaName;
-	}
-
-	/**
 	 * @return catalogName
 	 */
 	@Override
@@ -93,6 +92,25 @@ public class DefaultQueryResultColumnMeta implements QueryResultColumnMeta {
 	public void setCatalogName(String catalogName) {
 
 		this.catalogName = catalogName;
+	}
+
+	/**
+	 * @return schemaName
+	 */
+	@Override
+	public String getSchemaName() {
+
+		return schemaName;
+	}
+
+	/**
+	 * @param schemaName
+	 *            セットする schemaName
+	 */
+	@Override
+	public void setSchemaName(String schemaName) {
+
+		this.schemaName = schemaName;
 	}
 
 	/**
@@ -266,24 +284,175 @@ public class DefaultQueryResultColumnMeta implements QueryResultColumnMeta {
 		this.scale = scale;
 	}
 
-	// private boolean readOnly;
-	//
-	// private boolean writable;
-	//
-	// private boolean definitelyWritable;
-	//
-	// private int columnCount;
-	//
-	// private boolean autoIncrement;
-	//
-	// private boolean caseSensitive;
-	//
-	// private boolean searchable;
-	//
-	// private boolean currency;
-	//
-	// private int nullable;
-	//
-	// private boolean signed;
+	/**
+	 * @return autoIncrement
+	 */
+	@Override
+	public boolean isAutoIncrement() {
+
+		return autoIncrement;
+	}
+
+	/**
+	 * @param autoIncrement
+	 *            セットする autoIncrement
+	 */
+	@Override
+	public void setAutoIncrement(boolean autoIncrement) {
+
+		this.autoIncrement = autoIncrement;
+	}
+
+	/**
+	 * @return caseSensitive
+	 */
+	@Override
+	public boolean isCaseSensitive() {
+
+		return caseSensitive;
+	}
+
+	/**
+	 * @param caseSensitive
+	 *            セットする caseSensitive
+	 */
+	@Override
+	public void setCaseSensitive(boolean caseSensitive) {
+
+		this.caseSensitive = caseSensitive;
+	}
+
+	/**
+	 * @return currency
+	 */
+	@Override
+	public boolean isCurrency() {
+
+		return currency;
+	}
+
+	/**
+	 * @param currency
+	 *            セットする currency
+	 */
+	@Override
+	public void setCurrency(boolean currency) {
+
+		this.currency = currency;
+	}
+
+	/**
+	 * @return definitelyWritable
+	 */
+	@Override
+	public boolean isDefinitelyWritable() {
+
+		return definitelyWritable;
+	}
+
+	/**
+	 * @param definitelyWritable
+	 *            セットする definitelyWritable
+	 */
+	@Override
+	public void setDefinitelyWritable(boolean definitelyWritable) {
+
+		this.definitelyWritable = definitelyWritable;
+	}
+
+	/**
+	 * @return readOnly
+	 */
+	@Override
+	public boolean isReadOnly() {
+
+		return readOnly;
+	}
+
+	/**
+	 * @param readOnly
+	 *            セットする readOnly
+	 */
+	@Override
+	public void setReadOnly(boolean readOnly) {
+
+		this.readOnly = readOnly;
+	}
+
+	/**
+	 * @return searchable
+	 */
+	@Override
+	public boolean isSearchable() {
+
+		return searchable;
+	}
+
+	/**
+	 * @param searchable
+	 *            セットする searchable
+	 */
+	@Override
+	public void setSearchable(boolean searchable) {
+
+		this.searchable = searchable;
+	}
+
+	/**
+	 * @return signed
+	 */
+	@Override
+	public boolean isSigned() {
+
+		return signed;
+	}
+
+	/**
+	 * @param signed
+	 *            セットする signed
+	 */
+	@Override
+	public void setSigned(boolean signed) {
+
+		this.signed = signed;
+	}
+
+	/**
+	 * @return writable
+	 */
+	@Override
+	public boolean isWritable() {
+
+		return writable;
+	}
+
+	/**
+	 * @param writable
+	 *            セットする writable
+	 */
+	@Override
+	public void setWritable(boolean writable) {
+
+		this.writable = writable;
+	}
+
+	/**
+	 * @return nullable
+	 */
+	@Override
+	public Integer getNullable() {
+
+		return nullable;
+	}
+
+	/**
+	 * @param nullable
+	 *            セットする nullable
+	 */
+	@Override
+	public void setNullable(Integer nullable) {
+
+		this.nullable = nullable;
+	}
 
 }

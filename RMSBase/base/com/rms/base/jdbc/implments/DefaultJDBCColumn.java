@@ -1,94 +1,80 @@
 package com.rms.base.jdbc.implments;
 
+import java.math.BigDecimal;
+import java.util.Calendar;
+
 import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.jdbc.model.JDBCColumn;
+import com.rms.base.jdbc.model.QueryResultColumnMeta;
 
 /**
- *
  *
  * @author ri.meisei
  * @since 2014/01/30
  */
 public class DefaultJDBCColumn implements JDBCColumn {
 
-	private DefaultColumnMeta columnMeta;
-
-	private String columnName;
-
-	private Object rawValue;
+	private QueryResultColumnMeta queryResultColumnMeta;
 
 	private JDBCValue jdbcValue;
 
-	public DefaultJDBCColumn() {
+	public DefaultJDBCColumn(QueryResultColumnMeta queryResultColumnMeta, Object rawValue) {
 
+		this.queryResultColumnMeta = queryResultColumnMeta;
+		this.jdbcValue = JDBCFactory.newJDBCValue(rawValue);
 	}
 
-	/**
-	 * @return columnMeta
-	 */
-	public DefaultColumnMeta getColumnMeta() {
+	@Override
+	public Integer getColumnNumber() {
 
-		return columnMeta;
-	}
-
-	/**
-	 * @param columnMeta
-	 *            セットする columnMeta
-	 */
-	public void setColumnMeta(DefaultColumnMeta columnMeta) {
-
-		this.columnMeta = columnMeta;
+		return queryResultColumnMeta.getColumnNumber();
 	}
 
 	/**
 	 * @return columnName
 	 */
+	@Override
 	public String getColumnName() {
 
-		return columnName;
+		return queryResultColumnMeta.getColumnName();
 	}
 
-	/**
-	 * @param columnName
-	 *            セットする columnName
-	 */
-	public void setColumnName(String columnName) {
+	@Override
+	public boolean isNull() {
 
-		this.columnName = columnName;
+		return jdbcValue.isNull();
 	}
 
 	/**
 	 * @return rawValue
 	 */
-	public Object getRawValue() {
+	@Override
+	public Object rawValue() {
 
-		return rawValue;
+		return jdbcValue.rawValue();
 	}
 
-	/**
-	 * @param rawValue
-	 *            セットする rawValue
-	 */
-	public void setRawValue(Object rawValue) {
+	@Override
+	public String stringValue() {
 
-		this.rawValue = rawValue;
+		return jdbcValue.stringValue();
 	}
 
-	/**
-	 * @return jdbcValue
-	 */
-	public JDBCValue getJdbcValue() {
+	@Override
+	public BigDecimal numberValue() {
 
-		return jdbcValue;
+		return jdbcValue.numberValue();
 	}
 
-	/**
-	 * @param jdbcValue
-	 *            セットする jdbcValue
-	 */
-	public void setJdbcValue(JDBCValue jdbcValue) {
+	@Override
+	public Calendar dateValue() {
 
-		this.jdbcValue = jdbcValue;
+		return jdbcValue.dateValue();
 	}
 
+	@Override
+	public <T> T getValue() {
+
+		return jdbcValue.getValue();
+	}
 }

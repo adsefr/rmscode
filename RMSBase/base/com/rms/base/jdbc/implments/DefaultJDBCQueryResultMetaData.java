@@ -1,5 +1,7 @@
 package com.rms.base.jdbc.implments;
 
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.Map;
 
 import com.rms.base.jdbc.model.QueryResultColumnMeta;
 import com.rms.base.util.ArrayUtil;
+import com.rms.base.util.NumberUtil;
 import com.rms.base.validate.Assertion;
 import com.rms.common.jdbc.JDBCQueryResultMetaData;
 
@@ -17,51 +20,79 @@ import com.rms.common.jdbc.JDBCQueryResultMetaData;
  */
 class DefaultJDBCQueryResultMetaData implements JDBCQueryResultMetaData {
 
-	private List<QueryResultColumnMeta> queryResultColumnMetaCollection;
+	private final int columnCount;
 
-	private Map<String, QueryResultColumnMeta> columnNameMap = new HashMap<>();
+	private final List<QueryResultColumnMeta> queryResultColumnMetaCollection = new ArrayList<>();
 
-	public DefaultJDBCQueryResultMetaData() {
+	private final Map<String, QueryResultColumnMeta> queryResultColumnMetaMap = new HashMap<>();
 
-		queryResultColumnMetaCollection = new ArrayList<>();
-	}
+	private final Map<String, Integer> queryResultColumnOrderMap = new HashMap<>();
 
-	@Override
-	public int getColumnCount() {
+	DefaultJDBCQueryResultMetaData(ResultSetMetaData resultSetMetaData) throws SQLException {
 
-		return columnNameMap.size();
-	}
+		Assertion.assertNotNull("resultSetMetaData", resultSetMetaData);
 
-	@Override
-	public boolean hasColumn(int columnNumber) {
+		this.columnCount = resultSetMetaData.getColumnCount();
 
-		return columnNumber >= 1 && columnNumber <= queryResultColumnMetaCollection.size();
-	}
+		for (int columnNumber = 1; columnNumber <= columnCount; columnNumber++) {
+			QueryResultColumnMeta queryResultColumnMeta = JDBCFactory.newQueryResultColumnMeta();
+			queryResultColumnMeta.setColumnNumber(columnNumber);
+			queryResultColumnMeta.setCatalogName(resultSetMetaData.getCatalogName(columnNumber));
+			queryResultColumnMeta.setSchemaName(resultSetMetaData.getSchemaName(columnNumber));
+			queryResultColumnMeta.setTableName(resultSetMetaData.getTableName(columnNumber));
+			queryResultColumnMeta.setColumnName(resultSetMetaData.getColumnName(columnNumber));
+			queryResultColumnMeta.setColumnClassName(resultSetMetaData.getColumnClassName(columnNumber));
+			queryResultColumnMeta.setColumnType(resultSetMetaData.getColumnType(columnNumber));
+			queryResultColumnMeta.setColumnTypeName(resultSetMetaData.getColumnTypeName(columnNumber));
+			queryResultColumnMeta.setColumnLabel(resultSetMetaData.getColumnLabel(columnNumber));
+			queryResultColumnMeta.setColumnDisplaySize(resultSetMetaData.getColumnDisplaySize(columnNumber));
+			queryResultColumnMeta.setPrecision(resultSetMetaData.getPrecision(columnNumber));
+			queryResultColumnMeta.setAutoIncrement(resultSetMetaData.isAutoIncrement(columnNumber));
+			queryResultColumnMeta.setCaseSensitive(resultSetMetaData.isCaseSensitive(columnNumber));
+			queryResultColumnMeta.setCurrency(resultSetMetaData.isCurrency(columnNumber));
+			queryResultColumnMeta.setDefinitelyWritable(resultSetMetaData.isDefinitelyWritable(columnNumber));
+			queryResultColumnMeta.setReadOnly(resultSetMetaData.isReadOnly(columnNumber));
+			queryResultColumnMeta.setSearchable(resultSetMetaData.isSearchable(columnNumber));
+			queryResultColumnMeta.setSigned(resultSetMetaData.isSigned(columnNumber));
+			queryResultColumnMeta.setWritable(resultSetMetaData.isWritable(columnNumber));
+			queryResultColumnMeta.setNullable(resultSetMetaData.isNullable(columnNumber));
 
-	@Override
-	public boolean hasColumn(String columnName) {
-
-		Assertion.assertNotBlank("columnName", columnName);
-
-		return columnNameMap.containsKey(columnName);
-	}
-
-	@Override
-	public Integer getColumnNumber(String columnName) {
-
-		Assertion.assertNotBlank("columnName", columnName);
-
-		QueryResultColumnMeta queryResultColumnMeta = columnNameMap.get(columnName);
-
-		if (queryResultColumnMeta != null) {
-			return columnNameMap.get(columnName).getColumnNumber();
+			ArrayUtil.add(queryResultColumnMetaCollection, columnNumber, queryResultColumnMeta);
+			queryResultColumnMetaMap.put(queryResultColumnMeta.getColumnName().toUpperCase(), queryResultColumnMeta);
+			queryResultColumnOrderMap.put(queryResultColumnMeta.getColumnName().toUpperCase(), columnNumber);
 		}
-
-		return null;
 	}
 
 	@Override
-	public String getColumnName(int columnNumber) {
+	public final int getColumnCount() {
+
+		return columnCount;
+	}
+
+	@Override
+	public final boolean hasColumn(int columnNumber) {
+
+		return NumberUtil.between(columnNumber, 1, columnCount);
+	}
+
+	@Override
+	public final boolean hasColumn(String columnName) {
+
+		Assertion.assertNotBlank("columnName", columnName);
+
+		return queryResultColumnMetaMap.containsKey(columnName.toUpperCase());
+	}
+
+	@Override
+	public final Integer getColumnNumber(String columnName) {
+
+		Assertion.assertNotBlank("columnName", columnName);
+
+		return queryResultColumnOrderMap.get(columnName.toUpperCase());
+	}
+
+	@Override
+	public final String getColumnName(int columnNumber) {
 
 		String columnName = null;
 
@@ -73,42 +104,24 @@ class DefaultJDBCQueryResultMetaData implements JDBCQueryResultMetaData {
 	}
 
 	@Override
-	public QueryResultColumnMeta getColumnMeta(int columnNumber) {
+	public final QueryResultColumnMeta getColumnMeta(int columnNumber) {
 
 		QueryResultColumnMeta queryResultColumnMeta = null;
 
 		if (hasColumn(columnNumber)) {
-			queryResultColumnMeta = queryResultColumnMetaCollection.get(columnNumber - 1);
+			queryResultColumnMeta = queryResultColumnMetaCollection.get(columnNumber);
 		}
 
 		return queryResultColumnMeta;
 	}
 
 	@Override
-	public QueryResultColumnMeta getColumnMeta(String columnName) {
+	public final QueryResultColumnMeta getColumnMeta(String columnName) {
 
-		QueryResultColumnMeta queryResultColumnMeta = null;
+		Assertion.assertNotBlank("columnName", columnName);
 
-		if (hasColumn(columnName)) {
-			Integer columnNumber = getColumnNumber(columnName);
-			queryResultColumnMeta = queryResultColumnMetaCollection.get(columnNumber - 1);
-		}
+		QueryResultColumnMeta queryResultColumnMeta = queryResultColumnMetaMap.get(columnName.toUpperCase());
 
 		return queryResultColumnMeta;
-	}
-
-	@Override
-	public void addColumnMeta(QueryResultColumnMeta queryResultColumnMeta) {
-
-		Assertion.assertNotNull("queryResultColumnMeta", queryResultColumnMeta);
-
-		String columnName = queryResultColumnMeta.getColumnName();
-		Assertion.assertNotBlank("queryResultColumnMeta.getColumnName()", columnName);
-
-		if (!columnNameMap.containsKey(columnName)) {
-			columnNameMap.put(columnName, queryResultColumnMeta);
-		}
-
-		ArrayUtil.add(queryResultColumnMetaCollection, queryResultColumnMeta.getColumnNumber() - 1, queryResultColumnMeta);
 	}
 }

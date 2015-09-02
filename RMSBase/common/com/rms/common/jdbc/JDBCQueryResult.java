@@ -1,6 +1,7 @@
 package com.rms.common.jdbc;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
@@ -38,4 +39,5 @@ public interface JDBCQueryResult extends JDBCCloseable {
 
 	public <T> T getValue(String columnName) throws SQLException;
 
+	public List<Object> getValues() throws SQLException;
 }

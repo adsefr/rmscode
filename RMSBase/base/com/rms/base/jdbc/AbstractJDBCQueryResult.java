@@ -1,10 +1,10 @@
 package com.rms.base.jdbc;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import com.rms.base.jdbc.implments.JDBCFactory;
+import com.rms.base.jdbc.model.JDBCColumn;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.jdbc.model.QueryResultColumnMeta;
@@ -22,9 +22,9 @@ public abstract class AbstractJDBCQueryResult implements JDBCQueryResult {
 
 	protected QueryParameter queryParameter;
 
-	protected ResultSet resultSet;
+	private ResultSet resultSet;
 
-	protected final JDBCQueryResultMetaData jdbcQueryResultMetaData = JDBCFactory.newJDBCQueryResultMetaData();;
+	protected final JDBCQueryResultMetaData jdbcQueryResultMetaData;
 
 	protected String errorCode;
 
@@ -35,29 +35,7 @@ public abstract class AbstractJDBCQueryResult implements JDBCQueryResult {
 		this.resultSet = resultSet;
 		this.queryParameter = queryParameter;
 
-		getResultSet();
-
-		ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-
-		int columnCount = resultSetMetaData.getColumnCount();
-
-		for (int columnNumber = 1; columnNumber <= columnCount; columnNumber++) {
-			QueryResultColumnMeta queryResultColumnMeta = JDBCFactory.newQueryResultColumnMeta();
-			queryResultColumnMeta.setColumnNumber(columnNumber);
-			queryResultColumnMeta.setCatalogName(resultSetMetaData.getCatalogName(columnNumber));
-			queryResultColumnMeta.setSchemaName(resultSetMetaData.getSchemaName(columnNumber));
-			queryResultColumnMeta.setTableName(resultSetMetaData.getTableName(columnNumber));
-			queryResultColumnMeta.setColumnName(resultSetMetaData.getColumnName(columnNumber));
-			queryResultColumnMeta.setColumnClassName(resultSetMetaData.getColumnClassName(columnNumber));
-			queryResultColumnMeta.setColumnType(resultSetMetaData.getColumnType(columnNumber));
-			queryResultColumnMeta.setColumnTypeName(resultSetMetaData.getColumnTypeName(columnNumber));
-			queryResultColumnMeta.setColumnLabel(resultSetMetaData.getColumnLabel(columnNumber));
-			queryResultColumnMeta.setColumnDisplaySize(resultSetMetaData.getColumnDisplaySize(columnNumber));
-			queryResultColumnMeta.setPrecision(resultSetMetaData.getPrecision(columnNumber));
-			queryResultColumnMeta.setScale(resultSetMetaData.getScale(columnNumber));
-
-			jdbcQueryResultMetaData.addColumnMeta(queryResultColumnMeta);
-		}
+		jdbcQueryResultMetaData = JDBCFactory.newJDBCQueryResultMetaData(getResultSet().getMetaData());
 	}
 
 	protected final ResultSet getResultSet() throws SQLException {
@@ -69,18 +47,18 @@ public abstract class AbstractJDBCQueryResult implements JDBCQueryResult {
 		return resultSet;
 	}
 
-	protected JDBCRow convertCurrentResultToJDBCRow() throws SQLException {
+	protected JDBCRow convertToJDBCRow(ResultSet resultSet) throws SQLException {
 
-		ResultSet resultSet = getResultSet();
+		int columnCount = jdbcQueryResultMetaData.getColumnCount();
 
 		JDBCRow jdbcRow = JDBCFactory.newJDBCRow();
+		jdbcRow.setRowNumber(resultSet.getRow());
 
-		for (int columnNumber = 1; columnNumber <= jdbcQueryResultMetaData.getColumnCount(); columnNumber++) {
+		for (int columnNumber = 1; columnNumber <= columnCount; columnNumber++) {
+			QueryResultColumnMeta queryResultColumnMeta = jdbcQueryResultMetaData.getColumnMeta(columnNumber);
 			Object rawValue = resultSet.getObject(columnNumber);
-			JDBCValue jdbcValue = JDBCFactory.newJDBCValue();
-			jdbcValue.setColumnNumber(columnNumber);
-			jdbcValue.setRawValue(rawValue);
-			jdbcRow.addValue(columnNumber, jdbcValue);
+			JDBCColumn jdbcColumn = JDBCFactory.newJDBCColumn(queryResultColumnMeta, rawValue);
+			jdbcRow.addColumn(jdbcColumn);
 		}
 
 		return jdbcRow;

@@ -25,47 +25,90 @@ import com.rms.common.jdbc.JDBCQueryResult;
  */
 public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaData {
 
-	private final DatabaseMetaData databaseMetaData;
+	private Integer databaseMajorVersion;
+
+	private Integer databaseMinorVersion;
+
+	private String databaseProductName;
+
+	private String databaseProductVersion;
+
+	private Integer driverMajorVersion;
+
+	private Integer driverMinorVersion;
+
+	private String driverName;
+
+	private String driverVersion;
+
+	private Integer jdbcMajorVersion;
+
+	private Integer jdbcMinorVersion;
+
+	private String url;
+
+	private String currentCatalogName;
 
 	private final String CATALOG_SEPARATOR;
 
-	private Map<String, CatalogMeta> catalogMetaMap = new HashMap<>();
+	private final Map<String, CatalogMeta> catalogMetaMap = new HashMap<>();
 
-	private Map<String, SchemaMeta> schemaMetaMap = new HashMap<>();
+	private final Map<String, SchemaMeta> schemaMetaMap = new HashMap<>();
 
-	private Map<String, TableMeta> tableMetaMap = new HashMap<>();
+	private final Map<String, TableMeta> tableMetaMap = new HashMap<>();
 
 	protected AbstractJDBCDatabaseMetaData(DatabaseMetaData databaseMetaData) throws SQLException {
 
 		Assertion.assertNotNull("databaseMetaData", databaseMetaData);
 
-		this.databaseMetaData = databaseMetaData;
+		databaseMajorVersion = databaseMetaData.getDatabaseMajorVersion();
+
+		databaseMinorVersion = databaseMetaData.getDatabaseMajorVersion();
+
+		databaseProductName = databaseMetaData.getDatabaseProductName();
+
+		databaseProductVersion = databaseMetaData.getDatabaseProductVersion();
+
+		driverMajorVersion = databaseMetaData.getDriverMajorVersion();
+
+		driverMinorVersion = databaseMetaData.getDriverMinorVersion();
+
+		driverName = databaseMetaData.getDriverName();
+
+		driverVersion = databaseMetaData.getDriverVersion();
+
+		jdbcMajorVersion = databaseMetaData.getJDBCMajorVersion();
+
+		jdbcMinorVersion = databaseMetaData.getJDBCMinorVersion();
+
+		url = databaseMetaData.getURL();
+
+		currentCatalogName = databaseMetaData.getConnection().getCatalog();
 
 		this.CATALOG_SEPARATOR = databaseMetaData.getCatalogSeparator();
 
-		initialMetaData();
+		initialMetaData(databaseMetaData);
 	}
 
-	private void initialMetaData() throws SQLException {
+	private void initialMetaData(DatabaseMetaData databaseMetaData) throws SQLException {
 
-		setCatalogMetas();
+		setCatalogMetas(databaseMetaData);
 		for (CatalogMeta catalogMeta : catalogMetaMap.values()) {
-			setSchemaMetas(catalogMeta);
+			setSchemaMetas(databaseMetaData, catalogMeta);
 		}
 		for (SchemaMeta catalogMeta : schemaMetaMap.values()) {
-			setTableMetas(catalogMeta);
+			setTableMetas(databaseMetaData, catalogMeta);
 		}
 		for (TableMeta tableMeta : tableMetaMap.values()) {
-			setColumnMetas(tableMeta);
-			setPrimaryKeys(tableMeta);
+			setColumnMetas(databaseMetaData, tableMeta);
+			setPrimaryKeys(databaseMetaData, tableMeta);
 		}
 	}
 
-	private void setCatalogMetas() throws SQLException {
+	private void setCatalogMetas(DatabaseMetaData databaseMetaData) throws SQLException {
 
-		JDBCQueryResult catalogQueryResult = null;
+		JDBCQueryResult catalogQueryResult = JDBCFactory.newJDBCQueryResult(databaseMetaData.getCatalogs());
 
-		catalogQueryResult = JDBCFactory.newJDBCQueryResult(databaseMetaData.getCatalogs());
 		while (catalogQueryResult.hasNext()) {
 			CatalogMeta catalogMeta = JDBCFactory.newCatalogMeta();
 			// 1.TABLE_CAT String =>カタログ名
@@ -75,7 +118,7 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 		}
 	}
 
-	private void setSchemaMetas(CatalogMeta catalogMeta) throws SQLException {
+	private void setSchemaMetas(DatabaseMetaData databaseMetaData, CatalogMeta catalogMeta) throws SQLException {
 
 		String catalogName = catalogMeta.getCatalogName();
 
@@ -88,13 +131,13 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			// 2.TABLE_CATALOG String =>カタログ名(nullの可能性がある)
 			schemaMeta.setSchemaName(schemaQueryResult.getValue("TABLE_SCHEM"));
 
-			catalogMeta.getSchemaMetas().add(schemaMeta);
+			catalogMeta.addSchemaMeta(schemaMeta);
 			String schemaName = catalogName + CATALOG_SEPARATOR + schemaMeta.getSchemaName();
 			schemaMetaMap.put(schemaName, schemaMeta);
 		}
 	}
 
-	private void setTableMetas(SchemaMeta schemaMeta) throws SQLException {
+	private void setTableMetas(DatabaseMetaData databaseMetaData, SchemaMeta schemaMeta) throws SQLException {
 
 		String catalogName = schemaMeta.getCatalogName();
 		String schemaName = schemaMeta.getSchemaName();
@@ -188,7 +231,7 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 		}
 	}
 
-	private void setColumnMetas(TableMeta tableMeta) throws SQLException {
+	private static void setColumnMetas(DatabaseMetaData databaseMetaData, TableMeta tableMeta) throws SQLException {
 
 		String catalogName = tableMeta.getCatalogName();
 		String schemaName = tableMeta.getSchemaName();
@@ -339,7 +382,7 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 		}
 	}
 
-	private void setPrimaryKeys(TableMeta tableMeta) throws SQLException {
+	private static void setPrimaryKeys(DatabaseMetaData databaseMetaData, TableMeta tableMeta) throws SQLException {
 
 		String catalogName = tableMeta.getCatalogName();
 		String schemaName = tableMeta.getSchemaName();
@@ -372,110 +415,145 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 	}
 
 	@Override
-	public String getDatabaseProductName() throws SQLException {
+	public String getDatabaseProductName() {
 
-		return databaseMetaData.getDatabaseProductName();
+		return databaseProductName;
 	}
 
 	@Override
-	public String getDatabaseProductVersion() throws SQLException {
+	public String getDatabaseProductVersion() {
 
-		return databaseMetaData.getDatabaseProductVersion();
+		return databaseProductVersion;
 	}
 
 	@Override
-	public int getDatabaseMajorVersion() throws SQLException {
+	public int getDatabaseMajorVersion() {
 
-		return databaseMetaData.getDatabaseMajorVersion();
+		return databaseMajorVersion;
 	}
 
 	@Override
-	public int getDatabaseMinorVersion() throws SQLException {
+	public int getDatabaseMinorVersion() {
 
-		return databaseMetaData.getDatabaseMinorVersion();
+		return databaseMinorVersion;
 	}
 
 	@Override
-	public String getDriverName() throws SQLException {
+	public String getDriverName() {
 
-		return databaseMetaData.getDriverName();
+		return driverName;
 	}
 
 	@Override
-	public String getDriverVersion() throws SQLException {
+	public String getDriverVersion() {
 
-		return databaseMetaData.getDriverVersion();
+		return driverVersion;
 	}
 
 	@Override
 	public int getDriverMajorVersion() {
 
-		return databaseMetaData.getDriverMajorVersion();
+		return driverMajorVersion;
 	}
 
 	@Override
 	public int getDriverMinorVersion() {
 
-		return databaseMetaData.getDriverMinorVersion();
+		return driverMinorVersion;
 	}
 
 	@Override
-	public int getJDBCMajorVersion() throws SQLException {
+	public int getJDBCMajorVersion() {
 
-		return databaseMetaData.getJDBCMajorVersion();
+		return jdbcMajorVersion;
 	}
 
 	@Override
-	public int getJDBCMinorVersion() throws SQLException {
+	public int getJDBCMinorVersion() {
 
-		return databaseMetaData.getJDBCMinorVersion();
+		return jdbcMinorVersion;
 	}
 
 	@Override
-	public String getURL() throws SQLException {
+	public String getURL() {
 
-		return databaseMetaData.getURL();
+		return url;
 	}
 
 	@Override
-	public List<CatalogMeta> getCatalogMetas() throws SQLException {
+	public boolean hasCatalog(String catalogName) {
+
+		Assertion.assertNotBlank("catalogName", catalogName);
+
+		return catalogMetaMap.containsKey(catalogName);
+	}
+
+	@Override
+	public boolean hasSchema(String schemaName) {
+
+		Assertion.assertNotBlank("schemaName", schemaName);
+
+		return getCatalogMeta().contains(schemaName);
+	}
+
+	@Override
+	public boolean hasSchema(String catalogName, String schemaName) {
+
+		return hasCatalog(catalogName) && getCatalogMeta(catalogName).contains(schemaName);
+	}
+
+	@Override
+	public boolean hasTable(String schemaName, String tableName) {
+
+		Assertion.assertNotBlank("tableName", tableName);
+
+		return hasSchema(schemaName) && getSchemaMeta(schemaName).contains(tableName);
+	}
+
+	@Override
+	public boolean hasTable(String catalogName, String schemaName, String tableName) {
+
+		return hasSchema(catalogName, schemaName) && getSchemaMeta(catalogName, schemaName).contains(tableName);
+	}
+
+	@Override
+	public List<CatalogMeta> getCatalogMetas() {
 
 		return new ArrayList<CatalogMeta>(catalogMetaMap.values());
 	}
 
 	@Override
-	public CatalogMeta getCatalogMeta() throws SQLException {
+	public CatalogMeta getCatalogMeta() {
 
-		String catalogName = databaseMetaData.getConnection().getCatalog();
-		return getCatalogMeta(catalogName);
+		return getCatalogMeta(currentCatalogName);
 	}
 
 	@Override
-	public CatalogMeta getCatalogMeta(String catalogName) throws SQLException {
+	public CatalogMeta getCatalogMeta(String catalogName) {
 
 		return catalogMetaMap.get(catalogName);
 	}
 
 	@Override
-	public List<SchemaMeta> getSchemaMetas() throws SQLException {
+	public List<SchemaMeta> getSchemaMetas() {
 
 		return getCatalogMeta().getSchemaMetas();
 	}
 
 	@Override
-	public List<SchemaMeta> getSchemaMetas(String catalogName) throws SQLException {
+	public List<SchemaMeta> getSchemaMetas(String catalogName) {
 
 		return getCatalogMeta(catalogName).getSchemaMetas();
 	}
 
 	@Override
-	public SchemaMeta getSchemaMeta(String schemaName) throws SQLException {
+	public SchemaMeta getSchemaMeta(String schemaName) {
 
 		return getSchemaMeta(getCatalogMeta().getCatalogName(), schemaName);
 	}
 
 	@Override
-	public SchemaMeta getSchemaMeta(String catalogName, String schemaName) throws SQLException {
+	public SchemaMeta getSchemaMeta(String catalogName, String schemaName) {
 
 		List<SchemaMeta> schemaMetas = getSchemaMetas(catalogName);
 		for (SchemaMeta schemaMeta : schemaMetas) {
@@ -488,9 +566,10 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 	}
 
 	@Override
-	public List<TableMeta> getTableMetas(String schemaName) throws SQLException {
+	public List<TableMeta> getTableMetas(String schemaName) {
 
 		CatalogMeta catalogMeta = getCatalogMeta();
+
 		SchemaMeta schemaMeta = getSchemaMeta(catalogMeta.getCatalogName(), schemaName);
 		if (schemaMeta != null) {
 			return schemaMeta.getTableMetas();
@@ -500,13 +579,13 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 	}
 
 	@Override
-	public List<TableMeta> getTableMetas(String catalogName, String schemaName) throws SQLException {
+	public List<TableMeta> getTableMetas(String catalogName, String schemaName) {
 
 		return getSchemaMeta(catalogName, schemaName).getTableMetas();
 	}
 
 	@Override
-	public TableMeta getTableMeta(String schemaName, String tableName) throws SQLException {
+	public TableMeta getTableMeta(String schemaName, String tableName) {
 
 		List<TableMeta> tableMetas = getTableMetas(getCatalogMeta().getCatalogName(), schemaName);
 		for (TableMeta tableMeta : tableMetas) {
@@ -519,7 +598,7 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 	}
 
 	@Override
-	public TableMeta getTableMeta(String catalogName, String schemaName, String tableName) throws SQLException {
+	public TableMeta getTableMeta(String catalogName, String schemaName, String tableName) {
 
 		List<TableMeta> tableMetas = getTableMetas(catalogName, schemaName);
 		for (TableMeta tableMeta : tableMetas) {

@@ -68,8 +68,9 @@ class DefaultJDBCObject extends JDBCObject {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void startTransaction() throws SQLException {
+	public final boolean startTransaction() throws SQLException {
 
+		boolean newConnection = false;
 		if (isClosed()) {
 			ConnectionInfo connectionInfo = new ConnectionInfo();
 			connectionInfo.setDriver(dataBaseInfo.getDriver());
@@ -90,7 +91,11 @@ class DefaultJDBCObject extends JDBCObject {
 			jdbcConnection.connection(connectionInfo);
 
 			setJdbcConnection(jdbcConnection);
+
+			newConnection = true;
 		}
+
+		return newConnection;
 	}
 
 	/**

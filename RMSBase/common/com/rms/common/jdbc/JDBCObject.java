@@ -33,7 +33,7 @@ public abstract class JDBCObject implements JDBCCloseable {
 
 	public abstract void setDataBaseInfo(DataBaseInfo dataBaseInfo);
 
-	public abstract void startTransaction() throws SQLException;
+	public abstract boolean startTransaction() throws SQLException;
 
 	public abstract void endTransaction() throws SQLException;
 
