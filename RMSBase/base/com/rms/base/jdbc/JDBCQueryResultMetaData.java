@@ -1,4 +1,4 @@
-package com.rms.common.jdbc;
+package com.rms.base.jdbc;
 
 import com.rms.base.jdbc.model.QueryResultColumnMeta;
 

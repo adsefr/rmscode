@@ -3,7 +3,7 @@ package com.rms.base.jdbc.implments;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.rms.base.jdbc.AbstractJDBCQueryResult;
+import com.rms.base.jdbc.JDBCConnection;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.validate.Assertion;
@@ -13,11 +13,16 @@ import com.rms.base.validate.Assertion;
  * @author ri.meisei
  * @since 2014/02/24
  */
-class JDBCQueryLargeDataResult extends AbstractJDBCQueryResult {
+public class JDBCLargeQueryExecutor extends AbstractJDBCQueryExecutor {
 
-	JDBCQueryLargeDataResult(ResultSet resultSet, QueryParameter queryParameter) throws SQLException {
+	public JDBCLargeQueryExecutor(JDBCConnection jdbcConnection, QueryParameter queryParameter) {
 
-		super(resultSet, queryParameter);
+		super(jdbcConnection, queryParameter);
+	}
+
+	public JDBCLargeQueryExecutor(ResultSet resultSet) throws SQLException {
+
+		super(resultSet);
 	}
 
 	@Override
@@ -47,7 +52,7 @@ class JDBCQueryLargeDataResult extends AbstractJDBCQueryResult {
 	@Override
 	public final JDBCRow getRow() throws SQLException {
 
-		JDBCRow jdbcRow = super.convertToJDBCRow(getResultSet());
+		JDBCRow jdbcRow = super.convertCurrentRowToJDBCRow();
 
 		return jdbcRow;
 	}
@@ -81,5 +86,4 @@ class JDBCQueryLargeDataResult extends AbstractJDBCQueryResult {
 
 		return (T) object;
 	}
-
 }

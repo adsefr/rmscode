@@ -3,6 +3,7 @@ package com.rms.common.jdbc;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.rms.base.jdbc.JDBCCloseable;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
 
@@ -11,15 +12,21 @@ import com.rms.base.jdbc.model.QueryParameter;
  * @author ri.meisei
  * @since 2014/02/24
  */
-public interface JDBCQueryResult extends JDBCCloseable {
+public interface JDBCQueryExecutor extends JDBCCloseable {
 
-	public QueryParameter getQueryParameter();
+	public void execute() throws SQLException;
 
-	// public Integer getResultCount();
+	public boolean success();
 
-	public String getResultCode();
+	public boolean failure();
+
+	public String getStatusCode();
 
 	public String getErrorMessage();
+
+	public Throwable getThrowable();
+
+	public QueryParameter getQueryParameter();
 
 	public void beforeFirst() throws SQLException;
 

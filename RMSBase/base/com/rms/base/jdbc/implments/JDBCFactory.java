@@ -6,6 +6,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import com.rms.base.jdbc.JDBCConnection;
+import com.rms.base.jdbc.JDBCQueryResultMetaData;
 import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.jdbc.model.CatalogMeta;
 import com.rms.base.jdbc.model.ColumnMeta;
@@ -15,11 +16,10 @@ import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.jdbc.model.QueryResultColumnMeta;
 import com.rms.base.jdbc.model.SchemaMeta;
 import com.rms.base.jdbc.model.TableMeta;
+import com.rms.base.jdbc.model.UpdateParameter;
 import com.rms.common.jdbc.JDBCDataBaseMetaData;
-import com.rms.common.jdbc.JDBCQueryResult;
-import com.rms.common.jdbc.JDBCQueryResultMetaData;
-import com.rms.common.jdbc.JDBCSavePoint;
-import com.rms.common.jdbc.JDBCUpdateResult;
+import com.rms.common.jdbc.JDBCQueryExecutor;
+import com.rms.common.jdbc.JDBCUpdateExecutor;
 
 public class JDBCFactory {
 
@@ -44,25 +44,25 @@ public class JDBCFactory {
 		return defaultJDBCQueryResultMetaData;
 	}
 
-	public static JDBCQueryResult newJDBCQueryResult(ResultSet resultSet) throws SQLException {
+	public static JDBCQueryExecutor newJDBCQueryExecutor(JDBCConnection jdbcConnection, QueryParameter queryParameter) {
 
-		JDBCQueryResult jdbcQueryResult = new DefaultJDBCQueryResult(resultSet, null);
+		JDBCQueryExecutor jdbcQueryExecutor = AbstractJDBCQueryExecutor.newInstance(jdbcConnection, queryParameter);
 
-		return jdbcQueryResult;
+		return jdbcQueryExecutor;
 	}
 
-	public static JDBCQueryResult newJDBCQueryResult(ResultSet resultSet, QueryParameter queryParameter) throws SQLException {
+	public static JDBCQueryExecutor newJDBCQueryExecutor(ResultSet resultSet) throws SQLException {
 
-		JDBCQueryResult jdbcQueryResult = new DefaultJDBCQueryResult(resultSet, queryParameter);
+		JDBCQueryExecutor jdbcQueryExecutor = AbstractJDBCQueryExecutor.newInstance(resultSet);
 
-		return jdbcQueryResult;
+		return jdbcQueryExecutor;
 	}
 
-	public static JDBCUpdateResult newJDBCUpdateResult() {
+	public static JDBCUpdateExecutor newJDBCUpdateExecutor(JDBCConnection jdbcConnection, UpdateParameter updateParameter) {
 
-		JDBCUpdateResult jdbcUpdateResult = new DefaultJDBCUpdateResult();
+		JDBCUpdateExecutor jdbcUpdateExecutor = new DefaultJDBCUpdateExecutor(jdbcConnection, updateParameter);
 
-		return jdbcUpdateResult;
+		return jdbcUpdateExecutor;
 	}
 
 	public static JDBCRow newJDBCRow() {
@@ -72,9 +72,9 @@ public class JDBCFactory {
 		return defaultJDBCRow;
 	}
 
-	public static JDBCColumn newJDBCColumn(QueryResultColumnMeta queryResultColumnMeta, Object rawValue) {
+	public static JDBCColumn newJDBCColumn(QueryResultColumnMeta QueryExecutorColumnMeta, Object rawValue) {
 
-		DefaultJDBCColumn defaultJDBCColumn = new DefaultJDBCColumn(queryResultColumnMeta, rawValue);
+		DefaultJDBCColumn defaultJDBCColumn = new DefaultJDBCColumn(QueryExecutorColumnMeta, rawValue);
 
 		return defaultJDBCColumn;
 	}
@@ -84,13 +84,6 @@ public class JDBCFactory {
 		DefaultJDBCValue defaultJDBCValue = new DefaultJDBCValue(rawValue);
 
 		return defaultJDBCValue;
-	}
-
-	public static JDBCSavePoint newJDBCSavePoint() {
-
-		JDBCSavePoint jdbcSavePoint = new DefaultJDBCSavePoint();
-
-		return jdbcSavePoint;
 	}
 
 	public static CatalogMeta newCatalogMeta() {

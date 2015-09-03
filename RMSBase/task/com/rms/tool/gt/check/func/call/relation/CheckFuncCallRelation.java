@@ -13,7 +13,7 @@ import com.rms.base.util.TextUtil;
 import com.rms.common.io.file.FileOperationFactory;
 import com.rms.common.io.file.FileWriter;
 import com.rms.common.jdbc.JDBCObject;
-import com.rms.common.jdbc.JDBCQueryResult;
+import com.rms.common.jdbc.JDBCQueryExecutor;
 import com.rms.common.jdbc.model.DataBaseType;
 import com.rms.common.poi.excel.ExcelOperatorFactory;
 import com.rms.common.poi.excel.model.CellModel;
@@ -115,7 +115,7 @@ public class CheckFuncCallRelation {
 	private List<FuncInfoBean> executeSelectFuncInfo(RowInfo rowInfo) throws SQLException {
 
 		JDBCSelector selector = null;
-		JDBCQueryResult resultSet = null;
+		JDBCQueryExecutor resultSet = null;
 		try {
 
 			selector = jdbcObject.createJDBCSelector(jdbcConnection);
@@ -214,7 +214,7 @@ public class CheckFuncCallRelation {
 	private List<FuncInfoBean> executeSelectFuncInfo(FuncInfoBean infuncInfoBean) throws SQLException {
 
 		JDBCSelector selector = null;
-		JDBCQueryResult resultSet = null;
+		JDBCQueryExecutor resultSet = null;
 		try {
 
 			selector = jdbcObject.createJDBCSelector(jdbcConnection);
@@ -269,7 +269,7 @@ public class CheckFuncCallRelation {
 	private List<FuncInfoBean> executeSelectCallFuncInfo(RowInfo rowInfo) throws SQLException {
 
 		JDBCSelector selector = null;
-		JDBCQueryResult resultSet = null;
+		JDBCQueryExecutor resultSet = null;
 		try {
 			selector = jdbcObject.createJDBCSelector(jdbcConnection);
 			StringBuilder sBuilder = new StringBuilder();

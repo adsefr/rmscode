@@ -1,4 +1,4 @@
-package com.rms.base.jdbc;
+package com.rms.base.jdbc.implments;
 
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -7,16 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.rms.base.jdbc.implments.DefaultColumnMeta;
-import com.rms.base.jdbc.implments.DefaultSchemaMeta;
-import com.rms.base.jdbc.implments.DefaultTableMeta;
-import com.rms.base.jdbc.implments.JDBCFactory;
 import com.rms.base.jdbc.model.CatalogMeta;
 import com.rms.base.jdbc.model.SchemaMeta;
 import com.rms.base.jdbc.model.TableMeta;
 import com.rms.base.validate.Assertion;
 import com.rms.common.jdbc.JDBCDataBaseMetaData;
-import com.rms.common.jdbc.JDBCQueryResult;
+import com.rms.common.jdbc.JDBCQueryExecutor;
 
 /**
  *
@@ -107,12 +103,12 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 
 	private void setCatalogMetas(DatabaseMetaData databaseMetaData) throws SQLException {
 
-		JDBCQueryResult catalogQueryResult = JDBCFactory.newJDBCQueryResult(databaseMetaData.getCatalogs());
+		JDBCQueryExecutor catalogQueryExecutor = JDBCFactory.newJDBCQueryExecutor(databaseMetaData.getCatalogs());
 
-		while (catalogQueryResult.hasNext()) {
+		while (catalogQueryExecutor.hasNext()) {
 			CatalogMeta catalogMeta = JDBCFactory.newCatalogMeta();
 			// 1.TABLE_CAT String =>カタログ名
-			catalogMeta.setCatalogName(catalogQueryResult.getValue("TABLE_CAT"));
+			catalogMeta.setCatalogName(catalogQueryExecutor.getValue("TABLE_CAT"));
 
 			catalogMetaMap.put(catalogMeta.getCatalogName(), catalogMeta);
 		}
@@ -122,14 +118,14 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 
 		String catalogName = catalogMeta.getCatalogName();
 
-		JDBCQueryResult schemaQueryResult = null;
-		schemaQueryResult = JDBCFactory.newJDBCQueryResult(databaseMetaData.getSchemas(catalogName, null));
-		while (schemaQueryResult.hasNext()) {
+		JDBCQueryExecutor schemaQueryExecutor = null;
+		schemaQueryExecutor = JDBCFactory.newJDBCQueryExecutor(databaseMetaData.getSchemas(catalogName, null));
+		while (schemaQueryExecutor.hasNext()) {
 			DefaultSchemaMeta schemaMeta = (DefaultSchemaMeta) JDBCFactory.newSchemaMeta();
 			// 1.TABLE_SCHEM String =>スキーマ名
 			schemaMeta.setCatalogName(catalogName);
 			// 2.TABLE_CATALOG String =>カタログ名(nullの可能性がある)
-			schemaMeta.setSchemaName(schemaQueryResult.getValue("TABLE_SCHEM"));
+			schemaMeta.setSchemaName(schemaQueryExecutor.getValue("TABLE_SCHEM"));
 
 			catalogMeta.addSchemaMeta(schemaMeta);
 			String schemaName = catalogName + CATALOG_SEPARATOR + schemaMeta.getSchemaName();
@@ -142,57 +138,57 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 		String catalogName = schemaMeta.getCatalogName();
 		String schemaName = schemaMeta.getSchemaName();
 
-		JDBCQueryResult tableQueryResult = null;
-		tableQueryResult = JDBCFactory.newJDBCQueryResult(databaseMetaData.getTables(catalogName, schemaName, null, null));
+		JDBCQueryExecutor tableQueryExecutor = null;
+		tableQueryExecutor = JDBCFactory.newJDBCQueryExecutor(databaseMetaData.getTables(catalogName, schemaName, null, null));
 
-		while (tableQueryResult.hasNext()) {
+		while (tableQueryExecutor.hasNext()) {
 			/** TABLE_CAT String => テーブルカタログ (null の可能性がある) */
-			// String tableCatalog = tableQueryResult.getValue("TABLE_CAT");
+			// String tableCatalog = tableQueryExecutor.getValue("TABLE_CAT");
 			// if (tableCatalog == null && catalogName != null) {
 			// tableCatalog = catalogName;
 			// }
 
 			/** TABLE_SCHEM String => テーブルスキーマ (null の可能性がある) */
 			// String tableSchema =
-			// tableQueryResult.getValue("TABLE_SCHEM");
+			// tableQueryExecutor.getValue("TABLE_SCHEM");
 			// if (tableSchema == null && schemaName != null) {
 			// tableSchema = schemaName;
 			// }
 
 			/** TABLE_NAME String => テーブル名 */
-			String tableName = tableQueryResult.getValue("TABLE_NAME");
+			String tableName = tableQueryExecutor.getValue("TABLE_NAME");
 
 			/**
 			 * TABLE_TYPE String => テーブルのタイプ。典型的なタイプは、「TABLE」、「VIEW」、「SYSTEM
 			 * TABLE」、「GLOBAL TEMPORARY」、「LOCAL TEMPORARY」、「ALIAS」、「SYNONYM」である
 			 */
 			String tableType = null;
-			if (tableQueryResult.hasColumn("TABLE_TYPE")) {
-				tableType = tableQueryResult.getValue("TABLE_TYPE");
+			if (tableQueryExecutor.hasColumn("TABLE_TYPE")) {
+				tableType = tableQueryExecutor.getValue("TABLE_TYPE");
 			}
 
 			/** REMARKS String => テーブルに関する説明 */
 			String remarks = null;
-			if (tableQueryResult.hasColumn("REMARKS")) {
-				remarks = tableQueryResult.getValue("REMARKS");
+			if (tableQueryExecutor.hasColumn("REMARKS")) {
+				remarks = tableQueryExecutor.getValue("REMARKS");
 			}
 
 			/** TYPE_CAT String => タイプのカタログ (null の可能性がある) */
 			String tableTypeCatalog = null;
-			if (tableQueryResult.hasColumn("TYPE_CAT")) {
-				tableTypeCatalog = tableQueryResult.getValue("TYPE_CAT");
+			if (tableQueryExecutor.hasColumn("TYPE_CAT")) {
+				tableTypeCatalog = tableQueryExecutor.getValue("TYPE_CAT");
 			}
 
 			/** TYPE_SCHEM String => タイプのスキーマ (null の可能性がある) */
 			String tableTypeSchema = null;
-			if (tableQueryResult.hasColumn("TYPE_SCHEM")) {
-				tableTypeSchema = tableQueryResult.getValue("TYPE_SCHEM");
+			if (tableQueryExecutor.hasColumn("TYPE_SCHEM")) {
+				tableTypeSchema = tableQueryExecutor.getValue("TYPE_SCHEM");
 			}
 
 			/** TYPE_NAME String => タイプ名 (null の可能性がある) */
 			String typeName = null;
-			if (tableQueryResult.hasColumn("TYPE_NAME")) {
-				typeName = tableQueryResult.getValue("TYPE_NAME");
+			if (tableQueryExecutor.hasColumn("TYPE_NAME")) {
+				typeName = tableQueryExecutor.getValue("TYPE_NAME");
 			}
 
 			/**
@@ -200,8 +196,8 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			 * (null の可能性がある)
 			 */
 			String selfReferencingColumnName = null;
-			if (tableQueryResult.hasColumn("SELF_REFERENCING_COL_NAME")) {
-				selfReferencingColumnName = tableQueryResult.getValue("SELF_REFERENCING_COL_NAME");
+			if (tableQueryExecutor.hasColumn("SELF_REFERENCING_COL_NAME")) {
+				selfReferencingColumnName = tableQueryExecutor.getValue("SELF_REFERENCING_COL_NAME");
 			}
 
 			/**
@@ -209,8 +205,8 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			 * の値の作成方法を指定する。値は、「SYSTEM」、「USER」、「DERIVED」(null の可能性がある)
 			 */
 			String referenceGeneration = null;
-			if (tableQueryResult.hasColumn("REF_GENERATION")) {
-				referenceGeneration = tableQueryResult.getValue("REF_GENERATION");
+			if (tableQueryExecutor.hasColumn("REF_GENERATION")) {
+				referenceGeneration = tableQueryExecutor.getValue("REF_GENERATION");
 			}
 
 			DefaultTableMeta tableMeta = (DefaultTableMeta) JDBCFactory.newTableMeta();
@@ -237,31 +233,31 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 		String schemaName = tableMeta.getSchemaName();
 		String tableName = tableMeta.getTableName();
 
-		JDBCQueryResult columnQueryResult = null;
-		columnQueryResult = JDBCFactory.newJDBCQueryResult(databaseMetaData.getColumns(catalogName, schemaName, tableName, null));
+		JDBCQueryExecutor columnQueryExecutor = null;
+		columnQueryExecutor = JDBCFactory.newJDBCQueryExecutor(databaseMetaData.getColumns(catalogName, schemaName, tableName, null));
 
-		while (columnQueryResult.hasNext()) {
+		while (columnQueryExecutor.hasNext()) {
 
 			/** TABLE_CAT String => テーブルカタログ (null の可能性がある) */
-			// String tableCatalog = jdbcQueryResult.getValue("TABLE_CAT");
+			// String tableCatalog = jdbcQueryExecutor.getValue("TABLE_CAT");
 
 			/** TABLE_SCHEM String => テーブルスキーマ (null の可能性がある) */
-			// String tableSchema = jdbcQueryResult.getValue("TABLE_SCHEM");
+			// String tableSchema = jdbcQueryExecutor.getValue("TABLE_SCHEM");
 
 			/** TABLE_NAME String => テーブル名 */
-			// String tableName = jdbcQueryResult.getValue("TABLE_NAME");
+			// String tableName = jdbcQueryExecutor.getValue("TABLE_NAME");
 
 			/** COLUMN_NAME String => 列名 */
-			String columnName = columnQueryResult.getValue("COLUMN_NAME");
+			String columnName = columnQueryExecutor.getValue("COLUMN_NAME");
 
 			/** DATA_TYPE int => java.sql.Types からの SQL の型 */
-			Integer dataType = columnQueryResult.getValue("DATA_TYPE");
+			Integer dataType = columnQueryExecutor.getValue("DATA_TYPE");
 
 			/** TYPE_NAME String => データソース依存の型名。UDT の場合、型名は完全指定 */
-			String typeName = columnQueryResult.getValue("TYPE_NAME");
+			String typeName = columnQueryExecutor.getValue("TYPE_NAME");
 
 			/** COLUMN_SIZE int => 列サイズ */
-			Integer columnSize = columnQueryResult.getValue("COLUMN_SIZE");
+			Integer columnSize = columnQueryExecutor.getValue("COLUMN_SIZE");
 
 			/** BUFFER_LENGTH - 未使用。 */
 
@@ -269,10 +265,10 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			 * DECIMAL_DIGITS int => 小数点以下の桁数。DECIMAL_DIGITS
 			 * が適用できないデータ型の場合は、Null が返される。
 			 */
-			Integer decimalDits = columnQueryResult.getValue("DECIMAL_DIGITS");
+			Integer decimalDits = columnQueryExecutor.getValue("DECIMAL_DIGITS");
 
 			/** NUM_PREC_RADIX int => 基数 (通常は、10 または 2 のどちらか) */
-			Integer numPrecRadix = columnQueryResult.getValue("NUM_PREC_RADIX");
+			Integer numPrecRadix = columnQueryExecutor.getValue("NUM_PREC_RADIX");
 
 			/**
 			 * NULLABLE int => NULL は許されるか。<br>
@@ -280,26 +276,26 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			 * columnNullable - 必ず NULL 値を許す<br>
 			 * columnNullableUnknown - NULL 値を許すかどうかは不明<br>
 			 */
-			Integer nullable = columnQueryResult.getValue("NULLABLE");
+			Integer nullable = columnQueryExecutor.getValue("NULLABLE");
 
 			/** REMARKS String => 列を記述するコメント (null の可能性がある) */
-			String remarks = columnQueryResult.getValue("REMARKS");
+			String remarks = columnQueryExecutor.getValue("REMARKS");
 
 			/**
 			 * COLUMN_DEF String => 列のデフォルト値。単一引用符で囲まれた値は、文字列として解釈されるべき (null
 			 * の可能性がある)
 			 */
-			String columnDefaultValue = columnQueryResult.getValue("COLUMN_DEF");
+			String columnDefaultValue = columnQueryExecutor.getValue("COLUMN_DEF");
 
 			/** SQL_DATA_TYPE int => 未使用 */
 
 			/** SQL_DATETIME_SUB int => 未使用 */
 
 			/** CHAR_OCTET_LENGTH int => char の型については列の最大バイト数 */
-			String charOctetLength = columnQueryResult.getValue("CHAR_OCTET_LENGTH");
+			String charOctetLength = columnQueryExecutor.getValue("CHAR_OCTET_LENGTH");
 
 			/** ORDINAL_POSITION int => テーブル中の列のインデックス (1 から始まる) */
-			Integer ordinalPosition = columnQueryResult.getValue("ORDINAL_POSITION");
+			Integer ordinalPosition = columnQueryExecutor.getValue("ORDINAL_POSITION");
 
 			/**
 			 * IS_NULLABLE String => 列で NULL 値を許可するかどうかの判断に ISO 規則が使用される。<br>
@@ -307,35 +303,35 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			 * NO --- 列が NULL を許可しない場合<br>
 			 * 空の文字列 --- 列が NULL 値を許可するかどうか不明である場合<br>
 			 */
-			String isNullable = columnQueryResult.getValue("IS_NULLABLE");
+			String isNullable = columnQueryExecutor.getValue("IS_NULLABLE");
 
 			/**
 			 * SCOPE_CATALOG String => 参照属性のスコープであるテーブルのカタログ (DATA_TYPE が REF
 			 * でない場合は null)
 			 */
 			String scopeCatalog = null;
-			if (columnQueryResult.hasColumn("SCOPE_CATALOG")) {
-				scopeCatalog = columnQueryResult.getValue("SCOPE_CATALOG");
+			if (columnQueryExecutor.hasColumn("SCOPE_CATALOG")) {
+				scopeCatalog = columnQueryExecutor.getValue("SCOPE_CATALOG");
 			}
 
 			/**
 			 * SCOPE_SCHEMA String => 参照属性のスコープであるテーブルのスキーマ (DATA_TYPE が REF
 			 * でない場合は null)
 			 */
-			String scopeSchema = columnQueryResult.getValue("SCOPE_SCHEMA");
+			String scopeSchema = columnQueryExecutor.getValue("SCOPE_SCHEMA");
 
 			/**
 			 * SCOPE_TABLE String => 参照属性のスコープであるテーブル名 (DATA_TYPE が REF でない場合は
 			 * null)
 			 */
-			String scopeTable = columnQueryResult.getValue("SCOPE_TABLE");
+			String scopeTable = columnQueryExecutor.getValue("SCOPE_TABLE");
 
 			/**
 			 * SOURCE_DATA_TYPE short => 個別の型またはユーザー生成 Ref
 			 * 型のソースの型、java.sql.Types の SQL 型 (DATA_TYPE が DISTINCT またはユーザー生成
 			 * REF でない場合は null)
 			 */
-			Integer sourceDataType = columnQueryResult.getValue("SOURCE_DATA_TYPE");
+			Integer sourceDataType = columnQueryExecutor.getValue("SOURCE_DATA_TYPE");
 
 			/**
 			 * IS_AUTOINCREMENT String => この列が自動インクリメントされるかどうかを示す<br>
@@ -343,7 +339,7 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			 * NO --- 列が自動インクリメントされない場合<br>
 			 * 空の文字列 --- 列が自動インクリメントされるかどうかが判断できない場合<br>
 			 */
-			String isAutoIncrement = columnQueryResult.getValue("IS_AUTOINCREMENT");
+			String isAutoIncrement = columnQueryExecutor.getValue("IS_AUTOINCREMENT");
 
 			/**
 			 * IS_GENERATEDCOLUMN String => これが生成された列かどうかを示す<br>
@@ -352,8 +348,8 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			 * 空の文字列 --- これが生成された列かどうかが判断できない場合<br>
 			 */
 			String isGeneratedColumn = null;
-			if (columnQueryResult.hasColumn("IS_GENERATEDCOLUMN")) {
-				scopeCatalog = columnQueryResult.getValue("IS_GENERATEDCOLUMN");
+			if (columnQueryExecutor.hasColumn("IS_GENERATEDCOLUMN")) {
+				scopeCatalog = columnQueryExecutor.getValue("IS_GENERATEDCOLUMN");
 			}
 			DefaultColumnMeta columnMeta = (DefaultColumnMeta) JDBCFactory.newColumnMeta();
 			columnMeta.setCatalogName(catalogName);
@@ -388,9 +384,9 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 		String schemaName = tableMeta.getSchemaName();
 		String tableName = tableMeta.getTableName();
 
-		JDBCQueryResult primaryKeysQueryResult = null;
-		primaryKeysQueryResult = JDBCFactory.newJDBCQueryResult(databaseMetaData.getPrimaryKeys(catalogName, schemaName, tableName));
-		while (primaryKeysQueryResult.hasNext()) {
+		JDBCQueryExecutor primaryKeysQueryExecutor = null;
+		primaryKeysQueryExecutor = JDBCFactory.newJDBCQueryExecutor(databaseMetaData.getPrimaryKeys(catalogName, schemaName, tableName));
+		while (primaryKeysQueryExecutor.hasNext()) {
 			/** TABLE_CAT String => テーブルカタログ (null の可能性がある) */
 
 			/** TABLE_SCHEM String => テーブルスキーマ (null の可能性がある) */
@@ -398,13 +394,13 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			/** TABLE_NAME String => テーブル名 */
 
 			/** 4.COLUMN_NAME String =>列名 */
-			String columnName = primaryKeysQueryResult.getValue("COLUMN_NAME");
+			String columnName = primaryKeysQueryExecutor.getValue("COLUMN_NAME");
 
 			/** 5.KEY_SEQ short =>主キー内の連番(値1は主キーの最初の列、値2は主キーの2番目の列を表す)。 */
-			Integer keySequence = primaryKeysQueryResult.getValue("KEY_SEQ");
+			Integer keySequence = primaryKeysQueryExecutor.getValue("KEY_SEQ");
 
 			/** 6.PK_NAME String =>主キー名(nullの可能性がある) */
-			String primaryKeyName = primaryKeysQueryResult.getValue("PK_NAME");
+			String primaryKeyName = primaryKeysQueryExecutor.getValue("PK_NAME");
 
 			tableMeta.setPrimaryKeyName(primaryKeyName);
 

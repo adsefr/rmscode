@@ -10,7 +10,7 @@ import com.rms.base.jdbc.JDBCSelector;
 import com.rms.base.jdbc.model.DataBaseInfo;
 import com.rms.base.util.TextUtil;
 import com.rms.common.jdbc.JDBCObject;
-import com.rms.common.jdbc.JDBCQueryResult;
+import com.rms.common.jdbc.JDBCQueryExecutor;
 import com.rms.common.jdbc.model.DataBaseType;
 import com.rms.common.poi.excel.ExcelOperatorFactory;
 import com.rms.common.poi.excel.model.CellModel;
@@ -80,7 +80,7 @@ public class CheckFuncUsed {
 	private void executeSelectCALL_FUNC_NAME(String funcName) throws SQLException {
 
 		JDBCSelector selector = null;
-		JDBCQueryResult resultSet = null;
+		JDBCQueryExecutor resultSet = null;
 		try {
 
 			selector = jdbcObject.createJDBCSelector(jdbcConnection);
@@ -99,22 +99,22 @@ public class CheckFuncUsed {
 		}
 	}
 
-	private JDBCQueryResult executeSelectP_VB_FUNC() throws SQLException {
+	private JDBCQueryExecutor executeSelectP_VB_FUNC() throws SQLException {
 
 		JDBCSelector selector = jdbcObject.createJDBCSelector(jdbcConnection);
 		String selectClasue = "SELECT * FROM P_VB_FUNC";
 		selector.setSqlClause(selectClasue);
-		JDBCQueryResult resultSet = selector.executeQuery();
+		JDBCQueryExecutor resultSet = selector.executeQuery();
 
 		return resultSet;
 	}
 
-	private JDBCQueryResult executeSelectP_VB_FUNC_CALL() throws SQLException {
+	private JDBCQueryExecutor executeSelectP_VB_FUNC_CALL() throws SQLException {
 
 		JDBCSelector selector = jdbcObject.createJDBCSelector(jdbcConnection);
 		String selectClasue = "SELECT * FROM P_VB_FUNC_CALL";
 		selector.setSqlClause(selectClasue);
-		JDBCQueryResult resultSet = selector.executeQuery();
+		JDBCQueryExecutor resultSet = selector.executeQuery();
 		return resultSet;
 	}
 

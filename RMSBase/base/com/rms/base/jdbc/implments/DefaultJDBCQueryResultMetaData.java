@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.rms.base.jdbc.JDBCQueryResultMetaData;
 import com.rms.base.jdbc.model.QueryResultColumnMeta;
 import com.rms.base.util.ArrayUtil;
 import com.rms.base.util.NumberUtil;
 import com.rms.base.validate.Assertion;
-import com.rms.common.jdbc.JDBCQueryResultMetaData;
 
 /**
  *
@@ -22,11 +22,11 @@ class DefaultJDBCQueryResultMetaData implements JDBCQueryResultMetaData {
 
 	private final int columnCount;
 
-	private final List<QueryResultColumnMeta> queryResultColumnMetaCollection = new ArrayList<>();
+	private final List<QueryResultColumnMeta> QueryResultColumnMetaCollection = new ArrayList<>();
 
-	private final Map<String, QueryResultColumnMeta> queryResultColumnMetaMap = new HashMap<>();
+	private final Map<String, QueryResultColumnMeta> QueryResultColumnMetaMap = new HashMap<>();
 
-	private final Map<String, Integer> queryResultColumnOrderMap = new HashMap<>();
+	private final Map<String, Integer> QueryExecutorColumnOrderMap = new HashMap<>();
 
 	DefaultJDBCQueryResultMetaData(ResultSetMetaData resultSetMetaData) throws SQLException {
 
@@ -35,31 +35,31 @@ class DefaultJDBCQueryResultMetaData implements JDBCQueryResultMetaData {
 		this.columnCount = resultSetMetaData.getColumnCount();
 
 		for (int columnNumber = 1; columnNumber <= columnCount; columnNumber++) {
-			QueryResultColumnMeta queryResultColumnMeta = JDBCFactory.newQueryResultColumnMeta();
-			queryResultColumnMeta.setColumnNumber(columnNumber);
-			queryResultColumnMeta.setCatalogName(resultSetMetaData.getCatalogName(columnNumber));
-			queryResultColumnMeta.setSchemaName(resultSetMetaData.getSchemaName(columnNumber));
-			queryResultColumnMeta.setTableName(resultSetMetaData.getTableName(columnNumber));
-			queryResultColumnMeta.setColumnName(resultSetMetaData.getColumnName(columnNumber));
-			queryResultColumnMeta.setColumnClassName(resultSetMetaData.getColumnClassName(columnNumber));
-			queryResultColumnMeta.setColumnType(resultSetMetaData.getColumnType(columnNumber));
-			queryResultColumnMeta.setColumnTypeName(resultSetMetaData.getColumnTypeName(columnNumber));
-			queryResultColumnMeta.setColumnLabel(resultSetMetaData.getColumnLabel(columnNumber));
-			queryResultColumnMeta.setColumnDisplaySize(resultSetMetaData.getColumnDisplaySize(columnNumber));
-			queryResultColumnMeta.setPrecision(resultSetMetaData.getPrecision(columnNumber));
-			queryResultColumnMeta.setAutoIncrement(resultSetMetaData.isAutoIncrement(columnNumber));
-			queryResultColumnMeta.setCaseSensitive(resultSetMetaData.isCaseSensitive(columnNumber));
-			queryResultColumnMeta.setCurrency(resultSetMetaData.isCurrency(columnNumber));
-			queryResultColumnMeta.setDefinitelyWritable(resultSetMetaData.isDefinitelyWritable(columnNumber));
-			queryResultColumnMeta.setReadOnly(resultSetMetaData.isReadOnly(columnNumber));
-			queryResultColumnMeta.setSearchable(resultSetMetaData.isSearchable(columnNumber));
-			queryResultColumnMeta.setSigned(resultSetMetaData.isSigned(columnNumber));
-			queryResultColumnMeta.setWritable(resultSetMetaData.isWritable(columnNumber));
-			queryResultColumnMeta.setNullable(resultSetMetaData.isNullable(columnNumber));
+			QueryResultColumnMeta QueryResultColumnMeta = JDBCFactory.newQueryResultColumnMeta();
+			QueryResultColumnMeta.setColumnNumber(columnNumber);
+			QueryResultColumnMeta.setCatalogName(resultSetMetaData.getCatalogName(columnNumber));
+			QueryResultColumnMeta.setSchemaName(resultSetMetaData.getSchemaName(columnNumber));
+			QueryResultColumnMeta.setTableName(resultSetMetaData.getTableName(columnNumber));
+			QueryResultColumnMeta.setColumnName(resultSetMetaData.getColumnName(columnNumber));
+			QueryResultColumnMeta.setColumnClassName(resultSetMetaData.getColumnClassName(columnNumber));
+			QueryResultColumnMeta.setColumnType(resultSetMetaData.getColumnType(columnNumber));
+			QueryResultColumnMeta.setColumnTypeName(resultSetMetaData.getColumnTypeName(columnNumber));
+			QueryResultColumnMeta.setColumnLabel(resultSetMetaData.getColumnLabel(columnNumber));
+			QueryResultColumnMeta.setColumnDisplaySize(resultSetMetaData.getColumnDisplaySize(columnNumber));
+			QueryResultColumnMeta.setPrecision(resultSetMetaData.getPrecision(columnNumber));
+			QueryResultColumnMeta.setAutoIncrement(resultSetMetaData.isAutoIncrement(columnNumber));
+			QueryResultColumnMeta.setCaseSensitive(resultSetMetaData.isCaseSensitive(columnNumber));
+			QueryResultColumnMeta.setCurrency(resultSetMetaData.isCurrency(columnNumber));
+			QueryResultColumnMeta.setDefinitelyWritable(resultSetMetaData.isDefinitelyWritable(columnNumber));
+			QueryResultColumnMeta.setReadOnly(resultSetMetaData.isReadOnly(columnNumber));
+			QueryResultColumnMeta.setSearchable(resultSetMetaData.isSearchable(columnNumber));
+			QueryResultColumnMeta.setSigned(resultSetMetaData.isSigned(columnNumber));
+			QueryResultColumnMeta.setWritable(resultSetMetaData.isWritable(columnNumber));
+			QueryResultColumnMeta.setNullable(resultSetMetaData.isNullable(columnNumber));
 
-			ArrayUtil.add(queryResultColumnMetaCollection, columnNumber, queryResultColumnMeta);
-			queryResultColumnMetaMap.put(queryResultColumnMeta.getColumnName().toUpperCase(), queryResultColumnMeta);
-			queryResultColumnOrderMap.put(queryResultColumnMeta.getColumnName().toUpperCase(), columnNumber);
+			ArrayUtil.add(QueryResultColumnMetaCollection, columnNumber, QueryResultColumnMeta);
+			QueryResultColumnMetaMap.put(QueryResultColumnMeta.getColumnName().toUpperCase(), QueryResultColumnMeta);
+			QueryExecutorColumnOrderMap.put(QueryResultColumnMeta.getColumnName().toUpperCase(), columnNumber);
 		}
 	}
 
@@ -80,7 +80,7 @@ class DefaultJDBCQueryResultMetaData implements JDBCQueryResultMetaData {
 
 		Assertion.assertNotBlank("columnName", columnName);
 
-		return queryResultColumnMetaMap.containsKey(columnName.toUpperCase());
+		return QueryResultColumnMetaMap.containsKey(columnName.toUpperCase());
 	}
 
 	@Override
@@ -88,7 +88,7 @@ class DefaultJDBCQueryResultMetaData implements JDBCQueryResultMetaData {
 
 		Assertion.assertNotBlank("columnName", columnName);
 
-		return queryResultColumnOrderMap.get(columnName.toUpperCase());
+		return QueryExecutorColumnOrderMap.get(columnName.toUpperCase());
 	}
 
 	@Override
@@ -97,7 +97,7 @@ class DefaultJDBCQueryResultMetaData implements JDBCQueryResultMetaData {
 		String columnName = null;
 
 		if (hasColumn(columnNumber)) {
-			columnName = queryResultColumnMetaCollection.get(columnNumber).getColumnName();
+			columnName = QueryResultColumnMetaCollection.get(columnNumber).getColumnName();
 		}
 
 		return columnName;
@@ -106,13 +106,13 @@ class DefaultJDBCQueryResultMetaData implements JDBCQueryResultMetaData {
 	@Override
 	public final QueryResultColumnMeta getColumnMeta(int columnNumber) {
 
-		QueryResultColumnMeta queryResultColumnMeta = null;
+		QueryResultColumnMeta QueryResultColumnMeta = null;
 
 		if (hasColumn(columnNumber)) {
-			queryResultColumnMeta = queryResultColumnMetaCollection.get(columnNumber);
+			QueryResultColumnMeta = QueryResultColumnMetaCollection.get(columnNumber);
 		}
 
-		return queryResultColumnMeta;
+		return QueryResultColumnMeta;
 	}
 
 	@Override
@@ -120,8 +120,8 @@ class DefaultJDBCQueryResultMetaData implements JDBCQueryResultMetaData {
 
 		Assertion.assertNotBlank("columnName", columnName);
 
-		QueryResultColumnMeta queryResultColumnMeta = queryResultColumnMetaMap.get(columnName.toUpperCase());
+		QueryResultColumnMeta QueryResultColumnMeta = QueryResultColumnMetaMap.get(columnName.toUpperCase());
 
-		return queryResultColumnMeta;
+		return QueryResultColumnMeta;
 	}
 }

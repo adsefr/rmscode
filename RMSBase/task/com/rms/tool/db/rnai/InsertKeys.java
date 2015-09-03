@@ -12,7 +12,7 @@ import com.rms.base.jdbc.JDBCUpdater;
 import com.rms.base.jdbc.constant.HoldabilityType;
 import com.rms.base.jdbc.model.DataBaseInfo;
 import com.rms.common.jdbc.JDBCObject;
-import com.rms.common.jdbc.JDBCQueryResult;
+import com.rms.common.jdbc.JDBCQueryExecutor;
 import com.rms.common.jdbc.model.DataBaseType;
 
 /**
@@ -43,7 +43,7 @@ public class InsertKeys {
 				+ "FROM \"public\".\"rm_users\" users,\"public\".\"rm_cv_data_misc\" misc "
 				+ "WHERE users.id=misc.user_id and length(misc.jglobalid)=18";
 		userSelector.setSqlClause(users);
-		JDBCQueryResult rsUsers = userSelector.executeQuery();
+		JDBCQueryExecutor rsUsers = userSelector.executeQuery();
 
 		while (rsUsers.hasNext()) {
 			String read_user_id = rsUsers.getValue(1, String.class);

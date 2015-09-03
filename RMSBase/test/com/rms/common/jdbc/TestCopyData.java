@@ -97,19 +97,11 @@ public class TestCopyData {
 	@After
 	public void after() {
 
-		try {
-			srcJDBCObject.close();
-		} catch (SQLException e) {
-			logger.error(e);
-		}
-		try {
-			destJDBCObject.close();
-		} catch (SQLException e) {
-			logger.error(e);
-		}
+		srcJDBCObject.close();
+		destJDBCObject.close();
 	}
 
-	//@Test
+	// @Test
 	public void testCopy1() {
 
 		try {

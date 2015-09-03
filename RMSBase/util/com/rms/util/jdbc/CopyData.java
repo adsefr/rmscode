@@ -15,7 +15,8 @@ import com.rms.base.logging.Logger;
 import com.rms.base.util.ArrayUtil;
 import com.rms.base.validate.Assertion;
 import com.rms.common.jdbc.JDBCObject;
-import com.rms.common.jdbc.JDBCQueryResult;
+import com.rms.common.jdbc.JDBCQueryExecutor;
+import com.rms.common.jdbc.JDBCUpdateExecutor;
 
 public class CopyData extends JDBCProcess {
 
@@ -79,7 +80,8 @@ public class CopyData extends JDBCProcess {
 
 			QueryParameter queryParameter = new QueryParameter();
 			queryParameter.setSqlClause(sqlClause.toString());
-			JDBCQueryResult jdbcQueryResult = srcJDBCObject.query(queryParameter);
+			JDBCQueryExecutor jdbcQueryExecutor = srcJDBCObject.query(queryParameter);
+			jdbcQueryExecutor.execute();
 
 			List<String> valuesList = new ArrayList<>(columnNames);
 			Collections.fill(valuesList, "?");
@@ -90,13 +92,15 @@ public class CopyData extends JDBCProcess {
 
 			UpdateParameter updateParameter = new UpdateParameter();
 			updateParameter.setSqlClause(sqlClause.toString());
-
-			while (jdbcQueryResult.hasNext()) {
-				List<Object> parameterList = jdbcQueryResult.getValues();
+			JDBCUpdateExecutor jdbcUpdateExecutor = destJDBCObject.update(updateParameter);
+			while (jdbcQueryExecutor.hasNext()) {
+				List<Object> parameterList = jdbcQueryExecutor.getValues();
 				updateParameter.setParameterList(parameterList);
-				destJDBCObject.update(updateParameter);
+				jdbcUpdateExecutor.execute();
+				if (jdbcUpdateExecutor.failure()) {
+					logger.debug(jdbcUpdateExecutor.getErrorMessage());
+				}
 			}
-			destJDBCObject.commit();
 		}
 	}
 
@@ -104,7 +108,7 @@ public class CopyData extends JDBCProcess {
 	public void afterProcessSuccess() throws Exception {
 
 		destJDBCObject.commit();
-		destJDBCObject.endTransaction();
+		destJDBCObject.commitTransaction();
 	}
 
 	@Override

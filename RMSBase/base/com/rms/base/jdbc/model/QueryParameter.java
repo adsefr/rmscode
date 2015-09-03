@@ -19,7 +19,7 @@ public class QueryParameter {
 
 	private HoldabilityType holdabilityType = HoldabilityType.HOLD_CURSORS_OVER_COMMIT;
 
-	private boolean largeDataMode = false;
+	private boolean largeMode = false;
 
 	private String sqlClause;
 
@@ -104,20 +104,20 @@ public class QueryParameter {
 	}
 
 	/**
-	 * @return largeDataMode
+	 * @return largeMode
 	 */
-	public boolean isLargeDataMode() {
+	public boolean isLargeMode() {
 
-		return largeDataMode;
+		return largeMode;
 	}
 
 	/**
-	 * @param largeDataMode
+	 * @param largeMode
 	 *            セットする largeDataMode
 	 */
-	public void setLargeDataMode(boolean largeDataMode) {
+	public void setLargeMode(boolean largeMode) {
 
-		this.largeDataMode = largeDataMode;
+		this.largeMode = largeMode;
 	}
 
 	/**

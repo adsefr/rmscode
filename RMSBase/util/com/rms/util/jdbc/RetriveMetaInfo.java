@@ -44,7 +44,7 @@ public class RetriveMetaInfo extends JDBCProcess {
 	@Override
 	public void afterProcessSuccess() throws Exception {
 
-		this.jdbcObject.endTransaction();
+		this.jdbcObject.commitTransaction();
 
 	}
 
