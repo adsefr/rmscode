@@ -1,6 +1,6 @@
 package com.rms.util.jdbc;
 
-import com.rms.util.base.BaseProcess;
+import com.rms.util.baseclass.BaseProcess;
 
 abstract class JDBCProcess extends BaseProcess {
 

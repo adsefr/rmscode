@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Calendar;
 
+import com.rms.base.enumeration.DataType;
 import com.rms.base.exception.UnexpectedTypeException;
 import com.rms.base.jdbc.JDBCValue;
-import com.rms.base.jdbc.constant.ValueType;
 import com.rms.base.validate.Assertion;
 
 /**
@@ -19,7 +19,7 @@ class DefaultJDBCValue implements JDBCValue {
 
 	private Object rawValue = null;
 
-	private ValueType valueType = null;
+	private DataType valueType = null;
 
 	public DefaultJDBCValue(Object rawValue) {
 

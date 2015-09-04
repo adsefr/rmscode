@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.rms.base.constant.Encodes;
-import com.rms.common.generate.javaclass.info.ClassInfo;
-import com.rms.common.generate.javaclass.info.DataType;
-import com.rms.common.generate.javaclass.info.MethodModel;
-import com.rms.common.generate.javaclass.info.ModifierType;
-import com.rms.common.generate.javaclass.info.ParameterModel;
+import com.rms.base.generation.classfile.ClassInfo;
+import com.rms.base.generation.classfile.ModifierType;
+import com.rms.base.generation.model.DataType;
+import com.rms.base.generation.model.MethodModel;
+import com.rms.base.generation.model.ParameterModel;
 import com.rms.common.io.IOFactory;
 import com.rms.common.poi.excel.ExcelOperatorFactory;
 import com.rms.common.poi.excel.model.CellModel;

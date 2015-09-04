@@ -42,17 +42,17 @@ public enum ValueType {
 
 	NULL(Types.NULL), //
 
-	// ARRAY(Types.ARRAY), //
-	// JAVA_OBJECT(Types.JAVA_OBJECT), //
-	// DATALINK(Types.DATALINK), //
-	// DISTINCT(Types.DISTINCT), //
-	// OTHER(Types.OTHER), //
-	// REAL(Types.REAL), //
-	// REF(Types.REF), //
-	// ROWID(Types.ROWID), //
-	// STRUCT(Types.STRUCT), //
-	// NCLOB(Types.NCLOB), //
-	// SQLXML(Types.SQLXML), //
+	ARRAY(Types.ARRAY), //
+	JAVA_OBJECT(Types.JAVA_OBJECT), //
+	DATALINK(Types.DATALINK), //
+	DISTINCT(Types.DISTINCT), //
+	OTHER(Types.OTHER), //
+	REAL(Types.REAL), //
+	REF(Types.REF), //
+	ROWID(Types.ROWID), //
+	STRUCT(Types.STRUCT), //
+	NCLOB(Types.NCLOB), //
+	SQLXML(Types.SQLXML), //
 	;
 
 	private int type;
