@@ -1,5 +1,6 @@
 package com.rms.base.jdbc.implments;
 
+import java.sql.JDBCType;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 import com.rms.base.jdbc.JDBCQueryResultMetaData;
 import com.rms.base.jdbc.model.QueryResultColumnMeta;
+import com.rms.base.logging.Logger;
 import com.rms.base.util.ArrayUtil;
 import com.rms.base.util.NumberUtil;
 import com.rms.base.validate.Assertion;
@@ -19,6 +21,8 @@ import com.rms.base.validate.Assertion;
  * @since 2015/08/31
  */
 class DefaultJDBCQueryResultMetaData implements JDBCQueryResultMetaData {
+
+	private final static Logger logger = Logger.getLogger(JDBCQueryResultMetaData.class);
 
 	private final int columnCount;
 
@@ -42,7 +46,7 @@ class DefaultJDBCQueryResultMetaData implements JDBCQueryResultMetaData {
 			QueryResultColumnMeta.setTableName(resultSetMetaData.getTableName(columnNumber));
 			QueryResultColumnMeta.setColumnName(resultSetMetaData.getColumnName(columnNumber));
 			QueryResultColumnMeta.setColumnClassName(resultSetMetaData.getColumnClassName(columnNumber));
-			QueryResultColumnMeta.setColumnType(resultSetMetaData.getColumnType(columnNumber));
+			QueryResultColumnMeta.setColumnType(JDBCType.valueOf(resultSetMetaData.getColumnType(columnNumber)));
 			QueryResultColumnMeta.setColumnTypeName(resultSetMetaData.getColumnTypeName(columnNumber));
 			QueryResultColumnMeta.setColumnLabel(resultSetMetaData.getColumnLabel(columnNumber));
 			QueryResultColumnMeta.setColumnDisplaySize(resultSetMetaData.getColumnDisplaySize(columnNumber));
@@ -56,6 +60,8 @@ class DefaultJDBCQueryResultMetaData implements JDBCQueryResultMetaData {
 			QueryResultColumnMeta.setSigned(resultSetMetaData.isSigned(columnNumber));
 			QueryResultColumnMeta.setWritable(resultSetMetaData.isWritable(columnNumber));
 			QueryResultColumnMeta.setNullable(resultSetMetaData.isNullable(columnNumber));
+
+			logger.trace(QueryResultColumnMeta.toString());
 
 			ArrayUtil.add(QueryResultColumnMetaCollection, columnNumber, QueryResultColumnMeta);
 			QueryResultColumnMetaMap.put(QueryResultColumnMeta.getColumnName().toUpperCase(), QueryResultColumnMeta);

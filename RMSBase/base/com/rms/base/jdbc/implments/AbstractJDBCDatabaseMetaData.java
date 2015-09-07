@@ -251,7 +251,7 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			String columnName = columnQueryExecutor.getValue("COLUMN_NAME");
 
 			/** DATA_TYPE int => java.sql.Types からの SQL の型 */
-			Integer dataType = columnQueryExecutor.getValue("DATA_TYPE");
+			Integer dataType = ((Number) columnQueryExecutor.getValue("DATA_TYPE")).intValue();
 
 			/** TYPE_NAME String => データソース依存の型名。UDT の場合、型名は完全指定 */
 			String typeName = columnQueryExecutor.getValue("TYPE_NAME");
@@ -331,7 +331,7 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			 * 型のソースの型、java.sql.Types の SQL 型 (DATA_TYPE が DISTINCT またはユーザー生成
 			 * REF でない場合は null)
 			 */
-			Integer sourceDataType = columnQueryExecutor.getValue("SOURCE_DATA_TYPE");
+			Integer sourceDataType = ((Number) columnQueryExecutor.getValue("SOURCE_DATA_TYPE")).intValue();
 
 			/**
 			 * IS_AUTOINCREMENT String => この列が自動インクリメントされるかどうかを示す<br>

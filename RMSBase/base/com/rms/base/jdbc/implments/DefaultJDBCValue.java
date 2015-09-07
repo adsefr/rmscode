@@ -2,9 +2,9 @@ package com.rms.base.jdbc.implments;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.JDBCType;
 import java.util.Calendar;
 
-import com.rms.base.enumeration.DataType;
 import com.rms.base.exception.UnexpectedTypeException;
 import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.validate.Assertion;
@@ -19,7 +19,7 @@ class DefaultJDBCValue implements JDBCValue {
 
 	private Object rawValue = null;
 
-	private DataType valueType = null;
+	private JDBCType jdbcType = null;
 
 	public DefaultJDBCValue(Object rawValue) {
 
@@ -45,7 +45,7 @@ class DefaultJDBCValue implements JDBCValue {
 			return "";
 		}
 
-		switch (valueType) {
+		switch (jdbcType) {
 		case BIT:
 		case BIGINT:
 		case TINYINT:
@@ -76,14 +76,14 @@ class DefaultJDBCValue implements JDBCValue {
 			return String.valueOf(rawValue);
 
 		default:
-			throw new UnexpectedTypeException(valueType.getClass().getName());
+			throw new UnexpectedTypeException(jdbcType.getClass().getName());
 		}
 	}
 
 	@Override
 	public BigDecimal numberValue() {
 
-		switch (valueType) {
+		switch (jdbcType) {
 		case BIT:
 		case BIGINT:
 		case TINYINT:
@@ -95,14 +95,14 @@ class DefaultJDBCValue implements JDBCValue {
 		case DECIMAL:
 			return new BigDecimal(stringValue());
 		default:
-			throw new UnexpectedTypeException(valueType.getClass().getName());
+			throw new UnexpectedTypeException(jdbcType.getClass().getName());
 		}
 	}
 
 	@Override
 	public Calendar dateValue() {
 
-		switch (valueType) {
+		switch (jdbcType) {
 		case TIME:
 		case DATE:
 		case TIMESTAMP:
@@ -111,7 +111,7 @@ class DefaultJDBCValue implements JDBCValue {
 			calendar.setTime(date);
 			return calendar;
 		default:
-			throw new UnexpectedTypeException(valueType.getClass().getName());
+			throw new UnexpectedTypeException(jdbcType.getClass().getName());
 		}
 	}
 

@@ -101,12 +101,13 @@ public abstract class AbstractJDBCQueryExecutor implements JDBCQueryExecutor {
 
 		for (int columnNumber = 1; columnNumber <= columnCount; columnNumber++) {
 			QueryResultColumnMeta queryResultColumnMeta = jdbcQueryResultMetaData.getColumnMeta(columnNumber);
-			Object rawValue = getResultSet().getObject(columnNumber);
+			Object rawValue = JDBCUtil.getValue(getResultSet(), columnNumber, queryResultColumnMeta.getColumnType());
 			JDBCColumn jdbcColumn = JDBCFactory.newJDBCColumn(queryResultColumnMeta, rawValue);
 			jdbcRow.addColumn(jdbcColumn);
 		}
 
-		ArrayUtil.add(jdbcRowCollection, jdbcRow.getRowNumber(), jdbcRow);// TODO largeMode
+		ArrayUtil.add(jdbcRowCollection, jdbcRow.getRowNumber(), jdbcRow);// TODO
+																			// largeMode
 
 		return jdbcRow;
 	}

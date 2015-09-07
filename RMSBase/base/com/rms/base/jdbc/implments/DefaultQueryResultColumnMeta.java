@@ -1,5 +1,7 @@
 package com.rms.base.jdbc.implments;
 
+import java.sql.JDBCType;
+
 import com.rms.base.jdbc.model.QueryResultColumnMeta;
 
 /**
@@ -22,7 +24,7 @@ public class DefaultQueryResultColumnMeta implements QueryResultColumnMeta {
 
 	private String columnClassName;
 
-	private Integer columnType;
+	private JDBCType columnType;
 
 	private String columnTypeName;
 
@@ -54,6 +56,35 @@ public class DefaultQueryResultColumnMeta implements QueryResultColumnMeta {
 
 	public DefaultQueryResultColumnMeta() {
 
+	}
+
+	@Override
+	public String toString() {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("columnNumber=").append(columnNumber).append(", ");
+		sb.append("catalogName=").append(catalogName).append(", ");
+		sb.append("schemaName=").append(schemaName).append(", ");
+		sb.append("tableName=").append(tableName).append(", ");
+		sb.append("columnName=").append(columnName).append(", ");
+		sb.append("columnClassName=").append(columnClassName).append(", ");
+		sb.append("columnType=").append(columnType).append(", ");
+		sb.append("columnTypeName=").append(columnTypeName).append(", ");
+		sb.append("columnLabel=").append(columnLabel).append(", ");
+		sb.append("columnDisplaySize=").append(columnDisplaySize).append(", ");
+		sb.append("precision=").append(precision).append(", ");
+		sb.append("scale=").append(scale).append(", ");
+		sb.append("autoIncrement=").append(autoIncrement).append(", ");
+		sb.append("caseSensitive=").append(caseSensitive).append(", ");
+		sb.append("currency=").append(currency).append(", ");
+		sb.append("definitelyWritable=").append(definitelyWritable).append(", ");
+		sb.append("readOnly=").append(readOnly).append(", ");
+		sb.append("searchable=").append(searchable).append(", ");
+		sb.append("signed=").append(signed).append(", ");
+		sb.append("writable=").append(writable).append(", ");
+		sb.append("nullable=").append(nullable);
+
+		return sb.toString();
 	}
 
 	/**
@@ -174,7 +205,7 @@ public class DefaultQueryResultColumnMeta implements QueryResultColumnMeta {
 	 * @return columnType
 	 */
 	@Override
-	public Integer getColumnType() {
+	public JDBCType getColumnType() {
 
 		return columnType;
 	}
@@ -184,7 +215,7 @@ public class DefaultQueryResultColumnMeta implements QueryResultColumnMeta {
 	 *            セットする columnType
 	 */
 	@Override
-	public void setColumnType(Integer columnType) {
+	public void setColumnType(JDBCType columnType) {
 
 		this.columnType = columnType;
 	}

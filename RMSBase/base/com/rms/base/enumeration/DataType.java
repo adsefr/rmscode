@@ -1,5 +1,15 @@
 package com.rms.base.enumeration;
 
+import java.math.BigDecimal;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.Date;
+import java.sql.JDBCType;
+import java.sql.Ref;
+import java.sql.Struct;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.sql.Types;
 
 import com.rms.base.exception.UnexpectedTypeException;
@@ -7,128 +17,217 @@ import com.rms.base.validate.Assertion;
 
 /**
  *
- *
  * @author ri.meisei
- * @since 2014/02/26
+ * @since 2015/09/07
  */
 public enum DataType {
-	BIT(Types.BIT), //
-	TINYINT(Types.TINYINT), //
-	SMALLINT(Types.SMALLINT), //
-	BIGINT(Types.BIGINT), //
-	INTEGER(Types.INTEGER), //
-	FLOAT(Types.FLOAT), //
-	DOUBLE(Types.DOUBLE), //
-	DECIMAL(Types.DECIMAL), //
-	NUMERIC(Types.NUMERIC), //
 
-	CHAR(Types.CHAR), //
-	VARCHAR(Types.VARCHAR), //
-	LONGVARCHAR(Types.LONGVARCHAR), //
-	NCHAR(Types.NCHAR), //
-	NVARCHAR(Types.NVARCHAR), //
-	LONGNVARCHAR(Types.LONGNVARCHAR), //
+	STRING(String.class), //
 
-	BOOLEAN(Types.BOOLEAN), //
+	BYTE(Byte.class, byte.class), //
+	SHORT(Short.class, short.class), //
+	CHARACTER(Character.class, char.class), //
+	INTEGER(Integer.class, int.class), //
+	LONG(Long.class, long.class), //
+	FLOAT(Float.class, float.class), //
+	DOUBLE(Double.class, double.class), //
+	BIGDECIMAL(BigDecimal.class), //
 
-	BINARY(Types.BINARY), //
-	VARBINARY(Types.VARBINARY), //
-	LONGVARBINARY(Types.LONGVARBINARY), //
-	BLOB(Types.BLOB), //
-	CLOB(Types.CLOB), //
+	BOOLEAN(boolean.class, Boolean.class), //
 
-	TIME(Types.TIME), //
-	DATE(Types.DATE), //
-	TIMESTAMP(Types.TIMESTAMP), //
+	BYTE_ARRAY(Byte[].class, byte[].class), //
 
-	NULL(Types.NULL), //
+	TIME(Time.class), //
+	DATE(Date.class), //
+	TIMESTAMP(Timestamp.class), //
 
-	JAVA_OBJECT(Types.JAVA_OBJECT), //
-	REAL(Types.REAL), //
-	// ARRAY(Types.ARRAY), //
-	// DATALINK(Types.DATALINK), //
-	// DISTINCT(Types.DISTINCT), //
-	// OTHER(Types.OTHER), //
-	// REF(Types.REF), //
-	// ROWID(Types.ROWID), //
-	// STRUCT(Types.STRUCT), //
-	// NCLOB(Types.NCLOB), //
-	// SQLXML(Types.SQLXML), //
+	BLOB(Blob.class), //
+	CLOB(Clob.class), //
+	NCLOB(java.sql.NClob.class), //
+	ARRAY(Array.class), //
+	STRUCT(Struct.class), //
+	REF(Ref.class), //
+	SQLXML(java.sql.SQLXML.class), //
+	ROWID(java.sql.RowId.class), //
 	;
 
-	private int type;
+	private Class<?>[] clazz;
 
-	private DataType(int type) {
+	private DataType(Class<?>... clazz) {
 
-		this.type = type;
+		this.clazz = clazz;
 	}
 
-	/**
-	 * @return type
-	 */
-	public int getType() {
+	//
+	public static DataType getDataType(JDBCType jdbcType) {
 
-		return type;
-	}
+		Assertion.assertNotNull("jdbcType", jdbcType);
 
-	public static DataType valueOf(int type) {
-
-		for (DataType valueType : DataType.values()) {
-			if (valueType.getType() == type) {
-				return valueType;
-			}
-		}
-
-		throw new UnexpectedTypeException("type.getType():" + type);
-	}
-
-	public static String javaType(int dataType) {
-
-		Assertion.assertNotNull("dataType", dataType);
-
-		switch (dataType) {
+		switch (jdbcType.getVendorTypeNumber()) {
 		case Types.CHAR:
-			return " String";
+			// CHAR(Types.CHAR),
+			return STRING;
 		case Types.VARCHAR:
-			return " String";
+			// VARCHAR(Types.VARCHAR),
+			return STRING;
 		case Types.LONGVARCHAR:
-			return " String";
-		case Types.NUMERIC:
-			return " java.math.BigDecimal";
-		case Types.DECIMAL:
-			return " java.math.BigDecimal";
-		case Types.BIT:
-			return " Boolean";
+			// LONGVARCHAR(Types.LONGVARCHAR),
+			return STRING;
+		case Types.NCHAR:
+			// NCHAR(Types.NCHAR),
+			return STRING;
+		case Types.NVARCHAR:
+			// NVARCHAR(Types.NVARCHAR),
+			return STRING;
+		case Types.LONGNVARCHAR:
+			// LONGNVARCHAR(Types.LONGNVARCHAR),
+			return STRING;
+
 		case Types.TINYINT:
-			return " Integer";
+			// TINYINT(Types.TINYINT),
+			return BYTE;
 		case Types.SMALLINT:
-			return " Integer";
+			// SMALLINT(Types.SMALLINT),
+			return SHORT;
 		case Types.INTEGER:
-			return " Integer";
+			// INTEGER(Types.INTEGER),
+			return DataType.INTEGER;
 		case Types.BIGINT:
-			return " Long";
+			// BIGINT(Types.BIGINT),
+			return LONG;
 		case Types.REAL:
-			return " Float";
+			// REAL(Types.REAL),
+			return FLOAT;
 		case Types.FLOAT:
-			return " Double";
+			// FLOAT(Types.FLOAT),
+			return DOUBLE;
 		case Types.DOUBLE:
-			return " Double";
+			// DOUBLE(Types.DOUBLE),
+			return DOUBLE;
+		case Types.NUMERIC:
+			// NUMERIC(Types.NUMERIC),
+			return BIGDECIMAL;
+		case Types.DECIMAL:
+			// DECIMAL(Types.DECIMAL),
+			return BIGDECIMAL;
+
+		case Types.BIT:
+			// BIT(Types.BIT),
+			return BOOLEAN;
+		case Types.BOOLEAN:
+			// BOOLEAN(Types.BOOLEAN),
+			return BOOLEAN;
+
 		case Types.BINARY:
-			return " byte[]";
+			// BINARY(Types.BINARY),
+			return BYTE_ARRAY;
 		case Types.VARBINARY:
-			return " byte[]";
+			// VARBINARY(Types.VARBINARY),
+			return BYTE_ARRAY;
 		case Types.LONGVARBINARY:
-			return " byte[]";
-		case Types.DATE:
-			return " java.sql.Date";
+			// LONGVARBINARY(Types.LONGVARBINARY),
+			return BYTE_ARRAY;
+
 		case Types.TIME:
-			return " java.sql.Time";
+			// TIME(Types.TIME),
+			return TIME;
+		case Types.DATE:
+			// DATE(Types.DATE),
+			return DATE;
 		case Types.TIMESTAMP:
-			return " java.sql.Timestamp";
+			// TIMESTAMP(Types.TIMESTAMP),
+			return TIMESTAMP;
 
+		case Types.BLOB:
+			// BLOB(Types.BLOB),
+			return BLOB;
+		case Types.CLOB:
+			// CLOB(Types.CLOB),
+			return CLOB;
+		case Types.NCLOB:
+			// NCLOB(Types.NCLOB),
+			return NCLOB;
+
+		case Types.ARRAY:
+			// ARRAY(Types.ARRAY),
+			return ARRAY;
+		case Types.STRUCT:
+			// STRUCT(Types.STRUCT),
+			return STRUCT;
+		case Types.REF:
+			// REF(Types.REF),
+			return REF;
+		case Types.ROWID:
+			// ROWID(Types.ROWID),
+			return ROWID;
+		case Types.SQLXML:
+			// SQLXML(Types.SQLXML),
+			return SQLXML;
 		default:
-			throw new UnexpectedTypeException(dataType + "");
+			// DATALINK(Types.DATALINK),
+			// NULL(Types.NULL),
+			// OTHER(Types.OTHER),
+			// JAVA_OBJECT(Types.JAVA_OBJECT),
+			// DISTINCT(Types.DISTINCT),
+			// REF_CURSOR(Types.REF_CURSOR),
+			// TIME_WITH_TIMEZONE(Types.TIME_WITH_TIMEZONE),
+			// TIMESTAMP_WITH_TIMEZONE(Types.TIMESTAMP_WITH_TIMEZONE);
+			throw new UnexpectedTypeException(jdbcType.getClass().getName());
 		}
+	}
 
+	public String getClassName() {
+
+		switch (this) {
+		case STRING:
+			return clazz[0].getName();
+		case BOOLEAN:
+			return clazz[0].getName();
+		case BYTE:
+			return clazz[0].getName();
+		case SHORT://
+			return clazz[0].getName();
+		case CHARACTER:
+			return clazz[0].getName();
+		case INTEGER:
+			return clazz[0].getName();
+		case LONG:
+			return clazz[0].getName();
+		case FLOAT:
+			return clazz[0].getName();
+		case DOUBLE:
+			return clazz[0].getName();
+		case BIGDECIMAL:
+			return clazz[0].getName();
+
+		case BYTE_ARRAY:
+			return clazz[0].getName();
+
+		case TIME:
+			return clazz[0].getName();
+		case DATE:
+			return clazz[0].getName();
+		case TIMESTAMP:
+			return clazz[0].getName();
+
+		case BLOB:
+			return clazz[0].getName();
+		case CLOB:
+			return clazz[0].getName();
+		case NCLOB:
+			return clazz[0].getName();
+		case ARRAY:
+			return clazz[0].getName();
+		case STRUCT:
+			return clazz[0].getName();
+		case REF:
+			return clazz[0].getName();
+		case SQLXML:
+			return clazz[0].getName();
+		case ROWID:
+			return clazz[0].getName();
+		default:
+			throw new UnexpectedTypeException(this.getClass().getName());
+		}
 	}
 }

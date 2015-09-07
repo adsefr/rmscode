@@ -1,5 +1,7 @@
 package com.rms.base.jdbc.model;
 
+import java.sql.JDBCType;
+
 /**
  *
  *
@@ -32,9 +34,9 @@ public interface QueryResultColumnMeta {
 
 	public void setColumnClassName(String columnClassName);
 
-	public Integer getColumnType();
+	public JDBCType getColumnType();
 
-	public void setColumnType(Integer columnType);
+	public void setColumnType(JDBCType columnType);
 
 	public String getColumnTypeName();
 
