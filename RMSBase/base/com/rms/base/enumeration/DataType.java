@@ -176,7 +176,7 @@ public enum DataType {
 		}
 	}
 
-	public String getClassName() {
+	public String getStringType() {
 
 		switch (this) {
 		case STRING:
@@ -201,7 +201,7 @@ public enum DataType {
 			return clazz[0].getName();
 
 		case BYTE_ARRAY:
-			return clazz[0].getName();
+			return Byte.class.getName() + "[]";
 
 		case TIME:
 			return clazz[0].getName();

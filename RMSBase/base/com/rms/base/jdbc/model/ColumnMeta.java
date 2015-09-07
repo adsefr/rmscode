@@ -1,5 +1,7 @@
 package com.rms.base.jdbc.model;
 
+import java.sql.JDBCType;
+
 /**
  *
  *
@@ -16,7 +18,7 @@ public interface ColumnMeta {
 
 	public String getColumnName();
 
-	public Integer getDataType();
+	public JDBCType getJdbcType();
 
 	public String getTypeName();
 

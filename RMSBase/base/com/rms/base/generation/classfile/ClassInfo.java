@@ -1,7 +1,12 @@
 package com.rms.base.generation.classfile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.rms.base.constant.Characters;
 import com.rms.base.generation.model.TargetType;
+import com.rms.base.util.ArrayUtil;
+import com.rms.base.util.TextUtil;
 import com.rms.base.validate.Assertion;
 
 /**
@@ -11,19 +16,25 @@ import com.rms.base.validate.Assertion;
  */
 public class ClassInfo {
 
-	private final String packageName;
-
 	private final ImportInfo importInfo = new ImportInfo();
+
+	private final AnnotationInfo annotationInfo = new AnnotationInfo();
 
 	private final ModifierInfo modifierInfo = new ModifierInfo(TargetType.CLASS);
 
-	private final String simpleClassName;
+	private final List<String> parentClass = new ArrayList<>();
 
-	private final String className;
+	private final List<String> parentInterface = new ArrayList<>();
 
 	private final FieldInfo fieldInfo = new FieldInfo();
 
 	private final MethodInfo methodInfo = new MethodInfo();
+
+	private final String packageName;
+
+	private final String className;
+
+	private final String simpleClassName;
 
 	/**
 	 *
@@ -48,14 +59,13 @@ public class ClassInfo {
 		Assertion.assertNotBlank("packageName", packageName);
 		Assertion.assertNotBlank("simpleClassName", simpleClassName);
 
-		this.packageName = packageName;
+		this.packageName = getPackageName(packageName);
 		this.simpleClassName = simpleClassName;
-		this.className = packageName + "." + simpleClassName;
+		this.className = this.packageName + "." + simpleClassName;
 	}
 
 	/**
-	 *
-	 * @return
+	 * @return packageName
 	 */
 	public String getPackageName() {
 
@@ -69,6 +79,14 @@ public class ClassInfo {
 	public ImportInfo getImportInfo() {
 
 		return importInfo;
+	}
+
+	/**
+	 * @return annotationInfo
+	 */
+	public AnnotationInfo getAnnotationInfo() {
+
+		return annotationInfo;
 	}
 
 	/**
@@ -99,6 +117,22 @@ public class ClassInfo {
 	}
 
 	/**
+	 * @return parentClass
+	 */
+	public List<String> getParentClass() {
+
+		return parentClass;
+	}
+
+	/**
+	 * @return parentInterface
+	 */
+	public List<String> getParentInterface() {
+
+		return parentInterface;
+	}
+
+	/**
 	 *
 	 * @return
 	 */
@@ -119,34 +153,53 @@ public class ClassInfo {
 	@Override
 	public String toString() {
 
-		StringBuilder sbBuilder = new StringBuilder();
+		StringBuilder sBuilder = new StringBuilder();
 		String packageName = getPackageName(className);
 		if (packageName != null && !packageName.isEmpty()) {
-			sbBuilder.append("package ").append(packageName).append(";");
-			sbBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
-			sbBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
+			sBuilder.append("package ").append(packageName).append(";");
+			sBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
+			sBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
 		}
 
-		sbBuilder.append(importInfo.toString());
+		sBuilder.append(importInfo.toString());
 
-		sbBuilder.append(modifierInfo.toString());
-		sbBuilder.append(" class ");
-		sbBuilder.append(simpleClassName);
-		sbBuilder.append(" {");
-		sbBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
-		sbBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
+		sBuilder.append(modifierInfo.toString());
+		sBuilder.append(" class ");
+		sBuilder.append(simpleClassName);
 
-		sbBuilder.append(fieldInfo.toString());
+		if (!parentClass.isEmpty()) {
+			int length1 = sBuilder.lastIndexOf(Characters.LINE_SEPARATOR_SYSTEM);
+			int length2 = sBuilder.length();
+			sBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
+			TextUtil.repeat(" ", Math.max(length2 - length1, 16) - 4);
+			sBuilder.append(" extends ");
+			sBuilder.append(ArrayUtil.join(parentClass, ", "));
+		}
 
-		sbBuilder.append(methodInfo.toString());
+		if (!parentInterface.isEmpty()) {
+			int length1 = sBuilder.lastIndexOf(Characters.LINE_SEPARATOR_SYSTEM);
+			int length2 = sBuilder.length();
+			sBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
+			TextUtil.repeat(" ", Math.max(length2 - length1, 16) - 4);
+			sBuilder.append(" implements ");
+			sBuilder.append(ArrayUtil.join(parentInterface, ", "));
+		}
 
-		sbBuilder.append("}");
-		sbBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
+		sBuilder.append(" {");
+		sBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
+		sBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
 
-		return sbBuilder.toString();
+		sBuilder.append(fieldInfo.toString());
+
+		sBuilder.append(methodInfo.toString());
+
+		sBuilder.append("}");
+		sBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
+
+		return sBuilder.toString();
 	}
 
-	private String getPackageName(String className) {
+	private static String getPackageName(String className) {
 
 		String packageName = "";
 
@@ -158,7 +211,7 @@ public class ClassInfo {
 		return packageName;
 	}
 
-	private String getSimpleClassName(String className) {
+	private static String getSimpleClassName(String className) {
 
 		String simpleClassName = "";
 

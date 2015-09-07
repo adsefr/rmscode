@@ -1,5 +1,7 @@
 package com.rms.base.util;
 
+import com.rms.base.validate.Assertion;
+
 public class TextUtil {
 
 	/**
@@ -172,5 +174,27 @@ public class TextUtil {
 			builder.append(input);
 		}
 		return builder.toString();
+	}
+
+	/**
+	 *
+	 * @param content
+	 * @return
+	 */
+	public static String capital(String content) {
+
+		Assertion.assertNotNull("content", content);
+
+		if (content.isEmpty()) {
+			return "";
+		}
+
+		StringBuilder sBuilder = new StringBuilder(content);
+
+		String firstChar = sBuilder.deleteCharAt(0).toString().toUpperCase();
+
+		sBuilder.insert(0, firstChar);
+
+		return sBuilder.toString();
 	}
 }

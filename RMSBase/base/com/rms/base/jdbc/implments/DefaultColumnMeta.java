@@ -1,5 +1,7 @@
 package com.rms.base.jdbc.implments;
 
+import java.sql.JDBCType;
+
 import com.rms.base.jdbc.model.ColumnMeta;
 
 /**
@@ -23,7 +25,7 @@ public class DefaultColumnMeta implements ColumnMeta {
 	private String columnName;
 
 	/** DATA_TYPE int => java.sql.Types からの SQL の型 */
-	private Integer dataType;
+	private JDBCType jdbcType;
 
 	/** TYPE_NAME String => データソース依存の型名。UDT の場合、型名は完全指定 */
 	private String typeName;
@@ -191,21 +193,21 @@ public class DefaultColumnMeta implements ColumnMeta {
 	}
 
 	/**
-	 * @return dataType
+	 * @return jdbcType
 	 */
 	@Override
-	public Integer getDataType() {
+	public JDBCType getJdbcType() {
 
-		return dataType;
+		return jdbcType;
 	}
 
 	/**
-	 * @param dataType
-	 *            セットする dataType
+	 * @param jdbcType
+	 *            セットする jdbcType
 	 */
-	public void setDataType(Integer dataType) {
+	public void setJdbcType(JDBCType jdbcType) {
 
-		this.dataType = dataType;
+		this.jdbcType = jdbcType;
 	}
 
 	/**

@@ -26,7 +26,7 @@ public class TestGenerateTableBeanClass {
 			jdbcObject.startTransaction();
 			SchemaMeta schemaMeta = jdbcObject.getJDBCDataBaseMetaData().getSchemaMeta("public");
 
-			GenerateTableBeanClass generate = new GenerateTableBeanClass();
+			GenerateBeanClass generate = new GenerateBeanClass();
 			generate.setSchemaMeta(schemaMeta);
 
 			generate.generate();

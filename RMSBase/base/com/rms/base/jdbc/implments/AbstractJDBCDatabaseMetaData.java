@@ -1,6 +1,7 @@
 package com.rms.base.jdbc.implments;
 
 import java.sql.DatabaseMetaData;
+import java.sql.JDBCType;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -356,7 +357,7 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			columnMeta.setSchemaName(schemaName);
 			columnMeta.setTableName(tableName);
 			columnMeta.setColumnName(columnName);
-			columnMeta.setDataType(dataType);
+			columnMeta.setJdbcType(JDBCType.valueOf(dataType));
 			columnMeta.setTypeName(typeName);
 			columnMeta.setColumnSize(columnSize);
 			columnMeta.setDecimalDits(decimalDits);
