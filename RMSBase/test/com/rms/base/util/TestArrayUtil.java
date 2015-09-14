@@ -28,13 +28,13 @@ public class TestArrayUtil {
 		result = ArrayUtil.join(list, ",");
 		assertEquals("", "1,2,3,null", result);
 
-		result = ArrayUtil.join(list, ",",false);
+		result = ArrayUtil.join(list, ",", false);
 		assertEquals("", "1,2,3,null", result);
 
-		result = ArrayUtil.join(list, ",",true);
+		result = ArrayUtil.join(list, ",", true);
 		assertEquals("", "1,2,3", result);
 
-		result = ArrayUtil.join(list, ",","");
+		result = ArrayUtil.join(list, ",", "");
 		assertEquals("", "1,2,3,", result);
 	}
 }

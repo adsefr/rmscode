@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.rms.base.constant.Characters;
+import com.rms.base.io.file.FileHelper;
+import com.rms.base.io.file.FileConst.FileType;
 import com.rms.base.util.TextUtil;
-import com.rms.common.io.file.FileHelper;
-import com.rms.common.io.file.FileConst.FileType;
 import com.rms.common.poi.excel.ExcelOperatorFactory;
 import com.rms.common.poi.excel.object.ExcelOperator;
 import com.rms.common.poi.excel.object.SheetOperator;
@@ -61,7 +61,7 @@ public class ParseDTDFile {
 		}
 	}
 
-	private void parse(String path, String regex, String outDir) throws  IOException {
+	private void parse(String path, String regex, String outDir) throws IOException {
 
 		List<File> dtdFileList = FileHelper.getFileList(path, regex, FileType.FILE, true);
 		DTDParser dtdParser = new DTDParser();

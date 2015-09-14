@@ -22,20 +22,37 @@ import com.rms.base.validate.Assertion;
  */
 public enum DataType {
 
+	VOID(Void.class),
+
 	STRING(String.class), //
+	STRING_ARRAY(String[].class), //
 
 	BYTE(Byte.class, byte.class), //
-	SHORT(Short.class, short.class), //
-	CHARACTER(Character.class, char.class), //
-	INTEGER(Integer.class, int.class), //
-	LONG(Long.class, long.class), //
-	FLOAT(Float.class, float.class), //
-	DOUBLE(Double.class, double.class), //
-	BIGDECIMAL(BigDecimal.class), //
-
-	BOOLEAN(boolean.class, Boolean.class), //
-
 	BYTE_ARRAY(Byte[].class, byte[].class), //
+
+	SHORT(Short.class, short.class), //
+	SHORT_ARRAY(Short.class, short.class), //
+
+	CHARACTER(Character.class, char.class), //
+	CHARACTER_ARRAY(Character.class, char.class), //
+
+	INTEGER(Integer.class, int.class), //
+	INTEGER_ARRAY(Integer[].class, int[].class), //
+
+	LONG(Long[].class, long[].class), //
+	LONG_ARRAY(Long.class, long.class), //
+
+	FLOAT(Float.class, float.class), //
+	FLOAT_ARRAY(Float[].class, float[].class), //
+
+	DOUBLE(Double.class, double.class), //
+	DOUBLE_ARRAY(Double[].class, double[].class), //
+
+	BIGDECIMAL(BigDecimal.class), //
+	BIGDECIMAL_ARRAY(BigDecimal[].class), //
+
+	BOOLEAN(Boolean.class, boolean.class), //
+	BOOLEAN_ARRAY(Boolean[].class, boolean[].class), //
 
 	TIME(Time.class), //
 	DATE(Date.class), //
@@ -179,6 +196,8 @@ public enum DataType {
 	public String getStringType() {
 
 		switch (this) {
+		case VOID:
+			return "void";
 		case STRING:
 			return clazz[0].getName();
 		case BOOLEAN:

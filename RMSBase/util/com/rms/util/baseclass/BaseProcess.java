@@ -9,7 +9,7 @@ import com.rms.base.logging.Logger;
  */
 public abstract class BaseProcess {
 
-	private final static Logger logger = Logger.getLogger(BaseProcess.class);
+	private final Logger logger = Logger.getLogger(BaseProcess.class);
 
 	protected BaseProcess() {
 

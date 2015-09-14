@@ -20,7 +20,7 @@ import com.rms.common.jdbc.JDBCUpdateExecutor;
 
 public class CopyData extends JDBCProcess {
 
-	private final static Logger logger = Logger.getLogger(CopyData.class);
+	private final Logger logger = Logger.getLogger(CopyData.class);
 
 	private JDBCObject srcJDBCObject;
 

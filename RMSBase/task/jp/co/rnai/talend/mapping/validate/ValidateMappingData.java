@@ -7,12 +7,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.rms.base.constant.Encodes;
+import com.rms.base.io.file.FileHelper;
+import com.rms.base.io.file.FileConst.FileType;
 import com.rms.base.jdbc.model.DataBaseInfo;
 import com.rms.base.jdbc.model.JDBCColumn;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.JDBCTable;
-import com.rms.common.io.file.FileHelper;
-import com.rms.common.io.file.FileConst.FileType;
 import com.rms.common.jdbc.model.DataBaseType;
 import com.rms.common.jdbc.old.JDBC;
 import com.rms.common.jdbc.old.JDBCOperator;

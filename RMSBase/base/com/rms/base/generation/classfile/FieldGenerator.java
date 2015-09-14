@@ -1,19 +1,80 @@
 package com.rms.base.generation.classfile;
 
-import com.rms.base.generation.Generator;
+import com.rms.base.generation.model.FieldModel;
+import com.rms.base.logging.Logger;
 
 /**
  *
  * @author ri.meisei
  * @since 2015/09/04
  */
-public interface FieldGenerator extends Generator {
+public class FieldGenerator extends BaseGenerator {
 
-	public String annotation(FieldInfo fieldInfo);
+	private final Logger logger = Logger.getLogger(this.getClass());
 
-	public String fieldModify(FieldInfo fieldInfo);
+	private FieldInfo fieldInfo;
 
-	public String fieldName(FieldInfo fieldInfo);
+	public FieldGenerator() {
 
-	public String fieldValue(FieldInfo fieldInfo);
+	}
+
+	/**
+	 * @param fieldInfo
+	 */
+	public FieldGenerator(FieldInfo fieldInfo) {
+
+		super();
+		this.fieldInfo = fieldInfo;
+	}
+
+	/**
+	 * @return fieldInfo
+	 */
+	public FieldInfo getFieldInfo() {
+
+		return fieldInfo;
+	}
+
+	/**
+	 * @param fieldInfo
+	 *            セットする fieldInfo
+	 */
+	public void setFieldInfo(FieldInfo fieldInfo) {
+
+		this.fieldInfo = fieldInfo;
+	}
+
+	@Override
+	protected void generate() {
+
+		for (FieldModel fieldModel : fieldInfo.getFieldModelCollection().values()) {
+			buffered.append("\t");
+			buffered.append("/**");
+			buffered.append(lineSeparator);
+			buffered.append("\t");
+			buffered.append(" *");
+			buffered.append(fieldModel.getComment());
+			buffered.append(lineSeparator);
+			buffered.append("\t");
+			buffered.append(" */");
+			buffered.append(lineSeparator);
+			buffered.append("\t");
+			buffered.append(fieldModel.getModifierInfo().toString());
+			buffered.append(" ");
+			buffered.append(fieldModel.getDataType().getStringType());
+			buffered.append(" ");
+			buffered.append(fieldModel.getFieldName());
+
+			if (fieldModel.getValue() != null) {
+				buffered.append(" = ");
+				buffered.append(fieldModel.getValue().toString());
+			}
+
+			buffered.append(";");
+			buffered.append(lineSeparator);
+			buffered.append(lineSeparator);
+		}
+
+		logger.trace(buffered.toString());
+	}
 }

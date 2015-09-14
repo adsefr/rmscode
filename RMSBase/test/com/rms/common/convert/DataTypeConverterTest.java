@@ -12,6 +12,6 @@ public class DataTypeConverterTest {
 
 		String output = new String(DatatypeConverter.parseHexBinary(input));
 		System.out.println(output);
-		
+
 	}
 }

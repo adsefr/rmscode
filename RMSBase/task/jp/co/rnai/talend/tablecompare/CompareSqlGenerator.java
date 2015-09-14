@@ -5,11 +5,11 @@ import java.io.IOException;
 
 import com.rms.base.constant.Characters;
 import com.rms.base.constant.Encodes;
+import com.rms.base.io.file.FileOperationFactory;
+import com.rms.base.io.file.FileWriter;
 import com.rms.base.jdbc.model.JDBCTable;
 import com.rms.base.util.NumberUtil;
 import com.rms.base.util.TextUtil;
-import com.rms.common.io.file.FileOperationFactory;
-import com.rms.common.io.file.FileWriter;
 import com.rms.common.jdbc.old.model.Field;
 import com.rms.common.jdbc.old.model.Schema;
 import com.rms.common.poi.excel.model2.CellModel;

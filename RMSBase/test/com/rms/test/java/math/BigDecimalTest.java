@@ -1,9 +1,9 @@
 package com.rms.test.java.math;
 
-
 public class BigDecimalTest {
 
 	public static void main(String[] args) {
+
 		// 入力スキーマと出力スキーマに従って生成されたコード
 		Iinput_row input_row = new Iinput_row();
 
@@ -20,7 +20,7 @@ public class BigDecimalTest {
 		Integer minMonth = null;
 		Integer minDay = null;
 
-		if (pricelistYear == minYear&& minYear) {
+		if (pricelistYear == minYear && minYear) {
 			input_row.pricelistYearTag = null;
 		} else if (copyrightYear == minYear) {
 			input_row.copyrightYearTag = null;
@@ -43,12 +43,19 @@ public class BigDecimalTest {
 	class Iinput_row {
 
 		String pricelistYear;
+
 		String coverDateYear;
+
 		String coverDateMonth;
+
 		String printDateYear;
+
 		String printDateMonth;
+
 		String printDateDay;
+
 		String copyrightYear;
+
 		String onlineDateYear;
 	}
 }

@@ -1,8 +1,12 @@
 package com.rms.base.validate;
 
+import java.io.File;
+
 import com.rms.base.exception.InvalidException;
 import com.rms.base.exception.NullParameterException;
 import com.rms.base.exception.UnexpectedTypeException;
+import com.rms.base.io.IOUtil;
+import com.rms.base.validate.exception.UnexpectedFileTypeException;
 
 /**
  *
@@ -91,6 +95,20 @@ public class Assertion {
 
 		if (expected != actual) {
 			throw new UnexpectedTypeException(expected.getName(), actual.getName());
+		}
+	}
+
+	public static void assertFile(String name, File file) {
+
+		if (!IOUtil.isFile(file)) {
+			throw new UnexpectedFileTypeException("expect that " + name + "is a file!!![" + file.toString() + "]");
+		}
+	}
+
+	public static void assertDirectory(String name, File file) {
+
+		if (!IOUtil.isDirectory(file)) {
+			throw new UnexpectedFileTypeException("expect that " + name + "is a directory!!![" + file.toString() + "]");
 		}
 	}
 

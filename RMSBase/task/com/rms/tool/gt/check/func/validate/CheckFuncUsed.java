@@ -174,8 +174,10 @@ public class CheckFuncUsed {
 			CellModel filePath = excelOperator.getCellValue(rowIndex, 37);
 
 			// if (rowIndex == 689) {
-			// System.out.println(TextUtil.lPad(String.valueOf(((Double) seqNo.getValue()).intValue()), 3));
-			// System.out.println(vbProcessName.getValue() + " " + targetType.getValue());
+			// System.out.println(TextUtil.lPad(String.valueOf(((Double)
+			// seqNo.getValue()).intValue()), 3));
+			// System.out.println(vbProcessName.getValue() + " " +
+			// targetType.getValue());
 			// }
 			if (!targetType.getValue().equals("Java化対象")) {
 				continue;

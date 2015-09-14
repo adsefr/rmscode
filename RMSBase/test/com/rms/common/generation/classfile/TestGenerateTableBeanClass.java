@@ -5,6 +5,7 @@ import org.junit.Test;
 import com.rms.base.jdbc.model.DataBaseInfo;
 import com.rms.base.jdbc.model.DataBaseType;
 import com.rms.base.jdbc.model.SchemaMeta;
+import com.rms.base.jdbc.model.TableMeta;
 import com.rms.common.jdbc.JDBCObject;
 
 public class TestGenerateTableBeanClass {
@@ -26,10 +27,11 @@ public class TestGenerateTableBeanClass {
 			jdbcObject.startTransaction();
 			SchemaMeta schemaMeta = jdbcObject.getJDBCDataBaseMetaData().getSchemaMeta("public");
 
-			GenerateBeanClass generate = new GenerateBeanClass();
-			generate.setSchemaMeta(schemaMeta);
-
-			generate.generate();
+			BeanClassFileGenerator generate = new BeanClassFileGenerator();
+			for (TableMeta tableMeta : schemaMeta.getTableMetas()) {
+				generate.setTableMeta(tableMeta);
+				generate.generate();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

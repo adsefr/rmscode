@@ -1,6 +1,5 @@
 package com.rms.base.util;
 
-
 /**
  *
  *
@@ -39,6 +38,5 @@ public final class Utils {
 
 		return resultIndex;
 	}
-
 
 }

@@ -17,7 +17,7 @@ import org.dom4j.DocumentType;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import com.rms.common.io.file.FileHelper;
+import com.rms.base.io.file.FileHelper;
 import com.rms.common.xml.bean.backup.DocumentInfo;
 import com.rms.common.xml.bean.backup.ElementInfo;
 

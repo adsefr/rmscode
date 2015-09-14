@@ -3,7 +3,6 @@ package com.rms.base.generation.classfile;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.rms.base.constant.Characters;
 import com.rms.base.generation.model.FieldModel;
 import com.rms.base.validate.Assertion;
 
@@ -21,6 +20,14 @@ public class FieldInfo {
 	}
 
 	/**
+	 * @return fieldModelCollection
+	 */
+	public Map<String, FieldModel> getFieldModelCollection() {
+
+		return fieldModelCollection;
+	}
+
+	/**
 	 *
 	 * @param fieldModel
 	 */
@@ -31,16 +38,6 @@ public class FieldInfo {
 		String fieldName = fieldModel.getFieldName();
 
 		return fieldModelCollection.put(fieldName, fieldModel);
-	}
-
-	/**
-	 *
-	 * @param fieldName
-	 * @return
-	 */
-	public FieldModel get(String fieldName) {
-
-		return fieldModelCollection.get(fieldName);
 	}
 
 	/**
@@ -75,41 +72,5 @@ public class FieldInfo {
 	boolean isEmpty() {
 
 		return fieldModelCollection.isEmpty();
-	}
-
-	@Override
-	public String toString() {
-
-		StringBuilder sBuilder = new StringBuilder();
-
-		for (FieldModel fieldModel : fieldModelCollection.values()) {
-			sBuilder.append("\t");
-			sBuilder.append("/**");
-			sBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
-			sBuilder.append("\t");
-			sBuilder.append(" *");
-			sBuilder.append(fieldModel.getComment());
-			sBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
-			sBuilder.append("\t");
-			sBuilder.append(" */");
-			sBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
-			sBuilder.append("\t");
-			sBuilder.append(fieldModel.getModifierInfo().toString());
-			sBuilder.append(" ");
-			sBuilder.append(fieldModel.getDataType().getTypeName());
-			sBuilder.append(" ");
-			sBuilder.append(fieldModel.getFieldName());
-
-			if (fieldModel.getValue() != null) {
-				sBuilder.append(" = ");
-				sBuilder.append(fieldModel.getValue().toString());
-			}
-
-			sBuilder.append(";");
-			sBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
-			sBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
-		}
-
-		return sBuilder.toString();
 	}
 }

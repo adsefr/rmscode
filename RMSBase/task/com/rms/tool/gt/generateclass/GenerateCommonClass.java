@@ -14,7 +14,7 @@ import com.rms.base.generation.classfile.ModifierType;
 import com.rms.base.generation.model.DataType;
 import com.rms.base.generation.model.MethodModel;
 import com.rms.base.generation.model.ParameterModel;
-import com.rms.common.io.IOFactory;
+import com.rms.base.io.IOFactory;
 import com.rms.common.poi.excel.ExcelOperatorFactory;
 import com.rms.common.poi.excel.model.CellModel;
 import com.rms.common.poi.excel.object.ExcelOperator;
@@ -59,7 +59,8 @@ public class GenerateCommonClass {
 			// classInfo.getImportInfo().addImportClass(java.util.List.class.getName(),
 			// javax.accessibility.Accessible.class.getName(),
 			// com.oracle.jrockit.jfr.ContentType.Address.getClass().getName(),
-			// org.apache.lucene.LucenePackage.class.getName(), jp.co.rnai.parse.xml.ParseXMLInfo.class.getName());
+			// org.apache.lucene.LucenePackage.class.getName(),
+			// jp.co.rnai.parse.xml.ParseXMLInfo.class.getName());
 			// classInfo.getImportInfo().addImportClass(java.util.Map.class.getName(),
 			// javax.accessibility.AccessibleAction.class.getName(),
 			// com.oracle.jrockit.jfr.DynamicEventToken.class.getName(),
@@ -70,7 +71,8 @@ public class GenerateCommonClass {
 
 			// FieldModel fieldModel = new FieldModel();
 			// fieldModel.setComment("test field");
-			// fieldModel.getModifierInfo().add(ModifierType.PUBLIC, ModifierType.FINAL, ModifierType.STATIC);
+			// fieldModel.getModifierInfo().add(ModifierType.PUBLIC,
+			// ModifierType.FINAL, ModifierType.STATIC);
 			// fieldModel.setDataType(DataType.get("String"));
 			// fieldModel.setFieldName("name");
 			// fieldModel.setValue("\"abc\"");
@@ -78,14 +80,16 @@ public class GenerateCommonClass {
 			//
 			// FieldModel fieldModel2 = new FieldModel();
 			// fieldModel2.setComment("test field2");
-			// fieldModel2.getModifierInfo().add(ModifierType.PUBLIC, ModifierType.FINAL, ModifierType.STATIC);
+			// fieldModel2.getModifierInfo().add(ModifierType.PUBLIC,
+			// ModifierType.FINAL, ModifierType.STATIC);
 			// fieldModel2.setDataType(DataType.get("Integer"));
 			// fieldModel2.setFieldName("name2");
 			// fieldModel2.setValue("1");
 			// classInfo.getFieldInfo().add(fieldModel2);
 			// FieldModel fieldModel3 = new FieldModel();
 			// fieldModel3.setComment("test field3");
-			// fieldModel3.getModifierInfo().add(ModifierType.PUBLIC, ModifierType.FINAL, ModifierType.STATIC);
+			// fieldModel3.getModifierInfo().add(ModifierType.PUBLIC,
+			// ModifierType.FINAL, ModifierType.STATIC);
 			// fieldModel3.setDataType(DataType.get("Object"));
 			// fieldModel3.setFieldName("name3");
 			// classInfo.getFieldInfo().add(fieldModel3);
@@ -101,27 +105,27 @@ public class GenerateCommonClass {
 
 			String returnType = rowInfo.getReturnType();
 			switch (rowInfo.getReturnType()) {
-				case "Boolean":
-					returnType = "boolean";
-					break;
-				case "Byte":
-					returnType = "byte";
-					break;
-				case "Short":
-					returnType = "short";
-					break;
-				case "Integer":
-					returnType = "int";
-					break;
-				case "Long":
-					returnType = "long";
-					break;
-				case "Float":
-					returnType = "float";
-					break;
-				case "Double":
-					returnType = "double";
-					break;
+			case "Boolean":
+				returnType = "boolean";
+				break;
+			case "Byte":
+				returnType = "byte";
+				break;
+			case "Short":
+				returnType = "short";
+				break;
+			case "Integer":
+				returnType = "int";
+				break;
+			case "Long":
+				returnType = "long";
+				break;
+			case "Float":
+				returnType = "float";
+				break;
+			case "Double":
+				returnType = "double";
+				break;
 			}
 
 			methodModel.setReturnType(DataType.getDataType(returnType));
@@ -141,27 +145,27 @@ public class GenerateCommonClass {
 				}
 				String[] parameterInfo = parameter.split("=");
 				switch (parameterInfo[1]) {
-					case "Boolean":
-						parameterInfo[1] = "boolean";
-						break;
-					case "Byte":
-						parameterInfo[1] = "byte";
-						break;
-					case "Short":
-						parameterInfo[1] = "short";
-						break;
-					case "Integer":
-						parameterInfo[1] = "int";
-						break;
-					case "Long":
-						parameterInfo[1] = "long";
-						break;
-					case "Float":
-						parameterInfo[1] = "float";
-						break;
-					case "Double":
-						parameterInfo[1] = "double";
-						break;
+				case "Boolean":
+					parameterInfo[1] = "boolean";
+					break;
+				case "Byte":
+					parameterInfo[1] = "byte";
+					break;
+				case "Short":
+					parameterInfo[1] = "short";
+					break;
+				case "Integer":
+					parameterInfo[1] = "int";
+					break;
+				case "Long":
+					parameterInfo[1] = "long";
+					break;
+				case "Float":
+					parameterInfo[1] = "float";
+					break;
+				case "Double":
+					parameterInfo[1] = "double";
+					break;
 				}
 				if (parameterInfo[0].endsWith("()")) {
 					parameterInfo[0] = parameterInfo[0].replace("()", "");

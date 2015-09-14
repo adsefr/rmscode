@@ -1,8 +1,8 @@
 package com.rms.base.exception;
 
 /**
- * 
- * 
+ *
+ *
  * @author ri.meisei
  * @since 2014/02/04
  */
@@ -15,14 +15,9 @@ public class NotFoundException extends RuntimeException {
 		super();
 	}
 
-	public NotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	public NotFoundException(Throwable cause) {
 
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
-	public NotFoundException(String message, Throwable cause) {
-
-		super(message, cause);
+		super(cause);
 	}
 
 	public NotFoundException(String message) {
@@ -30,9 +25,9 @@ public class NotFoundException extends RuntimeException {
 		super(message);
 	}
 
-	public NotFoundException(Throwable cause) {
+	public NotFoundException(String message, Throwable cause) {
 
-		super(cause);
+		super(message, cause);
 	}
 
 }

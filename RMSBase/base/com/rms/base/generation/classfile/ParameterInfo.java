@@ -45,7 +45,7 @@ public class ParameterInfo {
 		for (String parameterName : ParameterModelCollection.keySet()) {
 			ParameterModel parameterModel = ParameterModelCollection.get(parameterName);
 
-			sbBuilder.append(parameterModel.getDataType().getTypeName());
+			sbBuilder.append(parameterModel.getDataType().getStringType());
 			sbBuilder.append(" ");
 			sbBuilder.append(parameterName);
 			sbBuilder.append(", ");

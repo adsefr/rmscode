@@ -1,5 +1,7 @@
 package com.rms.base.generation.model;
 
+import com.rms.base.enumeration.DataType;
+
 /**
  *
  * @author ri.meisei
@@ -7,7 +9,7 @@ package com.rms.base.generation.model;
  */
 public class ParameterModel {
 
-	private String parameterName;
+	private String parameterName = "";
 
 	private DataType dataType;
 

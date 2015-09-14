@@ -10,7 +10,7 @@ import com.rms.base.validate.Assertion;
  * @author ri.meisei
  * @since 2015/09/04
  */
-public final class DataType {
+private final class DataType {
 
 	private final static Map<String, DataType> dataTypeCollection = new HashMap<String, DataType>();
 

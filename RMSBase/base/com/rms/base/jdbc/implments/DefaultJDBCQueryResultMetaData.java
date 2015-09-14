@@ -22,7 +22,7 @@ import com.rms.base.validate.Assertion;
  */
 class DefaultJDBCQueryResultMetaData implements JDBCQueryResultMetaData {
 
-	private final static Logger logger = Logger.getLogger(JDBCQueryResultMetaData.class);
+	private final Logger logger = Logger.getLogger(JDBCQueryResultMetaData.class);
 
 	private final int columnCount;
 

@@ -1,6 +1,5 @@
 package com.rms.common.poi.excel.object;
 
-
 /**
  *
  * @author ri.meisei

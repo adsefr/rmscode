@@ -9,7 +9,7 @@ import java.util.Set;
 
 import org.dom4j.DocumentException;
 
-import com.rms.common.io.IOFactory;
+import com.rms.base.io.IOFactory;
 import com.rms.common.json.JsonParser;
 import com.rms.common.json.JsonParserFactory;
 import com.rms.common.json.exception.JsonParseException;

@@ -21,7 +21,7 @@ import com.rms.util.jdbc.CopyData;
 
 public class CopyDataTask {
 
-	private final static Logger logger = Logger.getLogger(CopyDataTask.class);
+	private final Logger logger = Logger.getLogger(CopyDataTask.class);
 
 	private static SSHSession sshSession;
 

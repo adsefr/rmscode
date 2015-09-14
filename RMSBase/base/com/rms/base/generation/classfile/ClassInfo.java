@@ -16,25 +16,23 @@ import com.rms.base.validate.Assertion;
  */
 public class ClassInfo {
 
-	private final ImportInfo importInfo = new ImportInfo();
-
 	private final AnnotationInfo annotationInfo = new AnnotationInfo();
 
 	private final ModifierInfo modifierInfo = new ModifierInfo(TargetType.CLASS);
 
-	private final List<String> parentClass = new ArrayList<>();
+	private final List<String> parentClasses = new ArrayList<>();
 
-	private final List<String> parentInterface = new ArrayList<>();
+	private final List<String> parentInterfaces = new ArrayList<>();
 
 	private final FieldInfo fieldInfo = new FieldInfo();
 
 	private final MethodInfo methodInfo = new MethodInfo();
 
-	private final String packageName;
+	private String packageName = "";
 
-	private final String className;
+	private String className = "";
 
-	private final String simpleClassName;
+	private String simpleClassName = "";
 
 	/**
 	 *
@@ -73,15 +71,6 @@ public class ClassInfo {
 	}
 
 	/**
-	 *
-	 * @return
-	 */
-	public ImportInfo getImportInfo() {
-
-		return importInfo;
-	}
-
-	/**
 	 * @return annotationInfo
 	 */
 	public AnnotationInfo getAnnotationInfo() {
@@ -117,19 +106,19 @@ public class ClassInfo {
 	}
 
 	/**
-	 * @return parentClass
+	 * @return parentClasses
 	 */
-	public List<String> getParentClass() {
+	public List<String> getParentClasses() {
 
-		return parentClass;
+		return parentClasses;
 	}
 
 	/**
-	 * @return parentInterface
+	 * @return parentInterfaces
 	 */
-	public List<String> getParentInterface() {
+	public List<String> getParentInterfaces() {
 
-		return parentInterface;
+		return parentInterfaces;
 	}
 
 	/**
@@ -161,28 +150,26 @@ public class ClassInfo {
 			sBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
 		}
 
-		sBuilder.append(importInfo.toString());
-
 		sBuilder.append(modifierInfo.toString());
 		sBuilder.append(" class ");
 		sBuilder.append(simpleClassName);
 
-		if (!parentClass.isEmpty()) {
+		if (!parentClasses.isEmpty()) {
 			int length1 = sBuilder.lastIndexOf(Characters.LINE_SEPARATOR_SYSTEM);
 			int length2 = sBuilder.length();
 			sBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
 			TextUtil.repeat(" ", Math.max(length2 - length1, 16) - 4);
 			sBuilder.append(" extends ");
-			sBuilder.append(ArrayUtil.join(parentClass, ", "));
+			sBuilder.append(ArrayUtil.join(parentClasses, ", "));
 		}
 
-		if (!parentInterface.isEmpty()) {
+		if (!parentInterfaces.isEmpty()) {
 			int length1 = sBuilder.lastIndexOf(Characters.LINE_SEPARATOR_SYSTEM);
 			int length2 = sBuilder.length();
 			sBuilder.append(Characters.LINE_SEPARATOR_SYSTEM);
 			TextUtil.repeat(" ", Math.max(length2 - length1, 16) - 4);
 			sBuilder.append(" implements ");
-			sBuilder.append(ArrayUtil.join(parentInterface, ", "));
+			sBuilder.append(ArrayUtil.join(parentInterfaces, ", "));
 		}
 
 		sBuilder.append(" {");

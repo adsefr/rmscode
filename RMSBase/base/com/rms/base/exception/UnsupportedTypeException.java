@@ -1,6 +1,5 @@
 package com.rms.base.exception;
 
-
 /**
  *
  *

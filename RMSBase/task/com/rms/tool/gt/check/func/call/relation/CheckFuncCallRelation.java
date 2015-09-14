@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.rms.base.constant.Encodes;
+import com.rms.base.io.file.FileOperationFactory;
+import com.rms.base.io.file.FileWriter;
 import com.rms.base.jdbc.JDBCConnection;
 import com.rms.base.jdbc.JDBCSelector;
 import com.rms.base.jdbc.model.DataBaseInfo;
 import com.rms.base.util.TextUtil;
-import com.rms.common.io.file.FileOperationFactory;
-import com.rms.common.io.file.FileWriter;
 import com.rms.common.jdbc.JDBCObject;
 import com.rms.common.jdbc.JDBCQueryExecutor;
 import com.rms.common.jdbc.model.DataBaseType;
@@ -33,7 +33,6 @@ public class CheckFuncCallRelation {
 	private ExcelOperator outExcelOperator;
 
 	public static void main(String[] args) {
-
 
 		CheckFuncCallRelation callRelation = new CheckFuncCallRelation();
 		try {
@@ -60,14 +59,17 @@ public class CheckFuncCallRelation {
 		// continue;
 		// }
 		// RowInfo rowInfo = rowInfos.get(i);
-		// List<FuncInfoBean> calledInfoList = executeSelectCallFuncInfo(rowInfo);
+		// List<FuncInfoBean> calledInfoList =
+		// executeSelectCallFuncInfo(rowInfo);
 		// if (calledInfoList.size() > 30) {
 		// continue;
 		// }
 		//
-		// System.out.println(rowInfo.getVbProcessName() + " " + calledInfoList.size());
+		// System.out.println(rowInfo.getVbProcessName() + " " +
+		// calledInfoList.size());
 		// for (FuncInfoBean funcInfoBean : calledInfoList) {
-		// List<FuncInfoBean> callInfoList = executeSelectFuncInfo(funcInfoBean);
+		// List<FuncInfoBean> callInfoList =
+		// executeSelectFuncInfo(funcInfoBean);
 		// writeToExcel(callInfoList);
 		// }
 		// }
@@ -188,7 +190,8 @@ public class CheckFuncCallRelation {
 
 			selector.setQueryTimeout(999);
 			selector.setSqlClause(sBuilder.toString());
-			selector.addParameters(rowInfo.getUserId(), rowInfo.getUserId(),  rowInfo.getFilePath().toUpperCase(),rowInfo.getUserId(), rowInfo.getVbProcessName(), "%." + rowInfo.getVbProcessName(), rowInfo.getUserId());
+			selector.addParameters(rowInfo.getUserId(), rowInfo.getUserId(), rowInfo.getFilePath().toUpperCase(), rowInfo.getUserId(), rowInfo.getVbProcessName(), "%." + rowInfo.getVbProcessName(),
+					rowInfo.getUserId());
 			resultSet = selector.executeQuery();
 			List<FuncInfoBean> resultList = new ArrayList<FuncInfoBean>();
 			while (resultSet.hasNext()) {

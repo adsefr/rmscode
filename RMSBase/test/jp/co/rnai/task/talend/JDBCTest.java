@@ -3,6 +3,7 @@ package jp.co.rnai.task.talend;
 public class JDBCTest {
 
 	public static void main(String[] args) {
+
 		testConvertItem();
 	}
 

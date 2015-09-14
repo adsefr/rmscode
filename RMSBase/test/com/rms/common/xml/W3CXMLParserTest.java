@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-import com.rms.common.io.IOFactory;
+import com.rms.base.io.IOFactory;
 import com.rms.common.xml.eception.XMLParseException;
 import com.rms.common.xml.node.DocumentNode;
 

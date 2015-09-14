@@ -9,7 +9,7 @@ public class DefaultCharSet {
 		String a = "⑤";
 		byte[] array = convert("E291A4");
 		String b = new String(array, "UTF-8");
-		System.out.println((int)b.charAt(0));
+		System.out.println((int) b.charAt(0));
 		System.out.println(a + " " + b);
 	}
 

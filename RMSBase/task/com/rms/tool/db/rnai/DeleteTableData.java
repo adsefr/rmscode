@@ -41,8 +41,10 @@ public class DeleteTableData {
 					System.out.println(tableMeta.getTableType() + " " + tableMeta.getTableCatalog() + "."
 							+ tableMeta.getTableSchema() + "." + tableMeta.getTableName());
 
-//					String sql = "DELETE FROM \"" + tableMeta.getTableSchema() + "\".\"" + tableMeta.getTableName()
-//							+ "\"";
+					// String sql = "DELETE FROM \"" +
+					// tableMeta.getTableSchema() + "\".\"" +
+					// tableMeta.getTableName()
+					// + "\"";
 					String sql = "TRUNCATE TABLE \"" + tableMeta.getTableSchema() + "\".\"" + tableMeta.getTableName()
 							+ "\" CASCADE";
 					jdbcUpdater.setSqlClause(sql);

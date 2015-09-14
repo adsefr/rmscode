@@ -1,6 +1,6 @@
 package com.rms.base.generation.model;
 
-import com.rms.base.generation.classfile.ExceptionInfo;
+import com.rms.base.enumeration.DataType;
 import com.rms.base.generation.classfile.ModifierInfo;
 import com.rms.base.generation.classfile.ParameterInfo;
 
@@ -15,17 +15,15 @@ public class MethodModel {
 
 	private final ModifierInfo modifierInfo = new ModifierInfo(TargetType.METHOD);
 
-	private DataType returnType;
+	private DataType returnType = DataType.VOID;
 
-	private String methodName;
+	private String methodName = "";
 
-	private String comment;
+	private String comment = "";
 
 	private final ParameterInfo parameterInfo = new ParameterInfo();
 
-	private final ExceptionInfo exceptionInfo = new ExceptionInfo();
-
-	private String methodBody;
+	private String methodBody = "";
 
 	public MethodModel() {
 
@@ -89,11 +87,6 @@ public class MethodModel {
 	public ParameterInfo getParameterInfo() {
 
 		return parameterInfo;
-	}
-
-	public ExceptionInfo getExceptionInfo() {
-
-		return exceptionInfo;
 	}
 
 }
