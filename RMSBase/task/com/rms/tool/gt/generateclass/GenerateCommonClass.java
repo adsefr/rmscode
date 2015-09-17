@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.rms.base.constant.Encodes;
-import com.rms.base.generation.classfile.ClassInfo;
-import com.rms.base.generation.classfile.ModifierType;
-import com.rms.base.generation.model.DataType;
-import com.rms.base.generation.model.MethodModel;
-import com.rms.base.generation.model.ParameterModel;
+import com.rms.base.gen.javaclass.model.ClassInfo;
+import com.rms.base.gen.javaclass.model.DataType;
+import com.rms.base.gen.javaclass.model.MethodModel;
+import com.rms.base.gen.javaclass.model.ModifierType;
+import com.rms.base.gen.javaclass.model.ParameterModel;
 import com.rms.base.io.IOFactory;
 import com.rms.common.poi.excel.ExcelOperatorFactory;
 import com.rms.common.poi.excel.model.CellModel;
@@ -128,7 +128,7 @@ public class GenerateCommonClass {
 				break;
 			}
 
-			methodModel.setReturnType(DataType.getDataType(returnType));
+			methodModel.setReturnType(DataTypes.getDataType(returnType));
 			methodModel.setMethodName(rowInfo.getVbProcessName().substring(0, 1).toLowerCase() + rowInfo.getVbProcessName().substring(1));
 			methodModel.setComment(rowInfo.getProcessDetail());
 			String parameterList = rowInfo.getMethodParameterList();
@@ -171,7 +171,7 @@ public class GenerateCommonClass {
 					parameterInfo[0] = parameterInfo[0].replace("()", "");
 					parameterInfo[1] = parameterInfo[1] + "[]";
 				}
-				DataType dataType = DataType.getDataType(parameterInfo[1]);
+				DataTypes dataType = DataTypes.getDataType(parameterInfo[1]);
 
 				ParameterModel parameterModel = new ParameterModel();
 				parameterModel.setParameterName(parameterInfo[0]);

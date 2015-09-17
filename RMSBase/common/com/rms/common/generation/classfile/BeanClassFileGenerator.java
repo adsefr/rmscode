@@ -3,15 +3,18 @@ package com.rms.common.generation.classfile;
 import java.util.List;
 
 import com.rms.base.constant.Characters;
-import com.rms.base.enumeration.DataType;
-import com.rms.base.generation.classfile.ClassFileGenerator;
-import com.rms.base.generation.classfile.ClassInfo;
-import com.rms.base.generation.classfile.FieldInfo;
-import com.rms.base.generation.classfile.MethodInfo;
-import com.rms.base.generation.classfile.ModifierType;
-import com.rms.base.generation.classfile.PackageInfo;
-import com.rms.base.generation.model.FieldModel;
-import com.rms.base.generation.model.MethodModel;
+import com.rms.base.datatype.enumeration.DataType;
+import com.rms.base.gen.javaclass.ClassFileGenerator;
+import com.rms.base.gen.javaclass.enumeration.ClassModifier;
+import com.rms.base.gen.javaclass.enumeration.FieldModifier;
+import com.rms.base.gen.javaclass.enumeration.MethodModifier;
+import com.rms.base.gen.javaclass.model.ClassInfo;
+import com.rms.base.gen.javaclass.model.FieldInfo;
+import com.rms.base.gen.javaclass.model.FieldModel;
+import com.rms.base.gen.javaclass.model.MethodInfo;
+import com.rms.base.gen.javaclass.model.MethodModel;
+import com.rms.base.gen.javaclass.model.PackageInfo;
+import com.rms.base.gen.javaclass.model.ParameterModel;
 import com.rms.base.jdbc.model.ColumnMeta;
 import com.rms.base.jdbc.model.TableMeta;
 import com.rms.base.logging.Logger;
@@ -37,7 +40,7 @@ public class BeanClassFileGenerator extends ClassFileGenerator {
 		Assertion.assertNotNull("tableMeta", tableMeta);
 		PackageInfo packageInfo = new PackageInfo(DEFAULT_PACKAGE_NAME);
 		ClassInfo classInfo = new ClassInfo(DEFAULT_PACKAGE_NAME, tableMeta.getTableName());
-		classInfo.getModifierInfo().add(ModifierType.PUBLIC);
+		classInfo.getModifierInfo().add(ClassModifier.PUBLIC);
 		FieldInfo fieldInfo = new FieldInfo();
 		MethodInfo methodInfo = new MethodInfo();
 
@@ -46,28 +49,46 @@ public class BeanClassFileGenerator extends ClassFileGenerator {
 		for (ColumnMeta columnMeta : columnMetas) {
 			String columnName = columnMeta.getColumnName();
 			FieldModel fieldModel = new FieldModel();
-			fieldModel.getModifierInfo().add(ModifierType.PRIVATE);
+			fieldModel.getModifierInfo().add(FieldModifier.PRIVATE);
 			fieldModel.setDataType(DataType.getDataType(columnMeta.getJdbcType()));
 			fieldModel.setFieldName(columnName);
-			fieldModel.setValue(columnMeta.getColumnDefaultValue());
 			fieldInfo.add(fieldModel);
 
-			clearBuffered();
-			String getMethod = buffered.append("get").append(columnName).toString();
+			clearBuffer();
+			append("get");
+			append(columnName);
+			String getMethod = toString();
+
 			MethodModel getMethodModel = new MethodModel();
+			getMethodModel.getModifierInfo().add(MethodModifier.PUBLIC);
 			getMethodModel.setMethodName(getMethod);
 			getMethodModel.setReturnType(DataType.getDataType(columnMeta.getJdbcType()));
-			clearBuffered();
-			getMethodModel.setMethodBody(buffered.append("return this.").append(fieldModel.getFieldName()).append(Characters.SEMICOLON).toString());
+			clearBuffer();
+			append("return this.");
+			append(fieldModel.getFieldName());
+			append(Characters.SEMICOLON);
+			getMethodModel.setMethodBody(toString());
 			methodInfo.add(getMethodModel);
 
-			clearBuffered();
-			String setMethod = buffered.append("set").append(columnName).toString();
+			clearBuffer();
+			append("set");
+			append(columnName);
+			String setMethod = toString();
 			MethodModel setMethodModel = new MethodModel();
+			setMethodModel.getModifierInfo().add(MethodModifier.PUBLIC, MethodModifier.FINAL);
 			setMethodModel.setReturnType(DataType.VOID);
 			setMethodModel.setMethodName(setMethod);
-			clearBuffered();
-			setMethodModel.setMethodBody(buffered.append("this.").append(fieldModel.getFieldName()).append(" = ").append(fieldModel.getFieldName()).append(Characters.SEMICOLON).toString());
+			ParameterModel parameterModel = new ParameterModel();
+			parameterModel.setDataType(fieldModel.getDataType());
+			parameterModel.setParameterName(columnName);
+			setMethodModel.getParameterInfo().add(parameterModel);
+			clearBuffer();
+			append("this.");
+			append(fieldModel.getFieldName());
+			append(" = ");
+			append(fieldModel.getFieldName());
+			append(Characters.SEMICOLON);
+			setMethodModel.setMethodBody(toString());
 			methodInfo.add(setMethodModel);
 		}
 
@@ -76,47 +97,4 @@ public class BeanClassFileGenerator extends ClassFileGenerator {
 		getFieldGenerator().setFieldInfo(fieldInfo);
 		getMethodGenerator().setMethodInfo(methodInfo);
 	}
-
-	@Override
-	protected void generate() {
-
-		super.generate();
-		logger.debug(buffered.toString());
-	}
-
-	// @Override
-	// public void generate() {
-	//
-	// PackageInfo packageInfo = new PackageInfo(DEFAULT_PACKAGE_NAME);
-	//
-	// ClassInfo classInfo = new ClassInfo(className);
-	// classInfo.getModifierInfo().add(ModifierType.PUBLIC);
-	//
-	// for (Entry<String, String> fieldInfo : fieldInfos.entrySet()) {
-	// String fieldName = fieldInfo.getKey();
-	// String fieldType = fieldInfo.getValue();
-	// DataType dataType = DataType.getDataType(fieldType);
-	// FieldModel fieldModel = new FieldModel();
-	// fieldModel.getModifierInfo().add(ModifierType.PRIVATE);
-	// fieldModel.setDataType(dataType);
-	// fieldModel.setFieldName(fieldName);
-	//
-	// MethodModel getMethodModel = new MethodModel();
-	// getMethodModel.getModifierInfo().add(ModifierType.PUBLIC);
-	// getMethodModel.setMethodName("get" + TextUtil.capital(fieldName));
-	// getMethodModel.setReturnType(dataType);
-	// getMethodModel.setMethodBody(" return this." + fieldName + ";");
-	// MethodModel setMethodModel = new MethodModel();
-	// setMethodModel.getModifierInfo().add(ModifierType.PUBLIC);
-	// setMethodModel.setMethodName("set" + TextUtil.capital(fieldName));
-	// setMethodModel.setMethodBody("this." + fieldName + " = " + fieldName +
-	// ";");
-	// ParameterModel parameterModel = new ParameterModel();
-	// parameterModel.setDataType(dataType);
-	// parameterModel.setParameterName(fieldName);
-	// setMethodModel.getParameterInfo().add(parameterModel);
-	// }
-	//
-	// logger.trace(classInfo.toString());
-	// }
 }

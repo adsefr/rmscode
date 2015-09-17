@@ -15,8 +15,8 @@ import com.rms.base.io.file.FileConst.FileOperateType;
 import com.rms.base.validate.Assertion;
 
 /**
- * 
- * 
+ *
+ *
  * @author ri.meisei
  * @since 2013/10/25
  */
@@ -44,7 +44,7 @@ abstract class AbstractFileReader implements FileReader {
 	private String readedLine;
 
 	/**
-	 * 
+	 *
 	 * @param targetFile
 	 * @param charset
 	 * @throws IOException
@@ -61,7 +61,7 @@ abstract class AbstractFileReader implements FileReader {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param inputStream
 	 * @param charset
 	 */
