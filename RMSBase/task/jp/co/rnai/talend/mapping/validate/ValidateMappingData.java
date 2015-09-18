@@ -6,21 +6,20 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import jp.co.rnai.task.talend.JDBC;
+
 import com.rms.base.constant.Encodes;
-import com.rms.base.io.file.FileHelper;
-import com.rms.base.io.file.FileConst.FileType;
+import com.rms.base.io.constant.FileConst.FileType;
+import com.rms.base.io.util.FileHelper;
 import com.rms.base.jdbc.model.DataBaseInfo;
+import com.rms.base.jdbc.model.DataBaseType;
 import com.rms.base.jdbc.model.JDBCColumn;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.JDBCTable;
-import com.rms.common.jdbc.model.DataBaseType;
-import com.rms.common.jdbc.old.JDBC;
-import com.rms.common.jdbc.old.JDBCOperator;
-import com.rms.common.poi.excel.model2.FontModel;
-import com.rms.common.poi.excel2.CellOperator;
-import com.rms.common.poi.excel2.ExcelFactory;
-import com.rms.common.poi.excel2.ExcelOperator;
-import com.rms.common.poi.excel2.SheetOperator;
+import com.rms.common.poi.excel.model.FontModel;
+import com.rms.common.poi.excel.object.ExcelFactory;
+import com.rms.common.poi.excel.object.ExcelOperator;
+import com.rms.common.poi.excel.object.SheetOperator;
 
 /**
  *

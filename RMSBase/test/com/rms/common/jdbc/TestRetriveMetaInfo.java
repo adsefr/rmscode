@@ -14,7 +14,7 @@ import com.rms.util.jdbc.RetriveMetaInfo;
 
 public class TestRetriveMetaInfo {
 
-	private final Logger logger = Logger.getLogger(TestRetriveMetaInfo.class);
+	private final static Logger logger = Logger.getLogger(TestRetriveMetaInfo.class);
 
 	private static RetriveMetaInfo retriveMetaInfo;
 

@@ -6,13 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.rms.base.jdbc.JDBCConnection;
-import com.rms.base.jdbc.JDBCSelector;
 import com.rms.base.jdbc.model.DataBaseInfo;
+import com.rms.base.jdbc.model.DataBaseType;
 import com.rms.base.util.TextUtil;
 import com.rms.common.jdbc.JDBCObject;
 import com.rms.common.jdbc.JDBCQueryExecutor;
-import com.rms.common.jdbc.model.DataBaseType;
-import com.rms.common.poi.excel.ExcelOperatorFactory;
 import com.rms.common.poi.excel.model.CellModel;
 import com.rms.common.poi.excel.object.ExcelOperator;
 import com.rms.common.poi.excel.object.SheetOperator;

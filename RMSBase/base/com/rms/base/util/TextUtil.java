@@ -143,6 +143,26 @@ public class TextUtil {
 
 	/**
 	 *
+	 * @param input
+	 * @param length
+	 * @return
+	 */
+	public static String lPad(String input, int length, String padSequence) {
+
+		if (input == null || length <= 0) {
+			return input;
+		}
+
+		String strResult = input;
+		while (length > strResult.length()) {
+			strResult = padSequence + strResult;
+		}
+
+		return strResult;
+	}
+
+	/**
+	 *
 	 * @param str
 	 * @param length
 	 * @return

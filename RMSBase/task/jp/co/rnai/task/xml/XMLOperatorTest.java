@@ -1,9 +1,8 @@
 package jp.co.rnai.task.xml;
 
 import java.io.File;
-import java.util.List;
 
-import com.rms.base.io.file.FileHelper;
+import com.rms.base.io.util.FileHelper;
 
 public class XMLOperatorTest {
 

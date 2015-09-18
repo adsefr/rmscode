@@ -1,8 +1,6 @@
-package com.rms.base.io.path;
+package com.rms.base.io.util;
 
 import java.io.File;
-
-import com.rms.base.exception.InvalidException;
 
 /**
  *

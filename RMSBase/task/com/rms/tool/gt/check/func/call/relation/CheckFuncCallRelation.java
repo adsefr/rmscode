@@ -6,16 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.rms.base.constant.Encodes;
-import com.rms.base.io.file.FileOperationFactory;
-import com.rms.base.io.file.FileWriter;
+import com.rms.base.io.FileWriter;
+import com.rms.base.io.IOFactory;
 import com.rms.base.jdbc.JDBCConnection;
-import com.rms.base.jdbc.JDBCSelector;
 import com.rms.base.jdbc.model.DataBaseInfo;
+import com.rms.base.jdbc.model.DataBaseType;
 import com.rms.base.util.TextUtil;
 import com.rms.common.jdbc.JDBCObject;
 import com.rms.common.jdbc.JDBCQueryExecutor;
-import com.rms.common.jdbc.model.DataBaseType;
-import com.rms.common.poi.excel.ExcelOperatorFactory;
 import com.rms.common.poi.excel.model.CellModel;
 import com.rms.common.poi.excel.model.FontModel;
 import com.rms.common.poi.excel.object.ExcelOperator;
@@ -73,7 +71,7 @@ public class CheckFuncCallRelation {
 		// writeToExcel(callInfoList);
 		// }
 		// }
-		FileWriter writer = FileOperationFactory.newFileWriter("D:\\tmp\\共通関数呼出情報一覧.tsv", Encodes.CHARSET_UTF8);
+		FileWriter writer = IOFactory.newFileWriter("D:\\tmp\\共通関数呼出情報一覧.tsv", Encodes.CHARSET_UTF8);
 
 		StringBuilder sb = new StringBuilder();
 		for (RowInfo rowInfo : rowInfos) {

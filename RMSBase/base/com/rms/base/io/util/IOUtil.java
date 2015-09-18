@@ -1,4 +1,4 @@
-package com.rms.base.io;
+package com.rms.base.io.util;
 
 import java.io.BufferedWriter;
 import java.io.Closeable;
@@ -42,10 +42,14 @@ public final class IOUtil {
 	 * @param closeable
 	 * @throws IOException
 	 */
-	public static void close(Closeable closeable) throws IOException {
+	public static void close(Closeable closeable) {
 
 		if (closeable != null) {
-			closeable.close();
+			try {
+				closeable.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

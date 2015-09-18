@@ -9,7 +9,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import com.rms.base.io.IOFactory;
-import com.rms.base.io.IOUtil;
+import com.rms.base.io.util.IOUtil;
 import com.rms.base.validate.Assertion;
 
 /**

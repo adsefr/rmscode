@@ -1,4 +1,4 @@
-package com.rms.base.io.file;
+package com.rms.base.io.constant;
 
 /**
  * ファイルに関する定数を定義クラス

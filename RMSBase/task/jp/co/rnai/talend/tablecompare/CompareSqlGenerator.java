@@ -5,17 +5,15 @@ import java.io.IOException;
 
 import com.rms.base.constant.Characters;
 import com.rms.base.constant.Encodes;
-import com.rms.base.io.file.FileOperationFactory;
-import com.rms.base.io.file.FileWriter;
+import com.rms.base.io.FileWriter;
+import com.rms.base.io.IOFactory;
 import com.rms.base.jdbc.model.JDBCTable;
 import com.rms.base.util.NumberUtil;
 import com.rms.base.util.TextUtil;
-import com.rms.common.jdbc.old.model.Field;
-import com.rms.common.jdbc.old.model.Schema;
-import com.rms.common.poi.excel.model2.CellModel;
-import com.rms.common.poi.excel2.ExcelFactory;
-import com.rms.common.poi.excel2.ExcelOperator;
-import com.rms.common.poi.excel2.SheetOperator;
+import com.rms.common.poi.excel.model.CellModel;
+import com.rms.common.poi.excel.object.ExcelFactory;
+import com.rms.common.poi.excel.object.ExcelOperator;
+import com.rms.common.poi.excel.object.SheetOperator;
 
 /**
  *
@@ -285,7 +283,7 @@ public class CompareSqlGenerator {
 			}
 
 			File sqlFile = new File(dir.getAbsolutePath() + "/" + tableName + ".sql");
-			FileWriter writer = FileOperationFactory.newFileWriter(sqlFile, Encodes.ENCODE_UTF8);
+			FileWriter writer = IOFactory.newFileWriter(sqlFile, Encodes.ENCODE_UTF8);
 			writer.write(builder.toString());
 			writer.close();
 		}

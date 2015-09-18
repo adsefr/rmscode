@@ -2,18 +2,14 @@ package com.rms.tool.db.rnai;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.rms.base.jdbc.JDBCConnection;
-import com.rms.base.jdbc.JDBCSelector;
-import com.rms.base.jdbc.JDBCUpdater;
-import com.rms.base.jdbc.constant.HoldabilityType;
 import com.rms.base.jdbc.model.DataBaseInfo;
+import com.rms.base.jdbc.model.DataBaseType;
 import com.rms.common.jdbc.JDBCObject;
 import com.rms.common.jdbc.JDBCQueryExecutor;
-import com.rms.common.jdbc.model.DataBaseType;
 
 /**
  *

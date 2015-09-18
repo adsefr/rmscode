@@ -5,7 +5,7 @@ import java.io.File;
 import com.rms.base.exception.InvalidException;
 import com.rms.base.exception.NullParameterException;
 import com.rms.base.exception.UnexpectedTypeException;
-import com.rms.base.io.IOUtil;
+import com.rms.base.io.util.IOUtil;
 import com.rms.base.validate.exception.UnexpectedFileTypeException;
 
 /**

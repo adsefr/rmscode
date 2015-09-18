@@ -11,8 +11,8 @@ import com.rms.base.gen.javaclass.generator.FieldGenerator;
 import com.rms.base.gen.javaclass.generator.ImportGenerator;
 import com.rms.base.gen.javaclass.generator.MethodGenerator;
 import com.rms.base.gen.javaclass.generator.PackageGenerator;
-import com.rms.base.io.file.FileOperationFactory;
-import com.rms.base.io.file.FileWriter;
+import com.rms.base.io.FileWriter;
+import com.rms.base.io.IOFactory;
 import com.rms.base.validate.Assertion;
 
 public abstract class ClassFileGenerator extends BaseGenerator {
@@ -151,7 +151,7 @@ public abstract class ClassFileGenerator extends BaseGenerator {
 
 		Path outFile = Paths.get(outDirectory.toString(), classGenerator.getClassInfo().getSimpleClassName() + ".java");
 
-		FileWriter fileWriter = FileOperationFactory.newFileWriter(outFile.toFile(), Encodes.CHARSET_UTF8);
+		FileWriter fileWriter = IOFactory.newFileWriter(Encodes.CHARSET_UTF8, outFile.toFile());
 		fileWriter.write(super.toString());
 		fileWriter.close();
 	}

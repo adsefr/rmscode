@@ -1,4 +1,4 @@
-package com.rms.base.io.path;
+package com.rms.base.io.util;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -9,14 +9,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.rms.base.constant.Characters;
-import com.rms.base.io.IOUtil;
-import com.rms.base.io.file.FileConst.FileType;
+import com.rms.base.io.FileReader;
+import com.rms.base.io.IOFactory;
+import com.rms.base.io.constant.FileConst.FileType;
 
 public final class FileHelper {
 
 	/**
 	 * 指定ディレクトリの下のファイルを取得する
-	 * 
+	 *
 	 * @param dirPath
 	 *            ディレクトリ
 	 * @param regex
@@ -32,7 +33,7 @@ public final class FileHelper {
 
 	/**
 	 * 指定ディレクトリの下のファイルを取得する
-	 * 
+	 *
 	 * @param dirPath
 	 *            ディレクトリ
 	 * @param regex
@@ -48,7 +49,7 @@ public final class FileHelper {
 
 	/**
 	 * 指定ディレクトリの下の指定形式のファイルを取得する
-	 * 
+	 *
 	 * @param dirPath
 	 *            ディレクトリ
 	 * @param regex
@@ -66,7 +67,7 @@ public final class FileHelper {
 
 	/**
 	 * 指定ディレクトリの下の指定形式のファイルを取得する
-	 * 
+	 *
 	 * @param targetDir
 	 *            ディレクトリ
 	 * @param regex
@@ -115,7 +116,7 @@ public final class FileHelper {
 
 	/**
 	 * 指定フォルダの下のファイルをすべて削除する
-	 * 
+	 *
 	 * @param dirPath
 	 * @param contains
 	 */
@@ -126,7 +127,7 @@ public final class FileHelper {
 
 	/**
 	 * 指定フォルダの下のファイルをすべて削除する
-	 * 
+	 *
 	 * @param dirFile
 	 * @param contains
 	 */
@@ -144,7 +145,7 @@ public final class FileHelper {
 
 	/**
 	 * ファイルの拡張子を変更する
-	 * 
+	 *
 	 * @param fileName
 	 *            ファイル名
 	 * @param extension
@@ -164,7 +165,7 @@ public final class FileHelper {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param targetFile
 	 * @param encoding
 	 * @return
@@ -176,7 +177,7 @@ public final class FileHelper {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param targetFile
 	 * @param encoding
 	 * @return
@@ -188,7 +189,7 @@ public final class FileHelper {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param targetFile
 	 * @param encoding
 	 * @return
@@ -196,12 +197,12 @@ public final class FileHelper {
 	 */
 	public static String readAll(File targetFile, String encoding) throws IOException {
 
-		FileReader reader = FileOperationFactory.newFileReader(targetFile, encoding);
+		FileReader reader = IOFactory.newFileReader(encoding, targetFile);
 
 		StringBuilder builder = new StringBuilder();
 
 		try {
-			while (reader.hasNextChar()) {
+			while (reader.hasChars()) {
 				builder.append(reader.readChars());
 			}
 		} finally {
@@ -212,7 +213,7 @@ public final class FileHelper {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param targetFile
 	 * @param encoding
 	 * @return
@@ -220,12 +221,12 @@ public final class FileHelper {
 	 */
 	public static List<String> readAllLine(File targetFile, String encoding) throws IOException {
 
-		FileReader reader = FileOperationFactory.newFileReader(targetFile, encoding);
+		FileReader reader = IOFactory.newFileReader(encoding, targetFile);
 
 		List<String> lines = new ArrayList<String>();
 
 		try {
-			while (reader.hasNextLine()) {
+			while (reader.hasLines()) {
 				lines.add(reader.readLine());
 			}
 		} finally {

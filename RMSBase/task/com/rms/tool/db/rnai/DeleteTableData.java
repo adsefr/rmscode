@@ -4,12 +4,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.rms.base.jdbc.JDBCConnection;
-import com.rms.base.jdbc.JDBCUpdater;
 import com.rms.base.jdbc.model.DataBaseInfo;
+import com.rms.base.jdbc.model.DataBaseType;
 import com.rms.base.jdbc.model.TableMeta;
 import com.rms.common.jdbc.JDBCObject;
-import com.rms.common.jdbc.model.DataBaseType;
-import com.rms.common.jdbc.old.JDBCMetaData;
 
 /**
  *
