@@ -30,7 +30,7 @@ public class AbstractSheetOperator implements SheetOperator {
 	/** 現在列位置 */
 	private int currColumnIndex;
 
-	protected DefaultSheetOperator() {
+	protected AbstractSheetOperator() {
 
 	}
 

@@ -1,5 +1,6 @@
 package com.rms.base.jdbc.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.rms.base.jdbc.constant.HoldabilityType;
@@ -26,7 +27,7 @@ public class QueryParameter {
 	private List<Object> parameterList;
 
 	public QueryParameter() {
-
+		parameterList = new ArrayList<>();
 	}
 
 	public QueryParameter(String sqlClause, List<Object> parameterList) {

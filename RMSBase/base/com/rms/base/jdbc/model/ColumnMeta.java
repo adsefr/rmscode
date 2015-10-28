@@ -1,5 +1,6 @@
 package com.rms.base.jdbc.model;
 
+import java.math.BigDecimal;
 import java.sql.JDBCType;
 
 /**
@@ -22,7 +23,7 @@ public interface ColumnMeta {
 
 	public String getTypeName();
 
-	public Integer getColumnSize();
+	public BigDecimal getColumnSize();
 
 	public Integer getDecimalDits();
 
