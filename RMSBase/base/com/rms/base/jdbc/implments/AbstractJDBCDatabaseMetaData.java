@@ -1,5 +1,6 @@
 package com.rms.base.jdbc.implments;
 
+import java.math.BigDecimal;
 import java.sql.DatabaseMetaData;
 import java.sql.JDBCType;
 import java.sql.SQLException;
@@ -11,6 +12,7 @@ import java.util.Map;
 import com.rms.base.jdbc.model.CatalogMeta;
 import com.rms.base.jdbc.model.SchemaMeta;
 import com.rms.base.jdbc.model.TableMeta;
+import com.rms.base.logging.Logger;
 import com.rms.base.validate.Assertion;
 import com.rms.common.jdbc.JDBCDataBaseMetaData;
 import com.rms.common.jdbc.JDBCQueryExecutor;
@@ -21,7 +23,7 @@ import com.rms.common.jdbc.JDBCQueryExecutor;
  * @since 2015/08/19
  */
 public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaData {
-
+	private static final Logger logger = Logger.getLogger(AbstractJDBCDatabaseMetaData.class);
 	private Integer databaseMajorVersion;
 
 	private Integer databaseMinorVersion;
@@ -90,6 +92,10 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 	private void initialMetaData(DatabaseMetaData databaseMetaData) throws SQLException {
 
 		setCatalogMetas(databaseMetaData);
+
+		if (databaseProductName.equals("Oracle")) {
+			setSchemaMetas(databaseMetaData, null);
+		}
 		for (CatalogMeta catalogMeta : catalogMetaMap.values()) {
 			setSchemaMetas(databaseMetaData, catalogMeta);
 		}
@@ -117,8 +123,10 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 
 	private void setSchemaMetas(DatabaseMetaData databaseMetaData, CatalogMeta catalogMeta) throws SQLException {
 
-		String catalogName = catalogMeta.getCatalogName();
-
+		String catalogName = null;
+		if (catalogMeta != null) {
+			catalogName = catalogMeta.getCatalogName();
+		}
 		JDBCQueryExecutor schemaQueryExecutor = null;
 		schemaQueryExecutor = JDBCFactory.newJDBCQueryExecutor(databaseMetaData.getSchemas(catalogName, null));
 		while (schemaQueryExecutor.hasNext()) {
@@ -127,9 +135,10 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			schemaMeta.setCatalogName(catalogName);
 			// 2.TABLE_CATALOG String =>カタログ名(nullの可能性がある)
 			schemaMeta.setSchemaName(schemaQueryExecutor.getValue("TABLE_SCHEM"));
-
-			catalogMeta.addSchemaMeta(schemaMeta);
-			String schemaName = catalogName + CATALOG_SEPARATOR + schemaMeta.getSchemaName();
+			if (catalogMeta != null) {
+				catalogMeta.addSchemaMeta(schemaMeta);
+			}
+			String schemaName = schemaMeta.getSchemaName();
 			schemaMetaMap.put(schemaName, schemaMeta);
 		}
 	}
@@ -235,7 +244,13 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 		String tableName = tableMeta.getTableName();
 
 		JDBCQueryExecutor columnQueryExecutor = null;
-		columnQueryExecutor = JDBCFactory.newJDBCQueryExecutor(databaseMetaData.getColumns(catalogName, schemaName, tableName, null));
+		//SYS_NTzZ1IW+s8SbGauVQME+4/5A==
+		try {
+			columnQueryExecutor = JDBCFactory.newJDBCQueryExecutor(databaseMetaData.getColumns(catalogName, schemaName, tableName, null));
+		} catch (Exception e) {
+			// TODO: handle exception
+			return;
+		}
 
 		while (columnQueryExecutor.hasNext()) {
 
@@ -258,7 +273,7 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			String typeName = columnQueryExecutor.getValue("TYPE_NAME");
 
 			/** COLUMN_SIZE int => 列サイズ */
-			Integer columnSize = columnQueryExecutor.getValue("COLUMN_SIZE");
+			BigDecimal columnSize = columnQueryExecutor.getValue("COLUMN_SIZE");
 
 			/** BUFFER_LENGTH - 未使用。 */
 
@@ -266,10 +281,10 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			 * DECIMAL_DIGITS int => 小数点以下の桁数。DECIMAL_DIGITS
 			 * が適用できないデータ型の場合は、Null が返される。
 			 */
-			Integer decimalDits = columnQueryExecutor.getValue("DECIMAL_DIGITS");
+			BigDecimal decimalDits = columnQueryExecutor.getValue("DECIMAL_DIGITS");
 
 			/** NUM_PREC_RADIX int => 基数 (通常は、10 または 2 のどちらか) */
-			Integer numPrecRadix = columnQueryExecutor.getValue("NUM_PREC_RADIX");
+			BigDecimal numPrecRadix = columnQueryExecutor.getValue("NUM_PREC_RADIX");
 
 			/**
 			 * NULLABLE int => NULL は許されるか。<br>
@@ -277,7 +292,7 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			 * columnNullable - 必ず NULL 値を許す<br>
 			 * columnNullableUnknown - NULL 値を許すかどうかは不明<br>
 			 */
-			Integer nullable = columnQueryExecutor.getValue("NULLABLE");
+			BigDecimal nullable = columnQueryExecutor.getValue("NULLABLE");
 
 			/** REMARKS String => 列を記述するコメント (null の可能性がある) */
 			String remarks = columnQueryExecutor.getValue("REMARKS");
@@ -286,17 +301,19 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			 * COLUMN_DEF String => 列のデフォルト値。単一引用符で囲まれた値は、文字列として解釈されるべき (null
 			 * の可能性がある)
 			 */
-			String columnDefaultValue = columnQueryExecutor.getValue("COLUMN_DEF");
+			String columnDefaultValue = null;
+			// String columnDefaultValue =
+			// columnQueryExecutor.getValue("COLUMN_DEF");
 
 			/** SQL_DATA_TYPE int => 未使用 */
 
 			/** SQL_DATETIME_SUB int => 未使用 */
 
 			/** CHAR_OCTET_LENGTH int => char の型については列の最大バイト数 */
-			String charOctetLength = columnQueryExecutor.getValue("CHAR_OCTET_LENGTH");
+			BigDecimal charOctetLength = columnQueryExecutor.getValue("CHAR_OCTET_LENGTH");
 
 			/** ORDINAL_POSITION int => テーブル中の列のインデックス (1 から始まる) */
-			Integer ordinalPosition = columnQueryExecutor.getValue("ORDINAL_POSITION");
+			BigDecimal ordinalPosition = columnQueryExecutor.getValue("ORDINAL_POSITION");
 
 			/**
 			 * IS_NULLABLE String => 列で NULL 値を許可するかどうかの判断に ISO 規則が使用される。<br>
@@ -332,8 +349,9 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			 * 型のソースの型、java.sql.Types の SQL 型 (DATA_TYPE が DISTINCT またはユーザー生成
 			 * REF でない場合は null)
 			 */
-			Integer sourceDataType = ((Number) columnQueryExecutor.getValue("SOURCE_DATA_TYPE")).intValue();
-
+			Integer sourceDataType = null;
+			// Integer sourceDataType = ((Number)
+			// columnQueryExecutor.getValue("SOURCE_DATA_TYPE")).intValue();
 			/**
 			 * IS_AUTOINCREMENT String => この列が自動インクリメントされるかどうかを示す<br>
 			 * YES --- 列が自動インクリメントされる場合<br>
@@ -357,16 +375,20 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			columnMeta.setSchemaName(schemaName);
 			columnMeta.setTableName(tableName);
 			columnMeta.setColumnName(columnName);
-			columnMeta.setJdbcType(JDBCType.valueOf(dataType));
+			try {
+				columnMeta.setJdbcType(JDBCType.valueOf(dataType));
+			} catch (Exception e) {
+				//logger.debug(e);
+			}
 			columnMeta.setTypeName(typeName);
 			columnMeta.setColumnSize(columnSize);
-			columnMeta.setDecimalDits(decimalDits);
-			columnMeta.setNumPrecRadix(numPrecRadix);
-			columnMeta.setNullable(nullable);
+			columnMeta.setDecimalDits(0);
+			columnMeta.setNumPrecRadix(numPrecRadix.intValue());
+			columnMeta.setNullable(nullable.intValue());
 			columnMeta.setRemarks(remarks);
 			columnMeta.setColumnDefaultValue(columnDefaultValue);
-			columnMeta.setCharOctetLength(charOctetLength);
-			columnMeta.setOrdinalPosition(ordinalPosition);
+			columnMeta.setCharOctetLength(String.valueOf(charOctetLength.intValue()));
+			columnMeta.setOrdinalPosition(ordinalPosition.intValue());
 			columnMeta.setIsNullable(isNullable);
 			columnMeta.setScopeCatalog(scopeCatalog);
 			columnMeta.setScopeSchema(scopeSchema);
@@ -398,7 +420,7 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			String columnName = primaryKeysQueryExecutor.getValue("COLUMN_NAME");
 
 			/** 5.KEY_SEQ short =>主キー内の連番(値1は主キーの最初の列、値2は主キーの2番目の列を表す)。 */
-			Integer keySequence = primaryKeysQueryExecutor.getValue("KEY_SEQ");
+			BigDecimal keySequence = primaryKeysQueryExecutor.getValue("KEY_SEQ");
 
 			/** 6.PK_NAME String =>主キー名(nullの可能性がある) */
 			String primaryKeyName = primaryKeysQueryExecutor.getValue("PK_NAME");
@@ -406,8 +428,11 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			tableMeta.setPrimaryKeyName(primaryKeyName);
 
 			DefaultColumnMeta defaultColumnMeta = (DefaultColumnMeta) tableMeta.getColumnMeta(columnName);
+			if (defaultColumnMeta == null) {
+				continue;
+			}
 			defaultColumnMeta.setPrimaryKey(true);
-			defaultColumnMeta.setKeySequence(keySequence);
+			defaultColumnMeta.setKeySequence(keySequence.intValue());
 		}
 	}
 
@@ -577,7 +602,9 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 
 	@Override
 	public List<TableMeta> getTableMetas(String catalogName, String schemaName) {
-
+		if(catalogName==null){
+		return schemaMetaMap.get(schemaName).getTableMetas();
+		}
 		return getSchemaMeta(catalogName, schemaName).getTableMetas();
 	}
 
