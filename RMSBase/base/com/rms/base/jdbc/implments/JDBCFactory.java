@@ -54,7 +54,7 @@ public class JDBCFactory {
 	public static JDBCQueryExecutor newJDBCQueryExecutor(ResultSet resultSet) throws SQLException {
 
 		JDBCQueryExecutor jdbcQueryExecutor = AbstractJDBCQueryExecutor.newInstance(resultSet);
-
+		resultSet.getStatement().close();
 		return jdbcQueryExecutor;
 	}
 

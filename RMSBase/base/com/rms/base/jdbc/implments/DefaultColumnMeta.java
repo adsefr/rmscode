@@ -1,5 +1,6 @@
 package com.rms.base.jdbc.implments;
 
+import java.math.BigDecimal;
 import java.sql.JDBCType;
 
 import com.rms.base.jdbc.model.ColumnMeta;
@@ -31,7 +32,7 @@ public class DefaultColumnMeta implements ColumnMeta {
 	private String typeName;
 
 	/** COLUMN_SIZE int => 列サイズ */
-	private Integer columnSize;
+	private BigDecimal columnSize;
 
 	/** BUFFER_LENGTH - 未使用。 */
 
@@ -232,7 +233,7 @@ public class DefaultColumnMeta implements ColumnMeta {
 	 * @return columnSize
 	 */
 	@Override
-	public Integer getColumnSize() {
+	public BigDecimal getColumnSize() {
 
 		return columnSize;
 	}
@@ -241,7 +242,7 @@ public class DefaultColumnMeta implements ColumnMeta {
 	 * @param columnSize
 	 *            セットする columnSize
 	 */
-	public void setColumnSize(Integer columnSize) {
+	public void setColumnSize(BigDecimal columnSize) {
 
 		this.columnSize = columnSize;
 	}
