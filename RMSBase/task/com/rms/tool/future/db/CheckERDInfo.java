@@ -65,6 +65,7 @@ public class CheckERDInfo {
 
 	@Test
 	public void printTableInfo() throws SQLException {
+
 		QueryParameter queryTables = new QueryParameter();
 		String sqlQueryTableInfo = "SELECT "
 				+ "MS_DOMAIN.DOMAIN_NUMBER ,"

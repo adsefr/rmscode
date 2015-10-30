@@ -77,6 +77,7 @@ public class TextUtil {
 	}
 
 	public static boolean isNotEquals(String... array) {
+
 		return !isEquals(array);
 	}
 
@@ -240,6 +241,7 @@ public class TextUtil {
 	}
 
 	public static String hankakuAlphabetToZenkakuAlphabet(String s) {
+
 		StringBuffer sb = new StringBuffer(s);
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
@@ -253,6 +255,7 @@ public class TextUtil {
 	}
 
 	public static String zenkakuAlphabetToHankaku(String s) {
+
 		StringBuffer sb = new StringBuffer(s);
 		for (int i = 0; i < sb.length(); i++) {
 			char c = sb.charAt(i);
@@ -292,6 +295,7 @@ public class TextUtil {
 	};
 
 	public static String HanToZenForKKana(String p) {
+
 		StringBuffer sb = new StringBuffer();
 
 		for (int i = 0, j = 0; i < p.length(); i++) {
@@ -320,6 +324,7 @@ public class TextUtil {
 	}
 
 	public static String ZenToHanForKKana(String p) {
+
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0, j = 0; i < p.length(); i++) {
 			Character c = new Character(p.charAt(i));

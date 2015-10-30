@@ -21,7 +21,7 @@ public class DefaultJDBCColumn implements JDBCColumn {
 	public DefaultJDBCColumn(QueryResultColumnMeta queryResultColumnMeta, Object rawValue) {
 
 		this.queryResultColumnMeta = queryResultColumnMeta;
-		this.jdbcValue = JDBCFactory.newJDBCValue(rawValue);
+		this.jdbcValue = new JDBCValue(rawValue);
 	}
 
 	@Override
@@ -42,39 +42,46 @@ public class DefaultJDBCColumn implements JDBCColumn {
 	@Override
 	public boolean isNull() {
 
-		return jdbcValue.isNull();
+		return jdbcValue == null || jdbcValue.isNull();
+	}
+
+	@Override
+	public JDBCValue getJDBCValue() {
+
+		return jdbcValue;
+	}
+
+	@Override
+	public <T> T getRawValue() {
+
+		return jdbcValue.getValue();
 	}
 
 	/**
 	 * @return rawValue
 	 */
 	@Override
-	public Object rawValue() {
+	public Object getObjectValue() {
 
-		return jdbcValue.rawValue();
+		return jdbcValue.getObjectValue();
 	}
 
 	@Override
-	public String stringValue() {
+	public String getStringValue() {
 
-		return jdbcValue.stringValue();
+		return jdbcValue.getStringValue();
 	}
 
 	@Override
-	public BigDecimal numberValue() {
+	public BigDecimal getNumberValue() {
 
-		return jdbcValue.numberValue();
+		return jdbcValue.getNumberValue();
 	}
 
 	@Override
-	public Calendar dateValue() {
+	public Calendar getCalendarValue() {
 
-		return jdbcValue.dateValue();
+		return jdbcValue.getCalendarValue();
 	}
 
-	@Override
-	public <T> T getValue() {
-
-		return jdbcValue.getValue();
-	}
 }

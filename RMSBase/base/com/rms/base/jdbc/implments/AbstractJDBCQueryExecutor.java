@@ -9,6 +9,7 @@ import java.util.List;
 import com.rms.base.jdbc.JDBCConnection;
 import com.rms.base.jdbc.JDBCQueryResultMetaData;
 import com.rms.base.jdbc.JDBCUtil;
+import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.jdbc.model.JDBCColumn;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
@@ -103,7 +104,7 @@ public abstract class AbstractJDBCQueryExecutor implements JDBCQueryExecutor {
 			QueryResultColumnMeta queryResultColumnMeta = jdbcQueryResultMetaData.getColumnMeta(columnNumber);
 			Object rawValue = JDBCUtil.getValue(getResultSet(), columnNumber, queryResultColumnMeta.getColumnType());
 			JDBCColumn jdbcColumn = JDBCFactory.newJDBCColumn(queryResultColumnMeta, rawValue);
-			jdbcRow.addColumn(jdbcColumn);
+			jdbcRow.addJDBCColumn(jdbcColumn);
 		}
 
 		ArrayUtil.add(jdbcRowCollection, jdbcRow.getRowNumber(), jdbcRow);// TODO
@@ -228,16 +229,16 @@ public abstract class AbstractJDBCQueryExecutor implements JDBCQueryExecutor {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final List<Object> getValues() throws SQLException {
+	public final List<JDBCValue> getJDBCValues() throws SQLException {
 
 		JDBCRow jdbcRow = getRow();
 
-		List<Object> values = new ArrayList<>();
+		List<JDBCValue> jdbcValues = new ArrayList<>();
 		for (int columnNumber = 1; columnNumber <= jdbcRow.getColumnCount(); columnNumber++) {
-			values.add(jdbcRow.getValue(columnNumber));
+			jdbcValues.add(jdbcRow.getJDBCValue(columnNumber));
 		}
 
-		return values;
+		return jdbcValues;
 	}
 
 	/**

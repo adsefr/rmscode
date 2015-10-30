@@ -19,6 +19,7 @@ import test.IVShapes;
 public class VisioMain {
 
 	public static void main(String[] args) {
+
 		String filePath = "C:/document/作業内容/【20151013_標準データ及びERD確認】/【WMS】【SD】概念ERD.vsd";
 		String outputDir = filePath + ".output";
 		// 创建Visio对象

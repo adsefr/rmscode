@@ -33,12 +33,12 @@ public enum HoldabilityType {
 	public static HoldabilityType valueOf(int type) {
 
 		switch (type) {
-		case ResultSet.HOLD_CURSORS_OVER_COMMIT:
-			return HOLD_CURSORS_OVER_COMMIT;
-		case ResultSet.CLOSE_CURSORS_AT_COMMIT:
-			return CLOSE_CURSORS_AT_COMMIT;
-		default:
-			return null;
+			case ResultSet.HOLD_CURSORS_OVER_COMMIT:
+				return HOLD_CURSORS_OVER_COMMIT;
+			case ResultSet.CLOSE_CURSORS_AT_COMMIT:
+				return CLOSE_CURSORS_AT_COMMIT;
+			default:
+				return null;
 		}
 	}
 }

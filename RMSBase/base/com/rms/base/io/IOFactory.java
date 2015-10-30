@@ -236,8 +236,7 @@ public final class IOFactory {
 	 * @param charset
 	 * @return
 	 */
-	public static BufferedWriter newBufferedWriter(OutputStream os)
-	{
+	public static BufferedWriter newBufferedWriter(OutputStream os) {
 
 		return new BufferedWriter(new OutputStreamWriter(os));
 	}

@@ -126,8 +126,7 @@ public interface SheetOperator {
 
 	/**
 	 * 現在行位置を設定する。<br>
-	 * currRowIndex<0の場合やcurrRowIndex>{@code CellCreator.getMaxRowIndex()}
-	 * 、IndexOutOfBoundsException例外が発生する。<br>
+	 * currRowIndex<0の場合やcurrRowIndex>{@code CellCreator.getMaxRowIndex()} 、IndexOutOfBoundsException例外が発生する。<br>
 	 *
 	 * @param currRowIndex
 	 *            行位置
@@ -137,8 +136,7 @@ public interface SheetOperator {
 
 	/**
 	 * 現在列位置を設定する。<br>
-	 * currColumnIndex<0の場合やcurrColumnIndex>
-	 * {@code CellCreator.getMaxColumnIndex()}
+	 * currColumnIndex<0の場合やcurrColumnIndex> {@code CellCreator.getMaxColumnIndex()}
 	 * の場合、IndexOutOfBoundsException例外が発生する。<br>
 	 *
 	 * @param currColumnIndex
@@ -149,10 +147,8 @@ public interface SheetOperator {
 
 	/**
 	 * 現在行位置と現在列位置を設定する。<br>
-	 * currRowIndex<0の場合やcurrRowIndex>{@code CellCreator.getMaxRowIndex()}
-	 * 、IndexOutOfBoundsException例外が発生する。<br>
-	 * currColumnIndex<0の場合やcurrColumnIndex>
-	 * {@code CellCreator.getMaxColumnIndex()}
+	 * currRowIndex<0の場合やcurrRowIndex>{@code CellCreator.getMaxRowIndex()} 、IndexOutOfBoundsException例外が発生する。<br>
+	 * currColumnIndex<0の場合やcurrColumnIndex> {@code CellCreator.getMaxColumnIndex()}
 	 * の場合、IndexOutOfBoundsException例外が発生する。<br>
 	 *
 	 * @param currRowIndex
@@ -166,10 +162,8 @@ public interface SheetOperator {
 	/**
 	 * 指定の行数を移動する。<br>
 	 * rowNumber>0の場合、下に移動する、rowNumber<0の場合、上に移動する。<br>
-	 * {@code CellCreator.getMinRowIndex()}<=(
-	 * {@code CellCreator.getCurrRowIndex()}+rowNumber)<=
-	 * {@code CellCreator.getMaxRowIndex()}以外の場合
-	 * 、IndexOutOfBoundsException例外が発生する。<br>
+	 * {@code CellCreator.getMinRowIndex()}<=( {@code CellCreator.getCurrRowIndex()}+rowNumber)<=
+	 * {@code CellCreator.getMaxRowIndex()}以外の場合 、IndexOutOfBoundsException例外が発生する。<br>
 	 *
 	 * @param rowNumber
 	 *            移動行数
@@ -181,10 +175,8 @@ public interface SheetOperator {
 	/**
 	 * 次の列に移動する。<br>
 	 * columnNumber>0の場合、右に移動する、columnNumber<0の場合、左に移動する。<br>
-	 * {@code CellCreator.getMinColumnIndex()}<=(
-	 * {@code CellCreator.getCurrColumnIndex()}+columnNumber)<=
-	 * {@code CellCreator.getMaxColumnIndex()}以外の場合
-	 * 、IndexOutOfBoundsException例外が発生する。<br>
+	 * {@code CellCreator.getMinColumnIndex()}<=( {@code CellCreator.getCurrColumnIndex()}+columnNumber)<=
+	 * {@code CellCreator.getMaxColumnIndex()}以外の場合 、IndexOutOfBoundsException例外が発生する。<br>
 	 *
 	 *
 	 * @param columnNumber

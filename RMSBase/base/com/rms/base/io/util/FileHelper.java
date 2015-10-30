@@ -24,7 +24,7 @@ public final class FileHelper {
 	 *            この文字列との一致を判定する正規表現
 	 * @param type
 	 *            取得ファイルのタイプ
-	 * @return　取得ファイルリスト
+	 * @return 取得ファイルリスト
 	 */
 	public static List<File> getFileList(final String dirPath, final String regex, final FileType type) {
 
@@ -40,7 +40,7 @@ public final class FileHelper {
 	 *            この文字列との一致を判定する正規表現
 	 * @param type
 	 *            取得ファイルのタイプ
-	 * @return　取得ファイルリスト
+	 * @return 取得ファイルリスト
 	 */
 	public static List<File> getFileList(final File targetDir, final String regex, final FileType type) {
 
@@ -58,7 +58,7 @@ public final class FileHelper {
 	 *            取得ファイルのタイプ
 	 * @param contains
 	 *            サブディレクトリが対象になるか表示フラグ
-	 * @return　取得ファイルリスト
+	 * @return 取得ファイルリスト
 	 */
 	public static List<File> getFileList(final String dirPath, final String regex, final FileType type, boolean contains) {
 
@@ -76,7 +76,7 @@ public final class FileHelper {
 	 *            取得ファイルのタイプ
 	 * @param contains
 	 *            サブディレクトリが対象になるか表示フラグ
-	 * @return　取得ファイルリスト
+	 * @return 取得ファイルリスト
 	 */
 	public static List<File> getFileList(final File targetDir, final String regex, final FileType type, boolean contains) {
 

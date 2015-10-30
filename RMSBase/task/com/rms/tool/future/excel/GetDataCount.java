@@ -15,7 +15,9 @@ import com.rms.base.io.util.FileHelper;
 import com.rms.base.util.TextUtil;
 
 public class GetDataCount {
+
 	public static void main(String[] args) throws IOException {
+
 		List<File> fileList = getFileList();
 		for (File file : fileList) {
 			printSheetNames(file);
@@ -23,11 +25,13 @@ public class GetDataCount {
 	}
 
 	private static List<File> getFileList() {
+
 		String targetDir = "C:/document/作業内容/【20151019_データ投入確認】/投入データ";
 		return FileHelper.getFileList(targetDir, ".+\\.xlsm", FileType.FILE);
 	}
 
 	private static void printSheetNames(File file) throws IOException {
+
 		XSSFWorkbook xssfWorkbook = new XSSFWorkbook(new FileInputStream(file));
 		int count = xssfWorkbook.getNumberOfSheets();
 		for (int index = 0; index < count; index++) {

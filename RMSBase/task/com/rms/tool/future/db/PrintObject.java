@@ -17,6 +17,7 @@ import com.rms.common.jdbc.JDBCDataBaseMetaData;
 import com.rms.common.jdbc.JDBCObject;
 
 public class PrintObject {
+
 	private final static Logger logger = Logger.getLogger(PrintObject.class);
 
 	private static DataBaseInfo dataBaseInfo;
@@ -60,8 +61,9 @@ public class PrintObject {
 
 	@Test
 	public void printObjectName() throws SQLException {
+
 		JDBCDataBaseMetaData jdbcDataBaseMetaData = jdbcObject.getJDBCDataBaseMetaData();
-		List<TableMeta> tableMetas = jdbcDataBaseMetaData.getTableMetas(null,"DKA_AP1");
+		List<TableMeta> tableMetas = jdbcDataBaseMetaData.getTableMetas(null, "DKA_AP1");
 		for (TableMeta tableMeta : tableMetas) {
 			System.out.println(tableMeta.getTableName());
 		}

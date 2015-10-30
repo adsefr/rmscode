@@ -12,6 +12,7 @@ import org.apache.poi.hdgf.streams.Stream;
 import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
 
 public final class VSDDumper {
+
 	public static void main(String[] args) throws Exception {
 
 		String fileName = "C:/document/作業内容/【20151013_標準データ及びERD確認】/【WMS】【SD】概念ERD.vsd";
@@ -28,6 +29,7 @@ public final class VSDDumper {
 	}
 
 	public static void dumpStream(Stream stream, int indent) {
+
 		String ind = "";
 		for (int i = 0; i < indent; i++) {
 			ind += "    ";

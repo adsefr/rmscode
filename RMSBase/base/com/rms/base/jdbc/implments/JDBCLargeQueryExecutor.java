@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.rms.base.jdbc.JDBCConnection;
+import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.validate.Assertion;
@@ -57,9 +58,8 @@ public class JDBCLargeQueryExecutor extends AbstractJDBCQueryExecutor {
 		return jdbcRow;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public final <T> T getValue(int columnNumber) throws SQLException {
+	public final JDBCValue getJDBCValue(int columnNumber) throws SQLException {
 
 		Assertion.assertNotNull("columnNumber", columnNumber);
 
@@ -69,12 +69,13 @@ public class JDBCLargeQueryExecutor extends AbstractJDBCQueryExecutor {
 
 		Object object = getResultSet().getObject(columnNumber);
 
-		return (T) object;
+		JDBCValue jdbcValue = new JDBCValue(object);
+
+		return jdbcValue;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public final <T> T getValue(String columnName) throws SQLException {
+	public final JDBCValue getJDBCValue(String columnName) throws SQLException {
 
 		Assertion.assertNotNull("columnName", columnName);
 
@@ -84,6 +85,8 @@ public class JDBCLargeQueryExecutor extends AbstractJDBCQueryExecutor {
 
 		Object object = getResultSet().getObject(columnName);
 
-		return (T) object;
+		JDBCValue jdbcValue = new JDBCValue(object);
+
+		return jdbcValue;
 	}
 }

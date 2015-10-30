@@ -103,27 +103,27 @@ public class GenerateCommonClass {
 
 			String returnType = rowInfo.getReturnType();
 			switch (rowInfo.getReturnType()) {
-			case "Boolean":
-				returnType = "boolean";
-				break;
-			case "Byte":
-				returnType = "byte";
-				break;
-			case "Short":
-				returnType = "short";
-				break;
-			case "Integer":
-				returnType = "int";
-				break;
-			case "Long":
-				returnType = "long";
-				break;
-			case "Float":
-				returnType = "float";
-				break;
-			case "Double":
-				returnType = "double";
-				break;
+				case "Boolean":
+					returnType = "boolean";
+					break;
+				case "Byte":
+					returnType = "byte";
+					break;
+				case "Short":
+					returnType = "short";
+					break;
+				case "Integer":
+					returnType = "int";
+					break;
+				case "Long":
+					returnType = "long";
+					break;
+				case "Float":
+					returnType = "float";
+					break;
+				case "Double":
+					returnType = "double";
+					break;
 			}
 
 			methodModel.setReturnType(DataTypes.getDataType(returnType));
@@ -143,27 +143,27 @@ public class GenerateCommonClass {
 				}
 				String[] parameterInfo = parameter.split("=");
 				switch (parameterInfo[1]) {
-				case "Boolean":
-					parameterInfo[1] = "boolean";
-					break;
-				case "Byte":
-					parameterInfo[1] = "byte";
-					break;
-				case "Short":
-					parameterInfo[1] = "short";
-					break;
-				case "Integer":
-					parameterInfo[1] = "int";
-					break;
-				case "Long":
-					parameterInfo[1] = "long";
-					break;
-				case "Float":
-					parameterInfo[1] = "float";
-					break;
-				case "Double":
-					parameterInfo[1] = "double";
-					break;
+					case "Boolean":
+						parameterInfo[1] = "boolean";
+						break;
+					case "Byte":
+						parameterInfo[1] = "byte";
+						break;
+					case "Short":
+						parameterInfo[1] = "short";
+						break;
+					case "Integer":
+						parameterInfo[1] = "int";
+						break;
+					case "Long":
+						parameterInfo[1] = "long";
+						break;
+					case "Float":
+						parameterInfo[1] = "float";
+						break;
+					case "Double":
+						parameterInfo[1] = "double";
+						break;
 				}
 				if (parameterInfo[0].endsWith("()")) {
 					parameterInfo[0] = parameterInfo[0].replace("()", "");

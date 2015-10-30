@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.rms.base.jdbc.JDBCConnection;
+import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.validate.Assertion;
@@ -66,9 +67,8 @@ public class DefaultJDBCQueryExecutor extends AbstractJDBCQueryExecutor {
 		return jdbcRowCollection.get(currentRowNumber);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public final <T> T getValue(int columnNumber) throws SQLException {
+	public final JDBCValue getJDBCValue(int columnNumber) throws SQLException {
 
 		Assertion.assertNotNull("columnNumber", columnNumber);
 
@@ -76,14 +76,13 @@ public class DefaultJDBCQueryExecutor extends AbstractJDBCQueryExecutor {
 			throw new SQLException("the columnNumber[" + columnNumber + "] is not found!!!");
 		}
 
-		Object object = jdbcRowCollection.get(currentRowNumber).getValue(columnNumber);
+		JDBCValue jdbcValue = jdbcRowCollection.get(currentRowNumber).getJDBCValue(columnNumber);
 
-		return (T) object;
+		return jdbcValue;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public final <T> T getValue(String columnName) throws SQLException {
+	public final JDBCValue getJDBCValue(String columnName) throws SQLException {
 
 		Assertion.assertNotNull("columnName", columnName);
 
@@ -93,8 +92,8 @@ public class DefaultJDBCQueryExecutor extends AbstractJDBCQueryExecutor {
 
 		JDBCRow jdbcRow = jdbcRowCollection.get(currentRowNumber);
 
-		Object object = jdbcRow.getValue(columnName);
+		JDBCValue jdbcValue = jdbcRow.getJDBCValue(columnName);
 
-		return (T) object;
+		return jdbcValue;
 	}
 }

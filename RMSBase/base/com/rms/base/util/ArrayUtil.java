@@ -62,8 +62,7 @@ public class ArrayUtil {
 	 * 配列にはnullの元素があるかチェックする。
 	 *
 	 * @param array
-	 *            チェック対象配列 * @return
-	 *            配列がnullか長さが０の場合またはnullの元素がある場合はtrueを返す。それ以外の場合はfalseを返す。
+	 *            チェック対象配列 * @return 配列がnullか長さが０の場合またはnullの元素がある場合はtrueを返す。それ以外の場合はfalseを返す。
 	 */
 	public static <T> boolean hasEmpty(T[] array) {
 

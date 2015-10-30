@@ -3,6 +3,8 @@ package com.rms.base.jdbc.model;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
+import com.rms.base.jdbc.JDBCValue;
+
 /**
  *
  *
@@ -17,13 +19,16 @@ public interface JDBCColumn {
 
 	public boolean isNull();
 
-	public <T> T getValue();
+	public JDBCValue getJDBCValue();
 
-	public Object rawValue();
+	public <T> T getRawValue();
 
-	public String stringValue();
+	public Object getObjectValue();
 
-	public BigDecimal numberValue();
+	public String getStringValue();
 
-	public Calendar dateValue();
+	public BigDecimal getNumberValue();
+
+	public Calendar getCalendarValue();
+
 }

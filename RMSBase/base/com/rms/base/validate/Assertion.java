@@ -114,8 +114,7 @@ public class Assertion {
 
 	/**
 	 * indexが範囲内かチェックする。<br>
-	 * {@code minIndex}<={@code index}<={@code maxIndex}以外の場合、
-	 * IndexOutOfBoundsExceptionが発生する。<br>
+	 * {@code minIndex}<={@code index}<={@code maxIndex}以外の場合、 IndexOutOfBoundsExceptionが発生する。<br>
 	 *
 	 * @param index
 	 *            チェック対象

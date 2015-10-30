@@ -164,17 +164,17 @@ public class DefaultJDBCConnection implements JDBCConnection {
 			int port = dataBaseInfo.getPort();
 			String dataBaseName = dataBaseInfo.getDataBaseName();
 			switch (dataBaseInfo.getDataBaseType()) {
-			case ORACLE:
-				url = "jdbc:oracle:thin:@" + host + ":" + port + ":" + dataBaseName;
-				break;
-			case MYSQL:
-				url = "jdbc:mysql://" + host + ":" + port + ":" + dataBaseName;
-				break;
-			case POSTGRESQL:
-				url = "jdbc:postgresql://" + host + ":" + port + "/" + dataBaseName;
-				break;
-			default:
-				throw new UnexpectedTypeException("type:" + dataBaseInfo.getDataBaseType().getClass().getName());
+				case ORACLE:
+					url = "jdbc:oracle:thin:@" + host + ":" + port + ":" + dataBaseName;
+					break;
+				case MYSQL:
+					url = "jdbc:mysql://" + host + ":" + port + ":" + dataBaseName;
+					break;
+				case POSTGRESQL:
+					url = "jdbc:postgresql://" + host + ":" + port + "/" + dataBaseName;
+					break;
+				default:
+					throw new UnexpectedTypeException("type:" + dataBaseInfo.getDataBaseType().getClass().getName());
 			}
 			connection = JDBCUtil.getConnection(url, userId, password);
 		}

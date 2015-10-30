@@ -9,6 +9,7 @@ import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
 import com.rms.base.logging.Logger;
 
 public final class VSDDumper2 {
+
 	private final static Logger logger = Logger.getLogger(VSDDumper2.class);
 
 	public static void main(String[] args) throws Exception {
@@ -21,7 +22,6 @@ public final class VSDDumper2 {
 		System.out.println("The document claims a size of " +
 				hdgf.getDocumentSize() + "   (" +
 				Long.toHexString(hdgf.getDocumentSize()) + ")");
-
 
 		dumpStream(hdgf);
 	}

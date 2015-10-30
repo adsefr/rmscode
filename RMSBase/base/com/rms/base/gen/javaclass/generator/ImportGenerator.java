@@ -67,21 +67,21 @@ public class ImportGenerator extends BaseGenerator {
 				prefix = className.substring(0, index);
 			}
 			switch (prefix) {
-			case "java":
-				javaPackageCollection.add(className);
-				break;
-			case "javax":
-				javaxPackageCollection.add(className);
-				break;
-			case "org":
-				orgPackageCollection.add(className);
-				break;
-			case "com":
-				comPackageCollection.add(className);
-				break;
-			default:
-				otherPackageCollection.add(className);
-				break;
+				case "java":
+					javaPackageCollection.add(className);
+					break;
+				case "javax":
+					javaxPackageCollection.add(className);
+					break;
+				case "org":
+					orgPackageCollection.add(className);
+					break;
+				case "com":
+					comPackageCollection.add(className);
+					break;
+				default:
+					otherPackageCollection.add(className);
+					break;
 			}
 		});
 	}

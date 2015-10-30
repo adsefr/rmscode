@@ -18,7 +18,7 @@ public enum BoldType {
 	/**
 	 * 太字
 	 */
-	BOLD(Font.BOLDWEIGHT_BOLD), ;
+	BOLD(Font.BOLDWEIGHT_BOLD),;
 
 	private short type;
 

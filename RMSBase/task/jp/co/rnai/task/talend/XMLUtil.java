@@ -268,18 +268,18 @@ public class XMLUtil {
 		String[] valueTags = new String[] { "sub", "sup" };
 
 		switch (metaType) {
-		case TYPE_CAPCAS:
-			exceptNamespace = new String[] { "mml" };
-			repaceTags = new String[] { "ce:sup", "sup", "ce:sub", "sub", "ce:inf", "sub" };
-			xmlText = trimTagCommon(xmlContent, exceptNamespace, repaceTags, valueTags);
-			break;
-		case TYPE_COMMON:
-		case TYPE_WILEY:
-		case TYPE_TAYLORFRANCIS:
-			xmlText = trimTagCommon(xmlContent, exceptNamespace, repaceTags, valueTags);
-			break;
-		default:
-			break;
+			case TYPE_CAPCAS:
+				exceptNamespace = new String[] { "mml" };
+				repaceTags = new String[] { "ce:sup", "sup", "ce:sub", "sub", "ce:inf", "sub" };
+				xmlText = trimTagCommon(xmlContent, exceptNamespace, repaceTags, valueTags);
+				break;
+			case TYPE_COMMON:
+			case TYPE_WILEY:
+			case TYPE_TAYLORFRANCIS:
+				xmlText = trimTagCommon(xmlContent, exceptNamespace, repaceTags, valueTags);
+				break;
+			default:
+				break;
 		}
 
 		return xmlText;
@@ -287,7 +287,7 @@ public class XMLUtil {
 
 	private static String trimTagCommon(String xmlContent, String[] exceptNamespace, String[] repaceTags,
 			String[] valueTags) throws ParserConfigurationException, TransformerException, SAXException, IOException,
-			XPathExpressionException {
+					XPathExpressionException {
 
 		String xmlText = xmlContent;
 

@@ -55,31 +55,31 @@ public abstract class JDKJsonParser implements JsonParser {
 		ValueType valueType = jsonValue.getValueType();
 
 		switch (valueType) {
-		case OBJECT:
-			return parseObject((JsonObject) jsonValue);
+			case OBJECT:
+				return parseObject((JsonObject) jsonValue);
 
-		case ARRAY:
-			return parseArray((JsonArray) jsonValue);
+			case ARRAY:
+				return parseArray((JsonArray) jsonValue);
 
-		case STRING:
-			String value = ((JsonString) jsonValue).getString();
-			return JsonModelFactory.newStringModel(value);
+			case STRING:
+				String value = ((JsonString) jsonValue).getString();
+				return JsonModelFactory.newStringModel(value);
 
-		case NUMBER:
-			BigDecimal bigDecimal = ((JsonNumber) jsonValue).bigDecimalValue();
-			return JsonModelFactory.newNumberModel(bigDecimal);
+			case NUMBER:
+				BigDecimal bigDecimal = ((JsonNumber) jsonValue).bigDecimalValue();
+				return JsonModelFactory.newNumberModel(bigDecimal);
 
-		case FALSE:
-			return JsonModelFactory.newBooleanModel(false);
+			case FALSE:
+				return JsonModelFactory.newBooleanModel(false);
 
-		case TRUE:
-			return JsonModelFactory.newBooleanModel(true);
+			case TRUE:
+				return JsonModelFactory.newBooleanModel(true);
 
-		case NULL:
-			return JsonModelFactory.newNullModel();
+			case NULL:
+				return JsonModelFactory.newNullModel();
 
-		default:
-			throw new UnexpectedDataException("valueType:" + valueType);
+			default:
+				throw new UnexpectedDataException("valueType:" + valueType);
 		}
 	}
 

@@ -179,7 +179,7 @@ public class CheckFuncCallRelation {
 			sBuilder.append("                    P_VB_FUNC_CALL");
 			sBuilder.append("                WHERE");
 			sBuilder.append("                    USER_ID = ?");
-			// sBuilder.append("                    AND FUNC_NAME = ?");
+			// sBuilder.append(" AND FUNC_NAME = ?");
 			sBuilder.append("        ) FC2");
 			sBuilder.append("    WHERE");
 			sBuilder.append("        PF1.PROJECT_FILE_PATH = PF2.PROJECT_FILE_PATH");

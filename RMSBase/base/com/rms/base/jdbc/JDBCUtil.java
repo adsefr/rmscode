@@ -27,20 +27,30 @@ public class JDBCUtil {
 		return UUID.randomUUID().toString();
 	}
 
+	public static boolean isNull(JDBCValue jdbcValue) {
+
+		return jdbcValue == null || jdbcValue.isNull();
+	}
+
+	public static boolean isNotNull(JDBCValue jdbcValue) {
+
+		return jdbcValue != null && jdbcValue.isNotNull();
+	}
+
 	public static Object getData(ResultSet resultSet, String fieldName, int dataType) throws SQLException {
 
 		switch (dataType) {
-		case Types.CHAR:
-		case Types.VARCHAR:
-			return resultSet.getString(fieldName);
-		case Types.SMALLINT:
-		case Types.BIGINT:
-		case Types.INTEGER:
-			return resultSet.getInt(fieldName);
-		case Types.TIMESTAMP:
-			return resultSet.getTimestamp(fieldName);
-		default:
-			throw new UnexpectedDataException("type:" + dataType);
+			case Types.CHAR:
+			case Types.VARCHAR:
+				return resultSet.getString(fieldName);
+			case Types.SMALLINT:
+			case Types.BIGINT:
+			case Types.INTEGER:
+				return resultSet.getInt(fieldName);
+			case Types.TIMESTAMP:
+				return resultSet.getTimestamp(fieldName);
+			default:
+				throw new UnexpectedDataException("type:" + dataType);
 		}
 	}
 
@@ -98,122 +108,122 @@ public class JDBCUtil {
 		Assertion.assertNotNull("jdbcType", jdbcType);
 
 		switch (jdbcType) {
-		case CHAR:
-			// CHAR(Types.CHAR),
-			return resultSet.getString(columnNumber);
-		case VARCHAR:
-			// VARCHAR(Types.VARCHAR),
-			return resultSet.getString(columnNumber);
-		case LONGVARCHAR:
-			// LONGVARCHAR(Types.LONGVARCHAR),
-			return resultSet.getAsciiStream(columnNumber);
-		case NCHAR:
-			// NCHAR(Types.NCHAR),
-			return resultSet.getString(columnNumber);
-		case NVARCHAR:
-			// NVARCHAR(Types.NVARCHAR),
-			return resultSet.getString(columnNumber);
-		case LONGNVARCHAR:
-			// LONGNVARCHAR(Types.LONGNVARCHAR),
-			return resultSet.getCharacterStream(columnNumber);
+			case CHAR:
+				// CHAR(Types.CHAR),
+				return resultSet.getString(columnNumber);
+			case VARCHAR:
+				// VARCHAR(Types.VARCHAR),
+				return resultSet.getString(columnNumber);
+			case LONGVARCHAR:
+				// LONGVARCHAR(Types.LONGVARCHAR),
+				return resultSet.getAsciiStream(columnNumber);
+			case NCHAR:
+				// NCHAR(Types.NCHAR),
+				return resultSet.getString(columnNumber);
+			case NVARCHAR:
+				// NVARCHAR(Types.NVARCHAR),
+				return resultSet.getString(columnNumber);
+			case LONGNVARCHAR:
+				// LONGNVARCHAR(Types.LONGNVARCHAR),
+				return resultSet.getCharacterStream(columnNumber);
 
-		case TINYINT:
-			// TINYINT(Types.TINYINT),
-			return resultSet.getByte(columnNumber);
-		case SMALLINT:
-			// SMALLINT(Types.SMALLINT),
-			return resultSet.getShort(columnNumber);
-		case INTEGER:
-			// INTEGER(Types.INTEGER),
-			return resultSet.getInt(columnNumber);
-		case BIGINT:
-			// BIGINT(Types.BIGINT),
-			return resultSet.getLong(columnNumber);
-		case REAL:
-			// REAL(Types.REAL),
-			return resultSet.getFloat(columnNumber);
-		case FLOAT:
-			// FLOAT(Types.FLOAT),
-			return resultSet.getDouble(columnNumber);
-		case DOUBLE:
-			// DOUBLE(Types.DOUBLE),
-			return resultSet.getDouble(columnNumber);
-		case NUMERIC:
-			// NUMERIC(Types.NUMERIC),
-			return resultSet.getBigDecimal(columnNumber);
-		case DECIMAL:
-			// DECIMAL(Types.DECIMAL),
-			return resultSet.getBigDecimal(columnNumber);
+			case TINYINT:
+				// TINYINT(Types.TINYINT),
+				return resultSet.getByte(columnNumber);
+			case SMALLINT:
+				// SMALLINT(Types.SMALLINT),
+				return resultSet.getShort(columnNumber);
+			case INTEGER:
+				// INTEGER(Types.INTEGER),
+				return resultSet.getInt(columnNumber);
+			case BIGINT:
+				// BIGINT(Types.BIGINT),
+				return resultSet.getLong(columnNumber);
+			case REAL:
+				// REAL(Types.REAL),
+				return resultSet.getFloat(columnNumber);
+			case FLOAT:
+				// FLOAT(Types.FLOAT),
+				return resultSet.getDouble(columnNumber);
+			case DOUBLE:
+				// DOUBLE(Types.DOUBLE),
+				return resultSet.getDouble(columnNumber);
+			case NUMERIC:
+				// NUMERIC(Types.NUMERIC),
+				return resultSet.getBigDecimal(columnNumber);
+			case DECIMAL:
+				// DECIMAL(Types.DECIMAL),
+				return resultSet.getBigDecimal(columnNumber);
 
-		case BIT:
-			// BIT(Types.BIT),
-			return resultSet.getBigDecimal(columnNumber);
-		case BOOLEAN:
-			// BOOLEAN(Types.BOOLEAN),
-			return resultSet.getBoolean(columnNumber);
+			case BIT:
+				// BIT(Types.BIT),
+				return resultSet.getBigDecimal(columnNumber);
+			case BOOLEAN:
+				// BOOLEAN(Types.BOOLEAN),
+				return resultSet.getBoolean(columnNumber);
 
-		case BINARY:
-			// BINARY(Types.BINARY),
-			return resultSet.getBytes(columnNumber);
-		case VARBINARY:
-			// VARBINARY(Types.VARBINARY),
-			return resultSet.getBytes(columnNumber);
-		case LONGVARBINARY:
-			// LONGVARBINARY(Types.LONGVARBINARY),
-			return resultSet.getBinaryStream(columnNumber);
+			case BINARY:
+				// BINARY(Types.BINARY),
+				return resultSet.getBytes(columnNumber);
+			case VARBINARY:
+				// VARBINARY(Types.VARBINARY),
+				return resultSet.getBytes(columnNumber);
+			case LONGVARBINARY:
+				// LONGVARBINARY(Types.LONGVARBINARY),
+				return resultSet.getBinaryStream(columnNumber);
 
-		case TIME:
-			// TIME(Types.TIME),
-			return resultSet.getTime(columnNumber);
+			case TIME:
+				// TIME(Types.TIME),
+				return resultSet.getTime(columnNumber);
 
-		case DATE:
-			// DATE(Types.DATE),
-			return resultSet.getDate(columnNumber);
+			case DATE:
+				// DATE(Types.DATE),
+				return resultSet.getDate(columnNumber);
 
-		case TIMESTAMP:
-			// TIMESTAMP(Types.TIMESTAMP),
-			return resultSet.getTimestamp(columnNumber);
+			case TIMESTAMP:
+				// TIMESTAMP(Types.TIMESTAMP),
+				return resultSet.getTimestamp(columnNumber);
 
-		case BLOB:
-			// BLOB(Types.BLOB),
-			return resultSet.getBlob(columnNumber);
+			case BLOB:
+				// BLOB(Types.BLOB),
+				return resultSet.getBlob(columnNumber);
 
-		case CLOB:
-			// CLOB(Types.CLOB),
-			return resultSet.getClob(columnNumber);
+			case CLOB:
+				// CLOB(Types.CLOB),
+				return resultSet.getClob(columnNumber);
 
-		case NCLOB:
-			// NCLOB(Types.NCLOB),
-			return resultSet.getNClob(columnNumber);
+			case NCLOB:
+				// NCLOB(Types.NCLOB),
+				return resultSet.getNClob(columnNumber);
 
-		case ARRAY:
-			// ARRAY(Types.ARRAY),
-			return resultSet.getArray(columnNumber);
-		case REF:
-			// REF(Types.REF),
-			return resultSet.getRef(columnNumber);
+			case ARRAY:
+				// ARRAY(Types.ARRAY),
+				return resultSet.getArray(columnNumber);
+			case REF:
+				// REF(Types.REF),
+				return resultSet.getRef(columnNumber);
 
-		case ROWID:
-			// ROWID(Types.ROWID),
-			return resultSet.getRowId(columnNumber);
+			case ROWID:
+				// ROWID(Types.ROWID),
+				return resultSet.getRowId(columnNumber);
 
-		case SQLXML:
-			// SQLXML(Types.SQLXML),
-			return resultSet.getSQLXML(columnNumber);
+			case SQLXML:
+				// SQLXML(Types.SQLXML),
+				return resultSet.getSQLXML(columnNumber);
 
-		case STRUCT:
-		case DATALINK:
-		case NULL:
-		case OTHER:
-		case JAVA_OBJECT:
-		case DISTINCT:
-		case REF_CURSOR:
-		case TIME_WITH_TIMEZONE:
-		case TIMESTAMP_WITH_TIMEZONE:
-			return resultSet.getObject(columnNumber);
+			case STRUCT:
+			case DATALINK:
+			case NULL:
+			case OTHER:
+			case JAVA_OBJECT:
+			case DISTINCT:
+			case REF_CURSOR:
+			case TIME_WITH_TIMEZONE:
+			case TIMESTAMP_WITH_TIMEZONE:
+				return resultSet.getObject(columnNumber);
 
-		default:
-			throw new UnexpectedTypeException(jdbcType.getClass().getName());
+			default:
+				throw new UnexpectedTypeException(jdbcType.getClass().getName());
 		}
 	}
 

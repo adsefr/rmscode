@@ -61,7 +61,7 @@ class DefaultJDBCQueryResultMetaData implements JDBCQueryResultMetaData {
 			QueryResultColumnMeta.setWritable(resultSetMetaData.isWritable(columnNumber));
 			QueryResultColumnMeta.setNullable(resultSetMetaData.isNullable(columnNumber));
 
-			//logger.trace(QueryResultColumnMeta.toString());
+			// logger.trace(QueryResultColumnMeta.toString());
 
 			ArrayUtil.add(QueryResultColumnMetaCollection, columnNumber, QueryResultColumnMeta);
 			QueryResultColumnMetaMap.put(QueryResultColumnMeta.getColumnName().toUpperCase(), QueryResultColumnMeta);

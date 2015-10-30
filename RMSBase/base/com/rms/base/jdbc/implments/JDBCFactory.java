@@ -7,15 +7,10 @@ import java.sql.SQLException;
 
 import com.rms.base.jdbc.JDBCConnection;
 import com.rms.base.jdbc.JDBCQueryResultMetaData;
-import com.rms.base.jdbc.JDBCValue;
-import com.rms.base.jdbc.model.CatalogMeta;
-import com.rms.base.jdbc.model.ColumnMeta;
 import com.rms.base.jdbc.model.JDBCColumn;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.jdbc.model.QueryResultColumnMeta;
-import com.rms.base.jdbc.model.SchemaMeta;
-import com.rms.base.jdbc.model.TableMeta;
 import com.rms.base.jdbc.model.UpdateParameter;
 import com.rms.common.jdbc.JDBCDataBaseMetaData;
 import com.rms.common.jdbc.JDBCQueryExecutor;
@@ -77,33 +72,6 @@ public class JDBCFactory {
 		DefaultJDBCColumn defaultJDBCColumn = new DefaultJDBCColumn(QueryExecutorColumnMeta, rawValue);
 
 		return defaultJDBCColumn;
-	}
-
-	public static JDBCValue newJDBCValue(Object rawValue) {
-
-		DefaultJDBCValue defaultJDBCValue = new DefaultJDBCValue(rawValue);
-
-		return defaultJDBCValue;
-	}
-
-	public static CatalogMeta newCatalogMeta() {
-
-		return new DefaultCatalogMeta();
-	}
-
-	public static SchemaMeta newSchemaMeta() {
-
-		return new DefaultSchemaMeta();
-	}
-
-	public static TableMeta newTableMeta() {
-
-		return new DefaultTableMeta();
-	}
-
-	public static ColumnMeta newColumnMeta() {
-
-		return new DefaultColumnMeta();
 	}
 
 	public static QueryResultColumnMeta newQueryResultColumnMeta() {

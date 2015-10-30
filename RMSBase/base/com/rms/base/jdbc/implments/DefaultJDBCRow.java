@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.jdbc.model.JDBCColumn;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.util.ArrayUtil;
@@ -63,35 +64,35 @@ public class DefaultJDBCRow implements JDBCRow {
 	}
 
 	@Override
-	public <T> T getValue(int columnNumber) {
+	public JDBCValue getJDBCValue(int columnNumber) {
 
 		if (exist(columnNumber)) {
-			return getColumn(columnNumber).getValue();
+			return getJDBCColumn(columnNumber).getJDBCValue();
 		}
 
 		return null;
 	}
 
 	@Override
-	public <T> T getValue(String columnName) {
+	public JDBCValue getJDBCValue(String columnName) {
 
 		Assertion.assertNotNull("columnName", columnName);
 
 		if (exist(columnName)) {
-			return jdbcColumnNameMap.get(columnName.toUpperCase()).getValue();
+			return jdbcColumnNameMap.get(columnName.toUpperCase()).getJDBCValue();
 		}
 
 		return null;
 	}
 
 	@Override
-	public JDBCColumn getColumn(int columnNumber) {
+	public JDBCColumn getJDBCColumn(int columnNumber) {
 
 		return jdbcColumnNumberMap.get(columnNumber);
 	}
 
 	@Override
-	public JDBCColumn getColumn(String columnName) {
+	public JDBCColumn getJDBCColumn(String columnName) {
 
 		Assertion.assertNotNull("columnName", columnName);
 
@@ -99,7 +100,7 @@ public class DefaultJDBCRow implements JDBCRow {
 	}
 
 	@Override
-	public void addColumn(JDBCColumn jdbcColumn) {
+	public void addJDBCColumn(JDBCColumn jdbcColumn) {
 
 		Assertion.assertNotNull("jdbcColumn", jdbcColumn);
 		Assertion.assertNotNull("jdbcColumn.getColumnNumber()", jdbcColumn.getColumnNumber());

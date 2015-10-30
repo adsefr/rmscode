@@ -33,22 +33,31 @@ import com.rms.tool.future.erd.bean.FileERDInfo;
 import com.rms.tool.future.erd.bean.TableInfo;
 
 public class ValidateERDInfo {
+
 	private final static Logger logger = Logger.getLogger(ValidateERDInfo.class);
 
 	private static final String COLUMN_SPLIT = "[　 ]*`[　 ]*";
+
 	final List<String> visiofileList = new ArrayList<>();
+
 	private List<FileERDInfo> visioFileERDInfo = new ArrayList<>();
 
 	private final Set<TableInfo> dbTableInfoCollection = new TreeSet<>();
+
 	private final Set<TableInfo> fileTableInfoCollection = new TreeSet<>();
 
 	private final Set<String> omitedDBTableNameJPCollection = new HashSet<>();
+
 	private final Set<String> omitedDBColumnNameJPCollection = new HashSet<>();
+
 	private final Map<String, String> convertedColumnNameJPMap = new HashMap<>();
+
 	private final Map<String, String> tableNameJPConvertInfoMap = new HashMap<>();
+
 	private final Map<String, Map<String, String>> columnNameJPConvertInfoMap = new HashMap<>();
 
 	private final static String VALIDATE_OUTPUT_FILEPATH = "C:/document/作業内容/【20151013_標準データ及びERD確認】/ERD整合性確認結果.txt";
+
 	private final static String CONVERTED_FILE_TABLEINFO_LIST = "C:/document/作業内容/【20151013_標準データ及びERD確認】/カラム名称変更対象一覧.txt";
 
 	public ValidateERDInfo() {
@@ -237,6 +246,7 @@ public class ValidateERDInfo {
 	}
 
 	public String validateTableResult(TableInfo tableInfo, ColumnInfo columnInfo) {
+
 		if (TextUtil.isNotEquals(tableInfo.getDefinedScope(), Const.TABLE_DEFINED_BOTH)) {
 			return "要確認";
 		}
@@ -248,18 +258,21 @@ public class ValidateERDInfo {
 	}
 
 	public String validateColumnResult(TableInfo tableInfo, ColumnInfo columnInfo) {
+
 		if (TextUtil.isNotEquals(columnInfo.getColumnDefinedScope(), Const.COLUMN_DEFINED_BOTH)) {
 			return "要確認";
 		}
 
-		//		if(TextUtil.isEquals("出荷グループ（出荷指示）",tableInfo.getFileTableNameJP())){
-		//			logger.debug(columnInfo.getFileColumnNameJP());
-		//			if (columnNameJPConvertInfoMap.containsKey(tableInfo.getFileTableNameJP())) {
-		//				if (columnNameJPConvertInfoMap.get(tableInfo.getFileTableNameJP()).values().contains(columnInfo.getFileColumnNameJP())) {
-		//					return "一致（項目名変更あり）";
-		//				}
-		//			}
-		//		}
+		// if(TextUtil.isEquals("出荷グループ（出荷指示）",tableInfo.getFileTableNameJP())){
+		// logger.debug(columnInfo.getFileColumnNameJP());
+		// if (columnNameJPConvertInfoMap.containsKey(tableInfo.getFileTableNameJP())) {
+		// if
+		// (columnNameJPConvertInfoMap.get(tableInfo.getFileTableNameJP()).values().contains(columnInfo.getFileColumnNameJP()))
+		// {
+		// return "一致（項目名変更あり）";
+		// }
+		// }
+		// }
 
 		if (columnNameJPConvertInfoMap.containsKey(tableInfo.getFileTableNameJP())) {
 			if (columnNameJPConvertInfoMap.get(tableInfo.getFileTableNameJP()).values().contains(columnInfo.getFileColumnNameJP())) {
@@ -382,6 +395,7 @@ public class ValidateERDInfo {
 	}
 
 	private void processFileERDInfos() {
+
 		for (FileERDInfo tableNameInfo : visioFileERDInfo) {
 			if (tableNameInfo.isProcessed()) {
 				continue;
@@ -490,10 +504,10 @@ public class ValidateERDInfo {
 				Matcher matcher = pattern.matcher(columnNameJPConverted);
 				if (matcher.matches()) {
 					int count = matcher.groupCount();
-					//String grp0 = matcher.group(0);
+					// String grp0 = matcher.group(0);
 					String grp1 = matcher.group(1);
 					String grp2 = matcher.group(2);
-					//String grp3 = matcher.group(3);
+					// String grp3 = matcher.group(3);
 					String grp4 = matcher.group(4);
 					String grp5 = "";
 					if (count == 5) {
@@ -541,6 +555,7 @@ public class ValidateERDInfo {
 	}
 
 	private Object replaceNull(Object obj) {
+
 		if (obj == null) {
 			return "";
 		}
@@ -549,6 +564,7 @@ public class ValidateERDInfo {
 	}
 
 	private String convertVal(String value) {
+
 		String convertVal = TextUtil.convertHalfToFull(value);
 		convertVal = convertVal.toUpperCase();
 		convertVal = convertVal.replaceAll("　", "");
@@ -600,6 +616,7 @@ public class ValidateERDInfo {
 	}
 
 	private void initOmitedDBTableNameJPCollection() {
+
 		omitedDBTableNameJPCollection.add("rBatchキャッシュ世代管理");
 		omitedDBTableNameJPCollection.add("rBatchジョブ名称マスタ");
 		omitedDBTableNameJPCollection.add("rBatchジョブ定義履歴");
@@ -639,6 +656,7 @@ public class ValidateERDInfo {
 	}
 
 	private void initOmitedDBColumnNameJPCollection() {
+
 		omitedDBColumnNameJPCollection.add("排他制御カウンタ");
 		omitedDBColumnNameJPCollection.add("登録日時");
 		omitedDBColumnNameJPCollection.add("登録ユーザ");
@@ -711,18 +729,19 @@ public class ValidateERDInfo {
 	}
 
 	private void initConvertedColumnNameJPMap() {
-		//		convertedColumnNameJPMap.put("(作成中、作成完了)", "");
-		//		convertedColumnNameJPMap.put("※CSV", "");
-		//		convertedColumnNameJPMap.put("※CSVの場合", "");
-		//		convertedColumnNameJPMap.put("※以下商品マスタと同一項目", "");
-		//		convertedColumnNameJPMap.put("※保管用汎用項目除く", "");
-		//		convertedColumnNameJPMap.put("※処理実行管理（集配信単位）と同項目を保持", "");
-		//		convertedColumnNameJPMap.put("※固定長", "");
-		//		convertedColumnNameJPMap.put("※固定長の場合", "");
-		//		convertedColumnNameJPMap.put("※集信ワークと同じ項目", "");
-		//		convertedColumnNameJPMap.put("★入力", "");
-		//		convertedColumnNameJPMap.put("★出力", "");
-		//		convertedColumnNameJPMap.put("〜", "");
+
+		// convertedColumnNameJPMap.put("(作成中、作成完了)", "");
+		// convertedColumnNameJPMap.put("※CSV", "");
+		// convertedColumnNameJPMap.put("※CSVの場合", "");
+		// convertedColumnNameJPMap.put("※以下商品マスタと同一項目", "");
+		// convertedColumnNameJPMap.put("※保管用汎用項目除く", "");
+		// convertedColumnNameJPMap.put("※処理実行管理（集配信単位）と同項目を保持", "");
+		// convertedColumnNameJPMap.put("※固定長", "");
+		// convertedColumnNameJPMap.put("※固定長の場合", "");
+		// convertedColumnNameJPMap.put("※集信ワークと同じ項目", "");
+		// convertedColumnNameJPMap.put("★入力", "");
+		// convertedColumnNameJPMap.put("★出力", "");
+		// convertedColumnNameJPMap.put("〜", "");
 		convertedColumnNameJPMap.put("アクションID（カンマ区切りで複数指定可）", "アクションID");
 		convertedColumnNameJPMap.put("グリッド幅（カンマ区切り）", "グリッド幅");
 		convertedColumnNameJPMap.put("グリッド高さ（カンマ区切り）", "グリッド高さ");

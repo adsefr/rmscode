@@ -2,7 +2,9 @@ package com.rms.common.jdbc;
 
 import java.util.List;
 
+import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.jdbc.model.CatalogMeta;
+import com.rms.base.jdbc.model.DataBaseMeta;
 import com.rms.base.jdbc.model.SchemaMeta;
 import com.rms.base.jdbc.model.TableMeta;
 
@@ -14,57 +16,37 @@ import com.rms.base.jdbc.model.TableMeta;
  */
 public interface JDBCDataBaseMetaData {
 
-	public String getDatabaseProductName();
+	public DataBaseMeta getDataBaseMeta();
 
-	public String getDatabaseProductVersion();
+	public boolean hasCatalog(JDBCValue catalogName);
 
-	public int getDatabaseMajorVersion();
+	public boolean hasSchema(JDBCValue schemaName);
 
-	public int getDatabaseMinorVersion();
+	public boolean hasSchema(JDBCValue catalogName, JDBCValue schemaName);
 
-	public String getDriverName();
+	boolean hasTable(JDBCValue schemaName, JDBCValue tableName);
 
-	public String getDriverVersion();
-
-	public int getDriverMajorVersion();
-
-	public int getDriverMinorVersion();
-
-	public int getJDBCMajorVersion();
-
-	public int getJDBCMinorVersion();
-
-	public String getURL();
-
-	public boolean hasCatalog(String catalogName);
-
-	public boolean hasSchema(String schemaName);
-
-	public boolean hasSchema(String catalogName, String schemaName);
-
-	boolean hasTable(String schemaName, String tableName);
-
-	boolean hasTable(String catalogName, String schemaName, String tableName);
+	boolean hasTable(JDBCValue catalogName, JDBCValue schemaName, JDBCValue tableName);
 
 	public List<CatalogMeta> getCatalogMetas();
 
-	public CatalogMeta getCatalogMeta();
+	public CatalogMeta getCurrentCatalogMeta();
 
-	public CatalogMeta getCatalogMeta(String catalogName);
+	public CatalogMeta getCatalogMeta(JDBCValue catalogName);
 
 	public List<SchemaMeta> getSchemaMetas();
 
-	public List<SchemaMeta> getSchemaMetas(String catalogName);
+	public List<SchemaMeta> getSchemaMetas(JDBCValue catalogName);
 
-	public SchemaMeta getSchemaMeta(String schemaName);
+	public SchemaMeta getSchemaMeta(JDBCValue schemaName);
 
-	public SchemaMeta getSchemaMeta(String catalogName, String schemaName);
+	public SchemaMeta getSchemaMeta(JDBCValue catalogName, JDBCValue schemaName);
 
-	public List<TableMeta> getTableMetas(String schemaName);
+	public List<TableMeta> getTableMetas(JDBCValue schemaName);
 
-	public List<TableMeta> getTableMetas(String catalogName, String schemaName);
+	public List<TableMeta> getTableMetas(JDBCValue catalogName, JDBCValue schemaName);
 
-	public TableMeta getTableMeta(String schemaName, String tableName);
+	public TableMeta getTableMeta(JDBCValue schemaName, JDBCValue tableName);
 
-	public TableMeta getTableMeta(String catalogName, String schemaName, String tableName);
+	public TableMeta getTableMeta(JDBCValue catalogName, JDBCValue schemaName, JDBCValue tableName);
 }

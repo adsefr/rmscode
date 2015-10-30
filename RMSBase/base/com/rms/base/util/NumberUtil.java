@@ -23,6 +23,7 @@ public class NumberUtil {
 	}
 
 	public static String convertNumberFullToHalf(String number) {
+
 		if (number == null) {
 			throw new IllegalArgumentException();
 		}
@@ -37,6 +38,7 @@ public class NumberUtil {
 	}
 
 	public static String convertNumberHalfToFull(String number) {
+
 		if (number == null) {
 			throw new IllegalArgumentException();
 		}
@@ -51,6 +53,7 @@ public class NumberUtil {
 	}
 
 	public static String convertNumberHalfToFull(int number) {
+
 		return convertNumberHalfToFull(String.valueOf(number));
 	}
 }

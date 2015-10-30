@@ -25,16 +25,24 @@ import com.rms.common.jdbc.JDBCQueryExecutor;
  *
  */
 public class DatabaseERDInfo {
+
 	private final static Logger logger = Logger.getLogger(DatabaseERDInfo.class);
+
 	public final static String ERDINFO_FILEPATH = "C:/document/作業内容/【00000000_参考情報】/ERD_INFO.txt";
+
 	public final static Charset ERDINFO_FILEPATH_CHARSET = Encodes.CHARSET_UTF8;
+
 	public final static String SPLIT_CHAR = "`";
+
 	private JDBCObject jdbcObject;
+
 	private DataBaseInfo dataBaseInfo;
+
 	private BufferedWriter bufferedWriter;
 
 	@Test
 	public void retrive() {
+
 		try {
 
 			bufferedWriter = Files.newBufferedWriter(Paths.get(ERDINFO_FILEPATH), ERDINFO_FILEPATH_CHARSET);
@@ -156,6 +164,7 @@ public class DatabaseERDInfo {
 	}
 
 	private Object replaceNull(Object obj) {
+
 		if (obj == null) {
 			return "";
 		}

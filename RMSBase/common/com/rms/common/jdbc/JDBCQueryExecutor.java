@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.rms.base.jdbc.JDBCCloseable;
+import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.QueryParameter;
 
@@ -42,9 +43,9 @@ public interface JDBCQueryExecutor extends JDBCCloseable {
 
 	public JDBCRow getRow() throws SQLException;
 
-	public <T> T getValue(int columnNumber) throws SQLException;
+	public JDBCValue getJDBCValue(int columnNumber) throws SQLException;
 
-	public <T> T getValue(String columnName) throws SQLException;
+	public JDBCValue getJDBCValue(String columnName) throws SQLException;
 
-	public List<Object> getValues() throws SQLException;
+	public List<JDBCValue> getJDBCValues() throws SQLException;
 }

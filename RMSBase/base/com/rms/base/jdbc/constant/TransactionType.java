@@ -40,18 +40,18 @@ public enum TransactionType {
 	public static TransactionType valueOf(int type) {
 
 		switch (type) {
-		case Connection.TRANSACTION_NONE:
-			return TRANSACTION_NONE;
-		case Connection.TRANSACTION_READ_COMMITTED:
-			return TRANSACTION_READ_COMMITTED;
-		case Connection.TRANSACTION_READ_UNCOMMITTED:
-			return TRANSACTION_READ_UNCOMMITTED;
-		case Connection.TRANSACTION_REPEATABLE_READ:
-			return TRANSACTION_REPEATABLE_READ;
-		case Connection.TRANSACTION_SERIALIZABLE:
-			return TRANSACTION_SERIALIZABLE;
-		default:
-			return null;
+			case Connection.TRANSACTION_NONE:
+				return TRANSACTION_NONE;
+			case Connection.TRANSACTION_READ_COMMITTED:
+				return TRANSACTION_READ_COMMITTED;
+			case Connection.TRANSACTION_READ_UNCOMMITTED:
+				return TRANSACTION_READ_UNCOMMITTED;
+			case Connection.TRANSACTION_REPEATABLE_READ:
+				return TRANSACTION_REPEATABLE_READ;
+			case Connection.TRANSACTION_SERIALIZABLE:
+				return TRANSACTION_SERIALIZABLE;
+			default:
+				return null;
 		}
 	}
 

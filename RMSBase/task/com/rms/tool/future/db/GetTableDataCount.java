@@ -19,6 +19,7 @@ import com.rms.common.jdbc.JDBCQueryExecutor;
 import com.rms.common.jdbc.JDBCUpdateExecutor;
 
 public class GetTableDataCount {
+
 	private final static Logger logger = Logger.getLogger(PrintObject.class);
 
 	private static DataBaseInfo dataBaseInfo;
@@ -58,6 +59,7 @@ public class GetTableDataCount {
 
 	@Test
 	public void printTableDataCount() throws SQLException {
+
 		String[] tableNames1 = { "MS_INFOHENKANCMDBUNRUI", "MS_INFOHENKANCMD", "MS_INFOHENKANCOMMANDHKSU", "MS_CALENDAR", "MS_HANDYLOCKKAIJOSET", "KR_DATA_REFRESH_SERVICE",
 				"KR_DATA_REFRESH_EXECUTION",
 				"MS_REFRESH_DATA_GRP", "MS_REFRESH_DATA_GRP_IDX", "MS_REFRESH_DATA", "MS_BARCDHENSYU", "MS_BARCDHENSYUMST_SETYO", "MS_PARAMSETTANIGRP", "MS_PARAMSETTANINM",
@@ -94,7 +96,7 @@ public class GetTableDataCount {
 		}
 	}
 
-	//@Test
+	// @Test
 	public void deleteTableDataCount() throws SQLException {
 
 		String[] tableNames = { "MS_PARAMSETTANIGRP", "MS_PARAMSETTANINM", "MS_PARAMSETTANIGRP_DETAIL", "MS_RP_PARAM_KEY", "MS_RP_PARAM_NM", "MS_RP_PARAM_VAL", "MS_PARAMTEIGI", "MS_PARAMTEIGISETTANI",
