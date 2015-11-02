@@ -31,6 +31,8 @@ public class DataBaseMeta {
 
 	private String url;
 
+	private String searchStringEscape;
+
 	public DataBaseMeta() {
 	}
 
@@ -236,6 +238,23 @@ public class DataBaseMeta {
 	public void setUrl(String url) {
 
 		this.url = url;
+	}
+
+	/**
+	 * @return searchStringEscape
+	 */
+	public String getSearchStringEscape() {
+
+		return searchStringEscape;
+	}
+
+	/**
+	 * @param searchStringEscape
+	 *            セットする searchStringEscape
+	 */
+	public void setSearchStringEscape(String searchStringEscape) {
+
+		this.searchStringEscape = searchStringEscape;
 	}
 
 }

@@ -35,7 +35,7 @@ public class PrintObject {
 		dataBaseInfo.setDataBaseType(DataBaseType.ORACLE);
 		dataBaseInfo.setHost("localhost");
 		dataBaseInfo.setPort(1521);
-		dataBaseInfo.setDriver("oracle.jdbc.driver.OracleDriver");
+		dataBaseInfo.setDriver("oracle.jdbc.OracleDriver");
 		dataBaseInfo.setDataBaseName("xe");
 		dataBaseInfo.setUserId("dka_ap1");
 		dataBaseInfo.setPassword("dka_ap1");
@@ -63,9 +63,13 @@ public class PrintObject {
 	public void printObjectName() throws SQLException {
 
 		JDBCDataBaseMetaData jdbcDataBaseMetaData = jdbcObject.getJDBCDataBaseMetaData();
-		List<TableMeta> tableMetas = jdbcDataBaseMetaData.getTableMetas(null, "DKA_AP1");
-		for (TableMeta tableMeta : tableMetas) {
-			System.out.println(tableMeta.getTableName());
-		}
+		jdbcDataBaseMetaData.getSchemaMetas(null).parallelStream().forEach((element) -> {
+			List<TableMeta> tableMetas = jdbcDataBaseMetaData.getTableMetas(null, element.getSchemaName());
+			for (TableMeta tableMeta : tableMetas) {
+				tableMeta.getColumnMetas().stream().forEach(element2 -> {
+					System.out.println(element2.getCatalogName() + "\t" + element2.getSchemaName() + "\t" + element2.getTableName() + "\t" + element2.getColumnName());
+				});
+			}
+		});
 	}
 }

@@ -6,7 +6,7 @@ package com.rms.base.exception;
  * @author ri.meisei
  * @since 2014/06/06
  */
-public class UnsupportedTypeException extends ApplicationException {
+class UnsupportedTypeException extends UnsupportedException {
 
 	private static final long serialVersionUID = -2824720275256316121L;
 

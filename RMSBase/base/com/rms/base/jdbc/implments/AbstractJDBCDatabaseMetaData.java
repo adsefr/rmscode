@@ -1,18 +1,19 @@
 package com.rms.base.jdbc.implments;
 
 import java.sql.DatabaseMetaData;
-import java.sql.JDBCType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.rms.base.jdbc.JDBCUtil;
-import com.rms.base.jdbc.JDBCValue;
+import com.rms.base.jdbc.constant.JDBCTypes;
 import com.rms.base.jdbc.model.CatalogMeta;
 import com.rms.base.jdbc.model.ColumnMeta;
 import com.rms.base.jdbc.model.DataBaseMeta;
+import com.rms.base.jdbc.model.JDBCValue;
 import com.rms.base.jdbc.model.SchemaMeta;
 import com.rms.base.jdbc.model.TableMeta;
 import com.rms.base.logging.Logger;
@@ -31,8 +32,6 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 	private static final Logger logger = Logger.getLogger(AbstractJDBCDatabaseMetaData.class);
 
 	private DataBaseMeta dataBaseMeta = new DataBaseMeta();
-
-	private String currentCatalogName = null;
 
 	private final List<CatalogMeta> catalogMetaCollection = new ArrayList<>();
 
@@ -62,8 +61,9 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			initializeTableMetas(databaseMetaData, schemaMeta);
 		}
 
-		for (TableMeta TableMeta : tableMetaCollection) {
-			initializeColumnMetas(databaseMetaData, TableMeta);
+		for (TableMeta tableMeta : tableMetaCollection) {
+			initializeColumnMetas(databaseMetaData, tableMeta);
+			initializePrimaryKeys(databaseMetaData, tableMeta);
 		}
 	}
 
@@ -81,20 +81,20 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 		dataBaseMeta.setJdbcMajorVersion(databaseMetaData.getJDBCMajorVersion());
 		dataBaseMeta.setJdbcMinorVersion(databaseMetaData.getJDBCMinorVersion());
 		dataBaseMeta.setUrl(databaseMetaData.getURL());
+		dataBaseMeta.setSearchStringEscape(databaseMetaData.getSearchStringEscape());
 	}
 
 	private void initializeCatalogMetas(DatabaseMetaData databaseMetaData) throws SQLException {
 
-		currentCatalogName = databaseMetaData.getConnection().getCatalog();
+		ResultSet resultSetCatalogMeta = databaseMetaData.getCatalogs();
 
-		JDBCQueryExecutor catalogQueryExecutor = JDBCFactory.newJDBCQueryExecutor(databaseMetaData.getCatalogs());
+		JDBCQueryExecutor catalogQueryExecutor = JDBCFactory.newJDBCQueryExecutor(resultSetCatalogMeta);
 
 		while (catalogQueryExecutor.hasNext()) {
 			// 1.TABLE_CAT String =>カタログ名
-			JDBCValue tableCatalog = catalogQueryExecutor.getJDBCValue("TABLE_CAT");
+			String tableCatalog = catalogQueryExecutor.getValue("TABLE_CAT");
 
-			CatalogMeta catalogMeta = new CatalogMeta();
-			catalogMeta.setCatalogName(tableCatalog);
+			CatalogMeta catalogMeta = new CatalogMeta(tableCatalog);
 
 			catalogMetaCollection.add(catalogMeta);
 		}
@@ -102,7 +102,7 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 
 	private void initializeSchemaMetas(DatabaseMetaData databaseMetaData, CatalogMeta catalogMeta) throws SQLException {
 
-		String catalogName = (catalogMeta == null) ? null : catalogMeta.getCatalogName().getStringValue();
+		String catalogName = (catalogMeta == null) ? null : catalogMeta.getCatalogName();
 
 		ResultSet resultSetSchemaMeta = databaseMetaData.getSchemas(catalogName, null);
 
@@ -111,16 +111,17 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 		while (schemaQueryExecutor.hasNext()) {
 
 			// 1.TABLE_SCHEM String =>スキーマ名
-			JDBCValue tableSchema = schemaQueryExecutor.getJDBCValue("TABLE_SCHEM");
+			String tableSchema = schemaQueryExecutor.getValue("TABLE_SCHEM");
 
 			// 2.TABLE_CATALOG String =>カタログ名(nullの可能性がある)
-			JDBCValue tableCatalog = schemaQueryExecutor.getJDBCValue("TABLE_CATALOG");
+			// String tableCatalog = schemaQueryExecutor.getValue("TABLE_CATALOG");
 
-			SchemaMeta schemaMeta = new SchemaMeta();
-			schemaMeta.setSchemaName(tableSchema);
-			schemaMeta.setCatalogName(tableCatalog);
+			SchemaMeta schemaMeta = new SchemaMeta(catalogName, tableSchema);
 
-			schemaMeta.setCatalogMeta(catalogMeta);
+			if (catalogMeta != null) {
+				schemaMeta.setCatalogMeta(catalogMeta);
+				catalogMeta.addSchemaMeta(schemaMeta);
+			}
 
 			schemaMetaCollection.add(schemaMeta);
 		}
@@ -128,9 +129,8 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 
 	private void initializeTableMetas(DatabaseMetaData databaseMetaData, SchemaMeta schemaMeta) throws SQLException {
 
-		String schemaName = (schemaMeta == null) ? null : schemaMeta.getSchemaName().getStringValue();
-		CatalogMeta catalogMeta = (schemaMeta == null) ? null : schemaMeta.getCatalogMeta();
-		String catalogName = (catalogMeta == null) ? null : catalogMeta.getCatalogName().getStringValue();
+		String catalogName = schemaMeta.getCatalogName();
+		String schemaName = schemaMeta.getSchemaName();
 
 		ResultSet resultSetTableMeta = databaseMetaData.getTables(catalogName, schemaName, null, null);
 
@@ -138,13 +138,13 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 
 		while (tableQueryExecutor.hasNext()) {
 			/** TABLE_CAT String => テーブルカタログ (null の可能性がある) */
-			JDBCValue tableCatalog = tableQueryExecutor.getJDBCValue("TABLE_CAT");
+			// String tableCatalog = tableQueryExecutor.getValue("TABLE_CAT");
 
 			/** TABLE_SCHEM String => テーブルスキーマ (null の可能性がある) */
-			JDBCValue tableSchema = tableQueryExecutor.getJDBCValue("TABLE_SCHEM");
+			// String tableSchema = tableQueryExecutor.getValue("TABLE_SCHEM");
 
 			/** TABLE_NAME String => テーブル名 */
-			JDBCValue tableName = tableQueryExecutor.getJDBCValue("TABLE_NAME");
+			String tableName = tableQueryExecutor.getValue("TABLE_NAME");
 
 			/**
 			 * TABLE_TYPE String => テーブルのタイプ。典型的なタイプは、「TABLE」、「VIEW」、「SYSTEM TABLE」、「GLOBAL TEMPORARY」、 「LOCAL
@@ -176,8 +176,8 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			JDBCValue referenceGeneration = tableQueryExecutor.getJDBCValue("REF_GENERATION");
 
 			TableMeta tableMeta = new TableMeta();
-			tableMeta.setCatalogName(tableCatalog);
-			tableMeta.setSchemaName(tableSchema);
+			tableMeta.setCatalogName(catalogName);
+			tableMeta.setSchemaName(schemaName);
 			tableMeta.setTableName(tableName);
 			tableMeta.setTableType(tableType);
 			tableMeta.setRemarks(remarks);
@@ -188,36 +188,40 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			tableMeta.setReferenceGeneration(referenceGeneration);
 
 			tableMeta.setSchemaMeta(schemaMeta);
-
+			schemaMeta.addTableMeta(tableMeta);
 			tableMetaCollection.add(tableMeta);
 		}
 	}
 
 	private void initializeColumnMetas(DatabaseMetaData databaseMetaData, TableMeta tableMeta) throws SQLException {
 
-		String tableName = (tableMeta == null) ? null : tableMeta.getTableName().getStringValue();
-		SchemaMeta schemaMeta = (tableMeta == null) ? null : tableMeta.getSchemaMeta();
-		String schemaName = (schemaMeta == null) ? null : schemaMeta.getSchemaName().getStringValue();
-		CatalogMeta catalogMeta = (schemaMeta == null) ? null : schemaMeta.getCatalogMeta();
-		String catalogName = (catalogMeta == null) ? null : catalogMeta.getCatalogName().getStringValue();
+		String catalogName = tableMeta.getCatalogName();
+		String schemaName = tableMeta.getSchemaName();
+		String tableName = tableMeta.getTableName();
 
-		ResultSet resultSetColumnMeta = databaseMetaData.getColumns(catalogName, schemaName, tableName, null);
+		ResultSet resultSetColumnMeta = null;
+		try {
+			resultSetColumnMeta = databaseMetaData.getColumns(catalogName, schemaName, tableName, null);
+		} catch (Exception e) {
+			logger.trace(e);
+			return;
+		}
 
 		JDBCQueryExecutor columnQueryExecutor = JDBCFactory.newJDBCQueryExecutor(resultSetColumnMeta);
 
 		while (columnQueryExecutor.hasNext()) {
 
 			/** TABLE_CAT String => テーブルカタログ (null の可能性がある) */
-			JDBCValue tableCatalog = columnQueryExecutor.getJDBCValue("TABLE_CAT");
+			// JDBCValue tableCatalog = columnQueryExecutor.getJDBCValue("TABLE_CAT");
 
 			/** TABLE_SCHEM String => テーブルスキーマ (null の可能性がある) */
-			JDBCValue tableSchema = columnQueryExecutor.getJDBCValue("TABLE_SCHEM");
+			// JDBCValue tableSchema = columnQueryExecutor.getJDBCValue("TABLE_SCHEM");
 
 			/** TABLE_NAME String => テーブル名 */
-			JDBCValue table = columnQueryExecutor.getJDBCValue("TABLE_NAME");
+			// JDBCValue table = columnQueryExecutor.getJDBCValue("TABLE_NAME");
 
 			/** COLUMN_NAME String => 列名 */
-			JDBCValue columnName = columnQueryExecutor.getJDBCValue("COLUMN_NAME");
+			String columnName = columnQueryExecutor.getValue("COLUMN_NAME");
 
 			/** DATA_TYPE int => java.sql.Types からの SQL の型 */
 			JDBCValue dataType = columnQueryExecutor.getJDBCValue("DATA_TYPE");
@@ -313,11 +317,11 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			}
 
 			ColumnMeta columnMeta = new ColumnMeta();
-			columnMeta.setCatalogName(tableCatalog);
-			columnMeta.setSchemaName(tableSchema);
-			columnMeta.setTableName(table);
+			columnMeta.setCatalogName(catalogName);
+			columnMeta.setSchemaName(schemaName);
+			columnMeta.setTableName(tableName);
 			columnMeta.setColumnName(columnName);
-			columnMeta.setJdbcType(JDBCType.valueOf(dataType.getStringValue()));
+			columnMeta.setJdbcType(JDBCTypes.getJDBCType(dataBaseMeta, dataType.toDecimalVal().intValue()));
 			columnMeta.setTypeName(typeName);
 			columnMeta.setColumnSize(columnSize);
 			columnMeta.setDecimalDits(decimalDits);
@@ -336,28 +340,33 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			columnMeta.setIsGeneratedColumn(isGeneratedColumn);
 
 			columnMeta.setTableMeta(tableMeta);
-
+			tableMeta.addColumnMeta(columnMeta);
 			columnMetaCollection.add(columnMeta);
 		}
 	}
 
-	private void setPrimaryKeys(DatabaseMetaData databaseMetaData, TableMeta tableMeta) throws SQLException {
+	private void initializePrimaryKeys(DatabaseMetaData databaseMetaData, TableMeta tableMeta) throws SQLException {
 
-		JDBCValue catalogName = tableMeta.getCatalogName();
-		JDBCValue schemaName = tableMeta.getSchemaName();
-		JDBCValue tableName = tableMeta.getTableName();
+		String catalogName = tableMeta.getCatalogName();
+		String schemaName = tableMeta.getSchemaName();
+		String tableName = tableMeta.getTableName();
 
-		JDBCQueryExecutor primaryKeysQueryExecutor = null;
-		primaryKeysQueryExecutor = JDBCFactory.newJDBCQueryExecutor(databaseMetaData.getPrimaryKeys(catalogName.getStringValue(), schemaName.getStringValue(), tableName.getStringValue()));
+		ResultSet resultSetPrimaryKeys = databaseMetaData.getPrimaryKeys(catalogName, schemaName, tableName);
+
+		JDBCQueryExecutor primaryKeysQueryExecutor = JDBCFactory.newJDBCQueryExecutor(resultSetPrimaryKeys);
+
 		while (primaryKeysQueryExecutor.hasNext()) {
 			/** TABLE_CAT String => テーブルカタログ (null の可能性がある) */
+			// JDBCValue tableCatalog = columnQueryExecutor.getJDBCValue("TABLE_CAT");
 
 			/** TABLE_SCHEM String => テーブルスキーマ (null の可能性がある) */
+			// JDBCValue tableSchema = columnQueryExecutor.getJDBCValue("TABLE_SCHEM");
 
 			/** TABLE_NAME String => テーブル名 */
+			// JDBCValue table = columnQueryExecutor.getJDBCValue("TABLE_NAME");
 
 			/** 4.COLUMN_NAME String =>列名 */
-			JDBCValue columnName = primaryKeysQueryExecutor.getJDBCValue("COLUMN_NAME");
+			String columnName = primaryKeysQueryExecutor.getValue("COLUMN_NAME");
 
 			/** 5.KEY_SEQ short =>主キー内の連番(値1は主キーの最初の列、値2は主キーの2番目の列を表す)。 */
 			JDBCValue keySequence = primaryKeysQueryExecutor.getJDBCValue("KEY_SEQ");
@@ -368,11 +377,10 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 			tableMeta.setPrimaryKeyName(primaryKeyName);
 
 			ColumnMeta columnMeta = tableMeta.getColumnMeta(columnName);
-			if (columnMeta == null) {
-				continue;
+			if (columnMeta != null) {
+				columnMeta.setPrimaryKey(JDBCValue.newJDBCValue(true));
+				columnMeta.setKeySequence(keySequence);
 			}
-			columnMeta.setPrimaryKey(new JDBCValue(true));
-			columnMeta.setKeySequence(keySequence);
 		}
 	}
 
@@ -383,161 +391,201 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 	}
 
 	@Override
-	public boolean hasCatalog(JDBCValue catalogName) {
-
-		if (JDBCUtil.isNull(catalogName)) {
-			return true;
-		}
-
-		return catalogMetaCollection.parallelStream().anyMatch(element -> element.getCatalogName().equals(catalogName));
-	}
-
-	@Override
-	public boolean hasSchema(JDBCValue schemaName) {
-
-		if (JDBCUtil.isNull(schemaName)) {
-			return true;
-		}
-
-		return schemaMetaCollection.parallelStream().anyMatch(element -> element.getSchemaName().equals(schemaName));
-	}
-
-	@Override
-	public boolean hasSchema(JDBCValue catalogName, JDBCValue schemaName) {
-
-		if (JDBCUtil.isNull(schemaName)) {
-			return true;
-		}
-
-		return schemaMetaCollection.parallelStream().anyMatch(schemaMeta -> schemaMeta.getSchemaName().equals(schemaName));
-	}
-
-	@Override
-	public boolean hasTable(JDBCValue schemaName, JDBCValue tableName) {
-
-		Assertion.assertNotNull("tableName", tableName);
-
-		return hasSchema(schemaName) && getSchemaMeta(schemaName).contains(tableName);
-	}
-
-	@Override
-	public boolean hasTable(JDBCValue catalogName, JDBCValue schemaName, JDBCValue tableName) {
-
-		return hasSchema(catalogName, schemaName) && getSchemaMeta(catalogName, schemaName).contains(tableName);
-	}
-
-	@Override
-	public CatalogMeta getCurrentCatalogMeta() {
-
-		for (CatalogMeta catalogMeta : catalogMetaCollection) {
-			if (TextUtil.isEquals(currentCatalogName, catalogMeta.getCatalogName().getStringValue())) {
-				return catalogMeta;
-			}
-		}
-
-		return null;
-	}
-
-	@Override
 	public List<CatalogMeta> getCatalogMetas() {
 
 		return catalogMetaCollection;
 	}
 
 	@Override
-	public CatalogMeta getCatalogMeta(JDBCValue catalogName) {
+	public boolean hasCatalogMeta(String catalogName) {
 
-		if (JDBCUtil.isNull(catalogName)) {
+		if (TextUtil.isBlank(catalogName)) {
+			return false;
+		}
+
+		Predicate<CatalogMeta> predicate = element -> element.getCatalogName().equals(catalogName);
+
+		return catalogMetaCollection.parallelStream().anyMatch(predicate);
+	}
+
+	@Override
+	public CatalogMeta getCatalogMeta(String catalogName) {
+
+		if (TextUtil.isBlank(catalogName)) {
 			return null;
 		}
 
-		for (CatalogMeta catalogMeta : catalogMetaCollection) {
-			if (catalogMeta.getCatalogName().equals(catalogName)) {
-				return catalogMeta;
+		Predicate<CatalogMeta> predicate = element -> element.getCatalogName().equals(catalogName);
+
+		Optional<CatalogMeta> optional = catalogMetaCollection.parallelStream().filter(predicate).findAny();
+
+		return optional.get();
+	}
+
+	@Override
+	public List<SchemaMeta> getSchemaMetas(String catalogName) {
+
+		Predicate<SchemaMeta> predicate = (element) -> {
+			if (TextUtil.isNotBlank(catalogName) && TextUtil.isNotEquals(catalogName, element.getCatalogName())) {
+				return false;
 			}
+
+			return true;
+		};
+
+		return schemaMetaCollection.stream().filter(predicate).collect(Collectors.toList());
+	}
+
+	@Override
+	public boolean hasSchemaMeta(String catalogName, String schemaName) {
+
+		if (TextUtil.isBlank(schemaName)) {
+			return true;
 		}
 
-		return null;
-	}
-
-	@Override
-	public List<SchemaMeta> getSchemaMetas() {
-
-		return getCurrentCatalogMeta().getSchemaMetas();
-	}
-
-	@Override
-	public List<SchemaMeta> getSchemaMetas(JDBCValue catalogName) {
-
-		return getCatalogMeta(catalogName).getSchemaMetas();
-	}
-
-	@Override
-	public SchemaMeta getSchemaMeta(JDBCValue schemaName) {
-
-		return getSchemaMeta(getCurrentCatalogMeta().getCatalogName(), schemaName);
-	}
-
-	@Override
-	public SchemaMeta getSchemaMeta(JDBCValue catalogName, JDBCValue schemaName) {
-
-		List<SchemaMeta> schemaMetas = getSchemaMetas(catalogName);
-		for (SchemaMeta schemaMeta : schemaMetas) {
-			if (schemaMeta.getSchemaName().equals(schemaName)) {
-				return schemaMeta;
+		Predicate<SchemaMeta> predicate = (element) -> {
+			if (TextUtil.isNotBlank(catalogName) && TextUtil.isNotEquals(catalogName, element.getCatalogName())) {
+				return false;
 			}
-		}
 
-		return null;
+			return TextUtil.isEquals(element.getSchemaName(), schemaName);
+		};
+
+		return schemaMetaCollection.parallelStream().anyMatch(predicate);
 	}
 
 	@Override
-	public List<TableMeta> getTableMetas(JDBCValue schemaName) {
+	public SchemaMeta getSchemaMeta(String catalogName, String schemaName) {
 
-		CatalogMeta catalogMeta = getCurrentCatalogMeta();
-
-		SchemaMeta schemaMeta = getSchemaMeta(catalogMeta.getCatalogName(), schemaName);
-		if (schemaMeta != null) {
-			return schemaMeta.getTableMetas();
-		}
-
-		return null;
-	}
-
-	@Override
-	public List<TableMeta> getTableMetas(JDBCValue catalogName, JDBCValue schemaName) {
-
-		return tableMetaCollection.stream().filter(tableMeta -> {
-			CatalogMeta catalogMeta = tableMeta.getSchemaMeta().getCatalogMeta();
-			SchemaMeta schemaMeta = tableMeta.getSchemaMeta();
-
-			return catalogMeta.getCatalogName().equals(catalogName) && schemaMeta.getCatalogName().equals(schemaMeta);
-		}).collect(Collectors.toList());
-	}
-
-	@Override
-	public TableMeta getTableMeta(JDBCValue schemaName, JDBCValue tableName) {
-
-		List<TableMeta> tableMetas = getTableMetas(getCurrentCatalogMeta().getCatalogName(), schemaName);
-		for (TableMeta tableMeta : tableMetas) {
-			if (tableMeta.getTableName().equals(schemaName)) {
-				return tableMeta;
+		Predicate<SchemaMeta> predicate = (element) -> {
+			if (TextUtil.isNotBlank(catalogName) && TextUtil.isNotEquals(catalogName, element.getCatalogName())) {
+				return false;
 			}
-		}
 
-		return null;
+			return TextUtil.isEquals(element.getSchemaName(), schemaName);
+		};
+
+		Optional<SchemaMeta> optional = schemaMetaCollection.parallelStream().filter(predicate).findAny();
+
+		return optional.get();
 	}
 
 	@Override
-	public TableMeta getTableMeta(JDBCValue catalogName, JDBCValue schemaName, JDBCValue tableName) {
+	public List<TableMeta> getTableMetas(String catalogName, String schemaName) {
 
-		List<TableMeta> tableMetas = getTableMetas(catalogName, schemaName);
-		for (TableMeta tableMeta : tableMetas) {
-			if (tableMeta.getTableName().equals(schemaName)) {
-				return tableMeta;
+		Predicate<TableMeta> predicate = (element) -> {
+			if (TextUtil.isNotBlank(catalogName) && TextUtil.isNotEquals(catalogName, element.getCatalogName())) {
+				return false;
 			}
+
+			return TextUtil.isEquals(element.getSchemaName(), schemaName);
+		};
+
+		return tableMetaCollection.stream().filter(predicate).collect(Collectors.toList());
+	}
+
+	@Override
+	public boolean hasTableMeta(String catalogName, String schemaName, String tableName) {
+
+		if (TextUtil.isBlank(tableName)) {
+			return true;
 		}
 
-		return null;
+		Predicate<TableMeta> predicate = (element) -> {
+			if (TextUtil.isNotBlank(catalogName) && TextUtil.isNotEquals(catalogName, element.getCatalogName())) {
+				return false;
+			}
+
+			if (TextUtil.isNotEquals(element.getSchemaName(), schemaName)) {
+				return false;
+			}
+
+			return TextUtil.isEquals(element.getTableName(), tableName);
+		};
+
+		return tableMetaCollection.parallelStream().anyMatch(predicate);
+	}
+
+	@Override
+	public TableMeta getTableMeta(String catalogName, String schemaName, String tableName) {
+
+		Predicate<TableMeta> predicate = (element) -> {
+			if (TextUtil.isNotBlank(catalogName) && TextUtil.isNotEquals(catalogName, element.getCatalogName())) {
+				return false;
+			}
+
+			if (TextUtil.isNotEquals(element.getSchemaName(), schemaName)) {
+				return false;
+			}
+
+			return TextUtil.isEquals(element.getTableName(), tableName);
+		};
+
+		Optional<TableMeta> optional = tableMetaCollection.parallelStream().filter(predicate).findAny();
+
+		return optional.get();
+	}
+
+	public List<ColumnMeta> getColumnMetas(String catalogName, String schemaName, String tableName) {
+
+		Predicate<ColumnMeta> predicate = (element) -> {
+			if (TextUtil.isNotBlank(catalogName) && TextUtil.isNotEquals(catalogName, element.getCatalogName())) {
+				return false;
+			}
+
+			if (TextUtil.isNotEquals(element.getSchemaName(), schemaName)) {
+				return false;
+			}
+
+			return TextUtil.isEquals(element.getTableName(), tableName);
+		};
+
+		return columnMetaCollection.parallelStream().filter(predicate).collect(Collectors.toList());
+
+	};
+
+	public boolean hasColumnMeta(String catalogName, String schemaName, String tableName, String columnName) {
+
+		Predicate<ColumnMeta> predicate = (element) -> {
+			if (TextUtil.isNotBlank(catalogName) && TextUtil.isNotEquals(catalogName, element.getCatalogName())) {
+				return false;
+			}
+
+			if (TextUtil.isNotEquals(element.getSchemaName(), schemaName)) {
+				return false;
+			}
+
+			if (TextUtil.isNotEquals(element.getTableName(), tableName)) {
+				return false;
+			}
+
+			return TextUtil.isEquals(element.getColumnName(), columnName);
+		};
+
+		return columnMetaCollection.parallelStream().filter(predicate).anyMatch(predicate);
+	}
+
+	@Override
+	public ColumnMeta getColumnMeta(String catalogName, String schemaName, String tableName, String columnName) {
+
+		Predicate<ColumnMeta> predicate = (element) -> {
+			if (TextUtil.isNotBlank(catalogName) && TextUtil.isNotEquals(catalogName, element.getCatalogName())) {
+				return false;
+			}
+
+			if (TextUtil.isNotEquals(element.getSchemaName(), schemaName)) {
+				return false;
+			}
+
+			if (TextUtil.isNotEquals(element.getTableName(), tableName)) {
+				return false;
+			}
+
+			return TextUtil.isEquals(element.getColumnName(), columnName);
+		};
+
+		Optional<ColumnMeta> optional = columnMetaCollection.parallelStream().filter(predicate).findAny();
+
+		return optional.get();
 	}
 }

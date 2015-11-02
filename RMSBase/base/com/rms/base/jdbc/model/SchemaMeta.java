@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.validate.Assertion;
 
 /**
@@ -18,57 +17,46 @@ public class SchemaMeta {
 
 	private CatalogMeta catalogMeta;
 
-	private JDBCValue catalogName;
+	private String catalogName;
 
-	private JDBCValue schemaName;
+	private String schemaName;
 
-	private List<TableMeta> tableMetas = new ArrayList<>();
-
-	private Map<JDBCValue, TableMeta> tableMetaMap = new HashMap<>();
+	private Map<String, TableMeta> tableMetaMap = new HashMap<>();
 
 	public SchemaMeta() {
+		super();
+	}
 
+	public SchemaMeta(String catalogName, String schemaName) {
+		super();
+		this.catalogName = catalogName;
+		this.schemaName = schemaName;
+	}
+
+	public boolean contains(String tableName) {
+
+		Assertion.assertNotBlank("tableName", tableName);
+
+		return tableMetaMap.containsKey(tableName);
 	}
 
 	public void addTableMeta(TableMeta tableMeta) {
 
-		tableMetas.add(tableMeta);
+		Assertion.assertNotNull("tableMeta", tableMeta);
+
 		tableMetaMap.put(tableMeta.getTableName(), tableMeta);
 	}
 
-	public boolean contains(JDBCValue tableName) {
-
-		// for (TableMeta tableMeta : tableMetas) {
-		// if (TextUtil.isEqualsIgnoreCase(tableMeta.getTableName(), tableName)) {
-		// return true;
-		// }
-		// }
-
-		return false;
-	}
-
-	public TableMeta getTableMeta(JDBCValue tableName) {
+	public TableMeta getTableMeta(String tableName) {
 
 		Assertion.assertNotNull("tableName", tableName);
 
 		return tableMetaMap.get(tableName);
 	}
 
-	public List<TableMeta> getTableMetas(List<String> tableNames) {
-
-		Assertion.assertNotNull("tableNames", tableNames);
-
-		List<TableMeta> tableMetas = new ArrayList<>();
-		for (String tableName : tableNames) {
-			tableMetas.add(tableMetaMap.get(tableName));
-		}
-
-		return tableMetas;
-	}
-
 	public List<TableMeta> getTableMetas() {
 
-		return new ArrayList<>(tableMetas);
+		return new ArrayList<>(tableMetaMap.values());
 	}
 
 	/**
@@ -91,7 +79,7 @@ public class SchemaMeta {
 	/**
 	 * @return catalogName
 	 */
-	public JDBCValue getCatalogName() {
+	public String getCatalogName() {
 
 		return catalogName;
 	}
@@ -100,7 +88,7 @@ public class SchemaMeta {
 	 * @param catalogName
 	 *            セットする catalogName
 	 */
-	public void setCatalogName(JDBCValue catalogName) {
+	public void setCatalogName(String catalogName) {
 
 		this.catalogName = catalogName;
 	}
@@ -108,7 +96,7 @@ public class SchemaMeta {
 	/**
 	 * @return schemaName
 	 */
-	public JDBCValue getSchemaName() {
+	public String getSchemaName() {
 
 		return schemaName;
 	}
@@ -117,7 +105,7 @@ public class SchemaMeta {
 	 * @param schemaName
 	 *            セットする schemaName
 	 */
-	public void setSchemaName(JDBCValue schemaName) {
+	public void setSchemaName(String schemaName) {
 
 		this.schemaName = schemaName;
 	}

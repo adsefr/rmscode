@@ -103,10 +103,10 @@ public class CheckERDInfo {
 		StringBuilder buffered = new StringBuilder();
 
 		while (jdbcQueryTablenames.hasNext()) {
-			String domain_number = jdbcQueryTablenames.getValue("DOMAIN_NUMBER");
-			String domain_name = jdbcQueryTablenames.getValue("DOMAIN_NAME");
-			BigDecimal table_id = jdbcQueryTablenames.getValue("TABLE_ID");
-			String table_name = jdbcQueryTablenames.getValue("TABLE_NAME");
+			String domain_number = jdbcQueryTablenames.getJDBCValue("DOMAIN_NUMBER").toStringVal();
+			String domain_name = jdbcQueryTablenames.getJDBCValue("DOMAIN_NAME").toStringVal();
+			BigDecimal table_id = jdbcQueryTablenames.getJDBCValue("TABLE_ID").toDecimalVal();
+			String table_name = jdbcQueryTablenames.getJDBCValue("TABLE_NAME").toStringVal();
 
 			buffered.setLength(0);
 			buffered.append(domain_number).append("\t");
@@ -124,10 +124,10 @@ public class CheckERDInfo {
 			jdbcQueryTableColumns.execute();
 
 			while (jdbcQueryTableColumns.hasNext()) {
-				BigDecimal column_id = jdbcQueryTableColumns.getValue("COLUMN_ID");
-				String column_name = jdbcQueryTableColumns.getValue("COLUMN_NAME");
-				String column_name_jp = jdbcQueryTableColumns.getValue("COLUMN_NAME_JP");
-				BigDecimal pk_position = jdbcQueryTableColumns.getValue("PK_POSITION");
+				BigDecimal column_id = jdbcQueryTableColumns.getJDBCValue("COLUMN_ID").toDecimalVal();
+				String column_name = jdbcQueryTableColumns.getJDBCValue("COLUMN_NAME").toStringVal();
+				String column_name_jp = jdbcQueryTableColumns.getJDBCValue("COLUMN_NAME_JP").toStringVal();
+				BigDecimal pk_position = jdbcQueryTableColumns.getJDBCValue("PK_POSITION").toDecimalVal();
 
 				buffered.setLength(length);
 				buffered.append(column_id.intValue()).append("\t");

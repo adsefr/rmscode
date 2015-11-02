@@ -14,7 +14,8 @@ public class JDBCConst {
 
 	public static final int DEFAULT_QUERY_TIME_OUT = 30;
 
-	public static final String DEFAULT_ORACLE_JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
+	public static final String DEFAULT_ORACLE_JDBC_DRIVER = "oracle.jdbc.OracleDriver";
+	// public static final String DEFAULT_ORACLE_JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
 
 	public static final String DEFAULT_MYSQL_JDBC_DRIVER = "com.mysql.jdbc.Driver";
 

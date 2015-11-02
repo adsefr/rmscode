@@ -3,8 +3,6 @@ package com.rms.base.jdbc.model;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
-import com.rms.base.jdbc.JDBCValue;
-
 /**
  *
  *

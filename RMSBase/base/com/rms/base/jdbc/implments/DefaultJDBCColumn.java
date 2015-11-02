@@ -3,8 +3,8 @@ package com.rms.base.jdbc.implments;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
-import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.jdbc.model.JDBCColumn;
+import com.rms.base.jdbc.model.JDBCValue;
 import com.rms.base.jdbc.model.QueryResultColumnMeta;
 
 /**
@@ -21,7 +21,7 @@ public class DefaultJDBCColumn implements JDBCColumn {
 	public DefaultJDBCColumn(QueryResultColumnMeta queryResultColumnMeta, Object rawValue) {
 
 		this.queryResultColumnMeta = queryResultColumnMeta;
-		this.jdbcValue = new JDBCValue(rawValue);
+		this.jdbcValue = JDBCValue.newJDBCValue(rawValue);
 	}
 
 	@Override
@@ -69,19 +69,19 @@ public class DefaultJDBCColumn implements JDBCColumn {
 	@Override
 	public String getStringValue() {
 
-		return jdbcValue.getStringValue();
+		return jdbcValue.toStringVal();
 	}
 
 	@Override
 	public BigDecimal getNumberValue() {
 
-		return jdbcValue.getNumberValue();
+		return jdbcValue.toDecimalVal();
 	}
 
 	@Override
 	public Calendar getCalendarValue() {
 
-		return jdbcValue.getCalendarValue();
+		return jdbcValue.toCalendarVal();
 	}
 
 }

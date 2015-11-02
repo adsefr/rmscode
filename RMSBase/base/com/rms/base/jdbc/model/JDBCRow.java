@@ -1,7 +1,5 @@
 package com.rms.base.jdbc.model;
 
-import com.rms.base.jdbc.JDBCValue;
-
 /**
  *
  *
@@ -19,6 +17,10 @@ public interface JDBCRow {
 	public boolean exist(int columnNumber);
 
 	public boolean exist(String columnName);
+
+	public <T> T getValue(int columnNumber);
+
+	public <T> T getValue(String columnName);
 
 	public JDBCValue getJDBCValue(int columnNumber);
 

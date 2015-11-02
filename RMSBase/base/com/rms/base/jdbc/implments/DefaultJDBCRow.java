@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.jdbc.model.JDBCColumn;
 import com.rms.base.jdbc.model.JDBCRow;
+import com.rms.base.jdbc.model.JDBCValue;
 import com.rms.base.util.ArrayUtil;
 import com.rms.base.validate.Assertion;
 
@@ -61,6 +61,28 @@ public class DefaultJDBCRow implements JDBCRow {
 		Assertion.assertNotBlank("columnName", columnName);
 
 		return jdbcColumnNameMap.containsKey(columnName.toUpperCase());
+	}
+
+	@Override
+	public <T> T getValue(int columnNumber) {
+
+		if (exist(columnNumber)) {
+			return getJDBCColumn(columnNumber).getRawValue();
+		}
+
+		return null;
+	}
+
+	@Override
+	public <T> T getValue(String columnName) {
+
+		Assertion.assertNotNull("columnName", columnName);
+
+		if (exist(columnName)) {
+			return jdbcColumnNameMap.get(columnName.toUpperCase()).getRawValue();
+		}
+
+		return null;
 	}
 
 	@Override

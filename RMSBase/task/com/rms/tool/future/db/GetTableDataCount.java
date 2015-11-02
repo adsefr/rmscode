@@ -88,7 +88,7 @@ public class GetTableDataCount {
 			JDBCQueryExecutor jdbcQueryExecutor = jdbcObject.query(queryParameter);
 			jdbcQueryExecutor.execute();
 			if (jdbcQueryExecutor.hasNext()) {
-				BigDecimal count = jdbcQueryExecutor.getValue(1);
+				BigDecimal count = jdbcQueryExecutor.getJDBCValue(1).toDecimalVal();
 				System.out.println(tableName + "-" + count.intValue());
 			}
 

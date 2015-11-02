@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.validate.Assertion;
 
 /**
@@ -16,33 +15,49 @@ import com.rms.base.validate.Assertion;
  */
 public class CatalogMeta {
 
-	private JDBCValue catalogName;
+	private String catalogName;
 
 	private Map<String, SchemaMeta> schemaMetaMap = new HashMap<>();
 
 	public CatalogMeta() {
-
+		super();
 	}
 
-	private boolean hasSchema(String schemaName) {
-
-		return schemaMetaMap.containsKey(schemaName.toUpperCase());
+	public CatalogMeta(String catalogName) {
+		super();
+		this.catalogName = catalogName;
 	}
 
-	private SchemaMeta _getSchemaMeta(String schemaName) {
+	public boolean contains(String schemaName) {
 
-		return schemaMetaMap.get(schemaName.toUpperCase());
+		Assertion.assertNotBlank("schemaName", schemaName);
+
+		return schemaMetaMap.containsKey(schemaName);
 	}
 
-	private void _addSchemaMeta(SchemaMeta schemaMeta) {
+	public void addSchemaMeta(SchemaMeta schemaMeta) {
 
-		// schemaMetaMap.put(schemaMeta.getSchemaName(), schemaMeta);
+		Assertion.assertNotNull("schemaMeta", schemaMeta);
+
+		schemaMetaMap.put(schemaMeta.getSchemaName(), schemaMeta);
+	}
+
+	public SchemaMeta getSchemaMeta(String schemaName) {
+
+		Assertion.assertNotBlank("schemaName", schemaName);
+
+		return schemaMetaMap.get(schemaName);
+	}
+
+	public List<SchemaMeta> getSchemaMetas() {
+
+		return new ArrayList<>(schemaMetaMap.values());
 	}
 
 	/**
 	 * @return catalogName
 	 */
-	public JDBCValue getCatalogName() {
+	public String getCatalogName() {
 
 		return catalogName;
 	}
@@ -51,37 +66,9 @@ public class CatalogMeta {
 	 * @param catalogName
 	 *            セットする catalogName
 	 */
-	public void setCatalogName(JDBCValue catalogName) {
+	public void setCatalogName(String catalogName) {
 
 		this.catalogName = catalogName;
-	}
-
-	public boolean contains(String schemaName) {
-
-		Assertion.assertNotNull("schemaName", schemaName);
-
-		return hasSchema(schemaName);
-	}
-
-	public void addSchemaMeta(SchemaMeta schemaMeta) {
-
-		Assertion.assertNotNull("schemaMeta", schemaMeta);
-
-		if (schemaMeta.getSchemaName() != null) {
-			_addSchemaMeta(schemaMeta);
-		}
-	}
-
-	public SchemaMeta getSchemaMeta(String schemaName) {
-
-		Assertion.assertNotNull("schemaName", schemaName);
-
-		return _getSchemaMeta(schemaName);
-	}
-
-	public List<SchemaMeta> getSchemaMetas() {
-
-		return new ArrayList<>(schemaMetaMap.values());
 	}
 
 }

@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import com.rms.base.exception.UnexpectedDataException;
 import com.rms.base.exception.UnexpectedTypeException;
+import com.rms.base.jdbc.model.JDBCValue;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.jdbc.model.UpdateParameter;
 import com.rms.base.logging.Logger;
@@ -276,5 +277,20 @@ public class JDBCUtil {
 	public static boolean isClosed(ResultSet resultSet) throws SQLException {
 
 		return (resultSet == null || resultSet.isClosed());
+	}
+
+	public static String escape(String escapeChar, String content) {
+
+		Assertion.assertNotBlank("escapeChar", escapeChar);
+		Assertion.assertNotNull("content", content);
+
+		StringBuilder stringBuilder = new StringBuilder(content);
+		for (int index = stringBuilder.length() - 1; index >= 0; index--) {
+			if (stringBuilder.charAt(index) == escapeChar.charAt(0)) {
+				stringBuilder.insert(index, escapeChar.charAt(0));
+			}
+		}
+
+		return stringBuilder.toString();
 	}
 }

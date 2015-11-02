@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.rms.base.jdbc.JDBCValue;
+import com.rms.base.validate.Assertion;
 
 /**
  *
@@ -18,13 +18,13 @@ public class TableMeta {
 	private SchemaMeta schemaMeta;
 
 	/** TABLE_CAT String => テーブルカタログ (null の可能性がある) */
-	private JDBCValue catalogName;
+	private String catalogName;
 
 	/** TABLE_SCHEM String => テーブルスキーマ (null の可能性がある) */
-	private JDBCValue schemaName;
+	private String schemaName;
 
 	/** TABLE_NAME String => テーブル名 */
-	private JDBCValue tableName;
+	private String tableName;
 
 	/**
 	 * TABLE_TYPE String => テーブルのタイプ。<BR>
@@ -56,11 +56,17 @@ public class TableMeta {
 
 	private JDBCValue primaryKeyName;
 
-	private List<ColumnMeta> columnMetas = new ArrayList<>();
-
 	private Map<String, ColumnMeta> columnMetaMap = new HashMap<>();
 
 	public TableMeta() {
+		super();
+	}
+
+	public TableMeta(String catalogName, String schemaName, String tableName) {
+		super();
+		this.catalogName = catalogName;
+		this.schemaName = schemaName;
+		this.tableName = tableName;
 	}
 
 	@Override
@@ -75,13 +81,30 @@ public class TableMeta {
 		return sBuilder.toString();
 	}
 
-	public ColumnMeta getColumnMeta(JDBCValue columnName) {
+	public boolean contains(String columnName) {
 
-		if (columnName == null || columnName.isNull()) {
-			return null;
-		}
+		Assertion.assertNotBlank("columnName", columnName);
 
-		return columnMetaMap.get(columnName.getStringValue());
+		return columnMetaMap.containsKey(columnName);
+	}
+
+	public void addColumnMeta(ColumnMeta columnMeta) {
+
+		Assertion.assertNotNull("columnMeta", columnMeta);
+
+		columnMetaMap.put(columnMeta.getColumnName(), columnMeta);
+	}
+
+	public ColumnMeta getColumnMeta(String columnName) {
+
+		Assertion.assertNotNull("columnName", columnName);
+
+		return columnMetaMap.get(columnName);
+	}
+
+	public List<ColumnMeta> getColumnMetas() {
+
+		return new ArrayList<>(columnMetaMap.values());
 	}
 
 	/**
@@ -104,7 +127,7 @@ public class TableMeta {
 	/**
 	 * @return catalogName
 	 */
-	public JDBCValue getCatalogName() {
+	public String getCatalogName() {
 
 		return catalogName;
 	}
@@ -113,7 +136,7 @@ public class TableMeta {
 	 * @param catalogName
 	 *            セットする catalogName
 	 */
-	public void setCatalogName(JDBCValue catalogName) {
+	public void setCatalogName(String catalogName) {
 
 		this.catalogName = catalogName;
 	}
@@ -121,7 +144,7 @@ public class TableMeta {
 	/**
 	 * @return schemaName
 	 */
-	public JDBCValue getSchemaName() {
+	public String getSchemaName() {
 
 		return schemaName;
 	}
@@ -130,7 +153,7 @@ public class TableMeta {
 	 * @param schemaName
 	 *            セットする schemaName
 	 */
-	public void setSchemaName(JDBCValue schemaName) {
+	public void setSchemaName(String schemaName) {
 
 		this.schemaName = schemaName;
 	}
@@ -138,7 +161,7 @@ public class TableMeta {
 	/**
 	 * @return tableName
 	 */
-	public JDBCValue getTableName() {
+	public String getTableName() {
 
 		return tableName;
 	}
@@ -147,7 +170,7 @@ public class TableMeta {
 	 * @param tableName
 	 *            セットする tableName
 	 */
-	public void setTableName(JDBCValue tableName) {
+	public void setTableName(String tableName) {
 
 		this.tableName = tableName;
 	}
@@ -287,39 +310,4 @@ public class TableMeta {
 
 		this.primaryKeyName = primaryKeyName;
 	}
-
-	/**
-	 * @return columnMetas
-	 */
-	public List<ColumnMeta> getColumnMetas() {
-
-		return columnMetas;
-	}
-
-	/**
-	 * @param columnMetas
-	 *            セットする columnMetas
-	 */
-	public void setColumnMetas(List<ColumnMeta> columnMetas) {
-
-		this.columnMetas = columnMetas;
-	}
-
-	/**
-	 * @return columnMetaMap
-	 */
-	public Map<String, ColumnMeta> getColumnMetaMap() {
-
-		return columnMetaMap;
-	}
-
-	/**
-	 * @param columnMetaMap
-	 *            セットする columnMetaMap
-	 */
-	public void setColumnMetaMap(Map<String, ColumnMeta> columnMetaMap) {
-
-		this.columnMetaMap = columnMetaMap;
-	}
-
 }

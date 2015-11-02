@@ -4,8 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.rms.base.jdbc.JDBCConnection;
-import com.rms.base.jdbc.JDBCValue;
 import com.rms.base.jdbc.model.JDBCRow;
+import com.rms.base.jdbc.model.JDBCValue;
 import com.rms.base.jdbc.model.QueryParameter;
 import com.rms.base.validate.Assertion;
 
@@ -58,6 +58,36 @@ public class JDBCLargeQueryExecutor extends AbstractJDBCQueryExecutor {
 		return jdbcRow;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public final <T> T getValue(int columnNumber) throws SQLException {
+
+		Assertion.assertNotNull("columnNumber", columnNumber);
+
+		if (!hasColumn(columnNumber)) {
+			throw new SQLException("the columnNumber[" + columnNumber + "] is not found!!!");
+		}
+
+		Object object = jdbcRowCollection.get(columnNumber).getValue(columnNumber);
+
+		return (T) object;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public final <T> T getValue(String columnName) throws SQLException {
+
+		Assertion.assertNotNull("columnName", columnName);
+
+		if (!hasColumn(columnName)) {
+			throw new SQLException("the columnName[" + columnName + "] is not found!!!");
+		}
+
+		Object object = getResultSet().getObject(columnName);
+
+		return (T) object;
+	}
+
 	@Override
 	public final JDBCValue getJDBCValue(int columnNumber) throws SQLException {
 
@@ -69,7 +99,7 @@ public class JDBCLargeQueryExecutor extends AbstractJDBCQueryExecutor {
 
 		Object object = getResultSet().getObject(columnNumber);
 
-		JDBCValue jdbcValue = new JDBCValue(object);
+		JDBCValue jdbcValue = JDBCValue.newJDBCValue(object);
 
 		return jdbcValue;
 	}
@@ -85,7 +115,7 @@ public class JDBCLargeQueryExecutor extends AbstractJDBCQueryExecutor {
 
 		Object object = getResultSet().getObject(columnName);
 
-		JDBCValue jdbcValue = new JDBCValue(object);
+		JDBCValue jdbcValue = JDBCValue.newJDBCValue(object);
 
 		return jdbcValue;
 	}

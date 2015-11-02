@@ -115,11 +115,11 @@ public class DatabaseERDInfo {
 		StringBuilder resultBuffered = new StringBuilder(1024);
 		while (jdbcQueryTablenames.hasNext()) {
 			resultBuffered.setLength(0);
-			String domainNumber = jdbcQueryTablenames.getValue("DOMAIN_NUMBER");
-			String domainName = jdbcQueryTablenames.getValue("DOMAIN_NAME");
-			BigDecimal tableID = jdbcQueryTablenames.getValue("TABLE_ID");
-			String tableName = jdbcQueryTablenames.getValue("TABLE_NAME");
-			String tableNameJP = jdbcQueryTablenames.getValue("TABLE_NAME_JP");
+			String domainNumber = jdbcQueryTablenames.getJDBCValue("DOMAIN_NUMBER").toStringVal();
+			String domainName = jdbcQueryTablenames.getJDBCValue("DOMAIN_NAME").toStringVal();
+			BigDecimal tableID = jdbcQueryTablenames.getJDBCValue("TABLE_ID").toDecimalVal();
+			String tableName = jdbcQueryTablenames.getJDBCValue("TABLE_NAME").toStringVal();
+			String tableNameJP = jdbcQueryTablenames.getJDBCValue("TABLE_NAME_JP").toStringVal();
 
 			resultBuffered.append(replaceNull(domainNumber));
 			resultBuffered.append(SPLIT_CHAR);
@@ -143,10 +143,10 @@ public class DatabaseERDInfo {
 			jdbcQueryTableColumns.execute();
 			while (jdbcQueryTableColumns.hasNext()) {
 				resultBuffered.setLength(tableInfoLength);
-				BigDecimal columnID = jdbcQueryTableColumns.getValue("COLUMN_ID");
-				String columnName = jdbcQueryTableColumns.getValue("COLUMN_NAME");
-				String columnNameJP = jdbcQueryTableColumns.getValue("COLUMN_NAME_JP");
-				BigDecimal pkPosition = jdbcQueryTableColumns.getValue("PK_POSITION");
+				BigDecimal columnID = jdbcQueryTableColumns.getJDBCValue("COLUMN_ID").toDecimalVal();
+				String columnName = jdbcQueryTableColumns.getJDBCValue("COLUMN_NAME").toStringVal();
+				String columnNameJP = jdbcQueryTableColumns.getJDBCValue("COLUMN_NAME_JP").toStringVal();
+				BigDecimal pkPosition = jdbcQueryTableColumns.getJDBCValue("PK_POSITION").toDecimalVal();
 
 				resultBuffered.append(replaceNull(columnID));
 				resultBuffered.append(SPLIT_CHAR);
