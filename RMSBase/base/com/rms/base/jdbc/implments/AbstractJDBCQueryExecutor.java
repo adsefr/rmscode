@@ -229,6 +229,22 @@ public abstract class AbstractJDBCQueryExecutor implements JDBCQueryExecutor {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public final List<Object> getValues() throws SQLException {
+
+		JDBCRow jdbcRow = getRow();
+
+		List<Object> jdbcValues = new ArrayList<>();
+		for (int columnNumber = 1; columnNumber <= jdbcRow.getColumnCount(); columnNumber++) {
+			jdbcValues.add(jdbcRow.getValue(columnNumber));
+		}
+
+		return jdbcValues;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public final List<JDBCValue> getJDBCValues() throws SQLException {
 
 		JDBCRow jdbcRow = getRow();

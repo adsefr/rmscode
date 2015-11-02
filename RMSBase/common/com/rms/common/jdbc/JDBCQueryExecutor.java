@@ -47,6 +47,8 @@ public interface JDBCQueryExecutor extends JDBCCloseable {
 
 	public <T> T getValue(String columnName) throws SQLException;
 
+	public List<Object> getValues() throws SQLException;
+
 	public JDBCValue getJDBCValue(int columnNumber) throws SQLException;
 
 	public JDBCValue getJDBCValue(String columnName) throws SQLException;

@@ -171,8 +171,8 @@ public class CopyData extends JDBCProcess {
 		Assertion.assertNotBlank("srcSchemaName", srcSchemaName);
 		Assertion.assertNotBlank("destSchemaName", destSchemaName);
 
-		srcSchemaMeta = srcJDBCObject.getJDBCDataBaseMetaData().getSchemaMeta(srcSchemaName);
-		destSchemaMeta = destJDBCObject.getJDBCDataBaseMetaData().getSchemaMeta(destSchemaName);
+		srcSchemaMeta = srcJDBCObject.getJDBCDataBaseMetaData().getSchemaMeta(null, srcSchemaName);
+		destSchemaMeta = destJDBCObject.getJDBCDataBaseMetaData().getSchemaMeta(null, destSchemaName);
 		copy(srcSchemaMeta, destSchemaMeta, destSchemaMeta.getTableMetas());
 	}
 
@@ -182,8 +182,8 @@ public class CopyData extends JDBCProcess {
 		Assertion.assertNotBlank("destSchemaName", destSchemaName);
 		Assertion.assertNotNull("tablesNameList", tablesNameList);
 
-		srcSchemaMeta = srcJDBCObject.getJDBCDataBaseMetaData().getSchemaMeta(srcSchemaName);
-		destSchemaMeta = destJDBCObject.getJDBCDataBaseMetaData().getSchemaMeta(destSchemaName);
+		srcSchemaMeta = srcJDBCObject.getJDBCDataBaseMetaData().getSchemaMeta(null, srcSchemaName);
+		destSchemaMeta = destJDBCObject.getJDBCDataBaseMetaData().getSchemaMeta(null, destSchemaName);
 		List<TableMeta> tableMetaList = tablesNameList.stream().map(e -> destSchemaMeta.getTableMeta(e)).collect(Collectors.toList());
 		copy(srcSchemaMeta, destSchemaMeta, tableMetaList);
 	}

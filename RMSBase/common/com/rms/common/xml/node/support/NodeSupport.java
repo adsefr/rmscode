@@ -6,8 +6,8 @@ import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
-import com.rms.base.exception.UnsupportedTypeException;
 import com.rms.base.validate.Assertion;
+import com.rms.common.xml.eception.UnsupportedNodeTypeException;
 import com.rms.common.xml.node.Node;
 
 /**
@@ -37,7 +37,7 @@ public final class NodeSupport {
 		} else if (node.getClass().isInstance(Attr.class)) {
 			converted = convertor.convert(Attr.class.cast(node));
 		} else {
-			throw new UnsupportedTypeException(node.getClass().getName());
+			throw new UnsupportedNodeTypeException(node.getClass().getName());
 		}
 
 		return converted;

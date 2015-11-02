@@ -39,7 +39,7 @@ public class BeanClassFileGenerator extends ClassFileGenerator {
 
 		Assertion.assertNotNull("tableMeta", tableMeta);
 		PackageInfo packageInfo = new PackageInfo(DEFAULT_PACKAGE_NAME);
-		ClassInfo classInfo = new ClassInfo(DEFAULT_PACKAGE_NAME, tableMeta.getTableName().toStringVal());
+		ClassInfo classInfo = new ClassInfo(DEFAULT_PACKAGE_NAME, tableMeta.getTableName());
 		classInfo.getModifierInfo().add(ClassModifier.PUBLIC);
 		FieldInfo fieldInfo = new FieldInfo();
 		MethodInfo methodInfo = new MethodInfo();
@@ -47,7 +47,7 @@ public class BeanClassFileGenerator extends ClassFileGenerator {
 		List<ColumnMeta> columnMetas = tableMeta.getColumnMetas();
 
 		for (ColumnMeta columnMeta : columnMetas) {
-			String columnName = columnMeta.getColumnName().toStringVal();
+			String columnName = columnMeta.getColumnName();
 			FieldModel fieldModel = new FieldModel();
 			fieldModel.getModifierInfo().add(FieldModifier.PRIVATE);
 			fieldModel.setDataType(DataType.getDataType(columnMeta.getJdbcType()));
