@@ -17,9 +17,9 @@ import com.rms.base.jdbc.model.JDBCColumn;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.JDBCTable;
 import com.rms.base.poi.excel.model.FontModel;
-import com.rms.base.poi.excel.object.ExcelFactory;
-import com.rms.base.poi.excel.object.ExcelOperator;
-import com.rms.base.poi.excel.object.SheetOperator;
+import com.rms.base.poi.excel.usermodel.ExcelFactory;
+import com.rms.base.poi.excel.usermodel.ExcelOperator;
+import com.rms.base.poi.excel.usermodel.SheetOperator;
 
 /**
  *

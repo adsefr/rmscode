@@ -9,9 +9,9 @@ import com.rms.base.io.FileWriter;
 import com.rms.base.io.IOFactory;
 import com.rms.base.jdbc.model.JDBCTable;
 import com.rms.base.poi.excel.model.CellModel;
-import com.rms.base.poi.excel.object.ExcelFactory;
-import com.rms.base.poi.excel.object.ExcelOperator;
-import com.rms.base.poi.excel.object.SheetOperator;
+import com.rms.base.poi.excel.usermodel.ExcelFactory;
+import com.rms.base.poi.excel.usermodel.ExcelOperator;
+import com.rms.base.poi.excel.usermodel.SheetOperator;
 import com.rms.base.util.NumberUtil;
 import com.rms.base.util.TextUtil;
 

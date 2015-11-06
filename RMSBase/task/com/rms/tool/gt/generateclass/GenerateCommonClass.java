@@ -15,8 +15,8 @@ import com.rms.base.gen.javaclass.model.ModifierType;
 import com.rms.base.gen.javaclass.model.ParameterModel;
 import com.rms.base.io.IOFactory;
 import com.rms.base.poi.excel.model.CellModel;
-import com.rms.base.poi.excel.object.ExcelOperator;
-import com.rms.base.poi.excel.object.SheetOperator;
+import com.rms.base.poi.excel.usermodel.ExcelOperator;
+import com.rms.base.poi.excel.usermodel.SheetOperator;
 
 public class GenerateCommonClass {
 
