@@ -6,7 +6,7 @@ package com.rms.base.exception;
  * @author ri.meisei
  * @since 2014/02/26
  */
-public class ApplicationException extends RuntimeException {
+class ApplicationException extends RuntimeException {
 
 	private static final long serialVersionUID = 7307947720210608274L;
 

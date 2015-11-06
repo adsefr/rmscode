@@ -1,12 +1,12 @@
 package com.rms.base.exception;
 
 /**
- * 
- * 
+ *
+ *
  * @author ri.meisei
  * @since 2014/02/04
  */
-public class DuplicationException extends RuntimeException {
+class DuplicationException extends RuntimeException {
 
 	private static final long serialVersionUID = -4772023432181924524L;
 

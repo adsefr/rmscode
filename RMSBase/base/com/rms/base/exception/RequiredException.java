@@ -1,12 +1,12 @@
 package com.rms.base.exception;
 
 /**
- * 
- * 
+ *
+ *
  * @author ri.meisei
  * @since 2014/02/04
  */
-public class RequiredException extends RuntimeException {
+class RequiredException extends RuntimeException {
 
 	private static final long serialVersionUID = -3452468664653854414L;
 
