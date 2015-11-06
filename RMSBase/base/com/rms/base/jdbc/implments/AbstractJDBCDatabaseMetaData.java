@@ -423,6 +423,12 @@ public abstract class AbstractJDBCDatabaseMetaData implements JDBCDataBaseMetaDa
 	}
 
 	@Override
+	public List<SchemaMeta> getSchemaMetas() {
+
+		return schemaMetaCollection;
+	}
+
+	@Override
 	public List<SchemaMeta> getSchemaMetas(String catalogName) {
 
 		Predicate<SchemaMeta> predicate = (element) -> {

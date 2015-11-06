@@ -81,6 +81,16 @@ public class TextUtil {
 		return !isEquals(array);
 	}
 
+	public static String deleteLast(String content, int length) {
+
+		return null;
+	}
+
+	public static String deleteFirst(String content, int length) {
+
+		return null;
+	}
+
 	/**
 	 * 入力データがすべて同じかチェックうする
 	 *

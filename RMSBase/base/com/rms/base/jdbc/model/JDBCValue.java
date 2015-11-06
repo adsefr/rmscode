@@ -57,6 +57,12 @@ public class JDBCValue {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+
+		return String.valueOf(rawValue);
+	}
+
 	public Class<?> getType() {
 
 		return null;
