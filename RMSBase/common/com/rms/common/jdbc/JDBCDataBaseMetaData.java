@@ -44,6 +44,12 @@ public interface JDBCDataBaseMetaData {
 
 	/**
 	 *
+	 * @return
+	 */
+	public List<SchemaMeta> getSchemaMetas();
+
+	/**
+	 *
 	 * @param catalogName
 	 * @return
 	 */
