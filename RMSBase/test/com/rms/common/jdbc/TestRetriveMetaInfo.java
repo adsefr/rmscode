@@ -53,7 +53,7 @@ public class TestRetriveMetaInfo {
 	public void getTableNameList() {
 
 		JDBCDataBaseMetaData jdbcDataBaseMetaData = retriveMetaInfo.getJdbcDataBaseMetaData();
-		List<TableMeta> tableMetas = jdbcDataBaseMetaData.getTableMetas("public");
+		List<TableMeta> tableMetas = jdbcDataBaseMetaData.getTableMetas(null, "public");
 		tableMetas.forEach(element -> logger.info(element.toString()));
 
 	}

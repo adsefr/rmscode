@@ -11,13 +11,13 @@ import com.rms.base.io.IOFactory;
 import com.rms.base.jdbc.JDBCConnection;
 import com.rms.base.jdbc.model.DataBaseInfo;
 import com.rms.base.jdbc.model.DataBaseType;
+import com.rms.base.poi.excel.model.CellModel;
+import com.rms.base.poi.excel.model.FontModel;
+import com.rms.base.poi.excel.object.ExcelOperator;
+import com.rms.base.poi.excel.object.SheetOperator;
 import com.rms.base.util.TextUtil;
 import com.rms.common.jdbc.JDBCObject;
 import com.rms.common.jdbc.JDBCQueryExecutor;
-import com.rms.common.poi.excel.model.CellModel;
-import com.rms.common.poi.excel.model.FontModel;
-import com.rms.common.poi.excel.object.ExcelOperator;
-import com.rms.common.poi.excel.object.SheetOperator;
 import com.rms.tool.gt.generateclass.RowInfo;
 
 public class CheckFuncCallRelation {
@@ -324,10 +324,10 @@ public class CheckFuncCallRelation {
 	private void writeToExcel(List<FuncInfoBean> callInfoList) throws IOException {
 
 		if (outExcelOperator == null) {
-			outExcelOperator = ExcelOperatorFactory.createExcel2007();
+			outExcelOperator = ExcelOperatorFactory.createXSSFExcel();
 			outExcelOperator.createSheet("共通関数呼出情報一覧");
 			// outExcelOperator.removeSheetsExclude("共通関数呼出情報一覧");
-			outExcelOperator.setSelectedSheet("共通関数呼出情報一覧");
+			outExcelOperator.setActiveSheet("共通関数呼出情報一覧");
 			SheetOperator sheetOperator = outExcelOperator.getSheetOperator();
 			sheetOperator.setCurrentIndex(0, 1);
 			CellModel cellModel1 = new CellModel();
@@ -429,7 +429,7 @@ public class CheckFuncCallRelation {
 
 		ExcelOperator excelOperator = ExcelOperatorFactory.load(excelPath);
 		String sheetName = "処理一覧";
-		boolean hasSheet = excelOperator.setSelectedSheet(sheetName);
+		boolean hasSheet = excelOperator.setActiveSheet(sheetName);
 
 		if (!hasSheet) {
 			throw new RuntimeException("the sheet is not found. sheetName:" + sheetName);

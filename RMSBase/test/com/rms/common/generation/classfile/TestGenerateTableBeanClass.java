@@ -33,7 +33,7 @@ public class TestGenerateTableBeanClass {
 			jdbcObject = JDBCObject.getInstance(dataBaseInfo);
 			jdbcObject.startTransaction();
 
-			SchemaMeta schemaMeta = jdbcObject.getJDBCDataBaseMetaData().getSchemaMeta("public");
+			SchemaMeta schemaMeta = jdbcObject.getJDBCDataBaseMetaData().getSchemaMeta(null, "public");
 
 			Path path = Paths.get("D:/documents/workspace/GitHub/rmscode/RMSBase/gen/com/rms/gen/bean");
 			BeanClassFileGenerator generate = new BeanClassFileGenerator();

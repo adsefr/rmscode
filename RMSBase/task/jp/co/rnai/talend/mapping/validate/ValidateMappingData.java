@@ -16,10 +16,10 @@ import com.rms.base.jdbc.model.DataBaseType;
 import com.rms.base.jdbc.model.JDBCColumn;
 import com.rms.base.jdbc.model.JDBCRow;
 import com.rms.base.jdbc.model.JDBCTable;
-import com.rms.common.poi.excel.model.FontModel;
-import com.rms.common.poi.excel.object.ExcelFactory;
-import com.rms.common.poi.excel.object.ExcelOperator;
-import com.rms.common.poi.excel.object.SheetOperator;
+import com.rms.base.poi.excel.model.FontModel;
+import com.rms.base.poi.excel.object.ExcelFactory;
+import com.rms.base.poi.excel.object.ExcelOperator;
+import com.rms.base.poi.excel.object.SheetOperator;
 
 /**
  *

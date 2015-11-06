@@ -14,9 +14,9 @@ import com.rms.base.gen.javaclass.model.MethodModel;
 import com.rms.base.gen.javaclass.model.ModifierType;
 import com.rms.base.gen.javaclass.model.ParameterModel;
 import com.rms.base.io.IOFactory;
-import com.rms.common.poi.excel.model.CellModel;
-import com.rms.common.poi.excel.object.ExcelOperator;
-import com.rms.common.poi.excel.object.SheetOperator;
+import com.rms.base.poi.excel.model.CellModel;
+import com.rms.base.poi.excel.object.ExcelOperator;
+import com.rms.base.poi.excel.object.SheetOperator;
 
 public class GenerateCommonClass {
 
@@ -199,7 +199,7 @@ public class GenerateCommonClass {
 
 		ExcelOperator excelOperator = ExcelOperatorFactory.load(excelPath);
 		String sheetName = "処理一覧";
-		boolean hasSheet = excelOperator.setSelectedSheet(sheetName);
+		boolean hasSheet = excelOperator.setActiveSheet(sheetName);
 
 		if (!hasSheet) {
 			throw new RuntimeException("the sheet is not found. sheetName:" + sheetName);
